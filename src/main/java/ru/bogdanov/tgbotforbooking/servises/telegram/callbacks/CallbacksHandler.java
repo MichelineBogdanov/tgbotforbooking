@@ -1,6 +1,5 @@
 package ru.bogdanov.tgbotforbooking.servises.telegram.callbacks;
 
-import org.hibernate.jpa.event.spi.CallbackType;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
