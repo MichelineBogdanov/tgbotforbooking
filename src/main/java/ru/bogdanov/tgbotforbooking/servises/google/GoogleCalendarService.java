@@ -1,4 +1,7 @@
 package ru.bogdanov.tgbotforbooking.servises.google;
 
-public class GoogleCalendarService {
+import org.springframework.stereotype.Service;
+
+@Service
+public class GoogleCalendarService implements GoogleAPI {
 }
