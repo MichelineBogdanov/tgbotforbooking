@@ -12,12 +12,12 @@ public class CommandsHandler {
     private final Map<CommandTypes, Command> handler;
 
     public CommandsHandler(StartCommand startCommand
-            , VisitDealsCommand visitDealsCommand
             , GeneralInfoCommand generalInfoCommand
+            , VisitDealsCommand visitDealsCommand
             , UnknownCommand unknownCommand) {
         this.handler = Map.of(CommandTypes.START, startCommand
-                , CommandTypes.VISIT_DEALS, visitDealsCommand
                 , CommandTypes.GENERAL_INFO, generalInfoCommand
+                , CommandTypes.VISIT_DEALS, visitDealsCommand
                 , CommandTypes.UNKNOWN_COMMAND, unknownCommand
         );
     }

@@ -1,4 +1,4 @@
-package ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.general_info;
+package ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.visit_deals;
 
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -7,15 +7,11 @@ import ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities.Base
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.CallbackHandler;
 
 @Component
-public class PlaceInfoCallback implements CallbackHandler {
+public class CancelVisitCallback implements CallbackHandler {
 
     @Override
     public SendMessage apply(BaseCallbackData callback, Update update) {
-        long chatId = update.getCallbackQuery().getMessage().getChatId();
-        SendMessage message = new SendMessage();
-        message.setChatId(chatId);
-        message.setText(callback.getType().toString());
-        return message;
+        return null;
     }
 
 }

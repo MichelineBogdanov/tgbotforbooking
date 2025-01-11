@@ -1,23 +1,25 @@
 package ru.bogdanov.tgbotforbooking.servises.telegram.callbacks;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public enum CallbackTypes {
 
     // VISIT_DEALS
-    GET_FREE_NUMBER("Получить свободные номерки"),
-    CREATE_VISIT("Записаться на прием"),
-    CANCEL_VISIT("Отменить визит"),
+    @JsonProperty("GET_FREE_NUMBER")
+    GET_FREE_NUMBER,
+    @JsonProperty("CREATE_VISIT")
+    CREATE_VISIT,
+    @JsonProperty("CHOOSE_DAY")
+    CHOOSE_DAY,
+    @JsonProperty("CHOOSE_TIME")
+    CHOOSE_TIME,
+    @JsonProperty("CANCEL_VISIT")
+    CANCEL_VISIT,
 
     // GENERAL_INFO
-    GET_SCHEDULE("Получить расписание"),
-    GET_PLACE_INFO("Узнать информацию о месте");
+    @JsonProperty("GET_SCHEDULE")
+    GET_SCHEDULE,
+    @JsonProperty("GET_PLACE_INFO")
+    GET_PLACE_INFO;
 
-    private final String description;
-
-    CallbackTypes(String description) {
-        this.description = description;
-    }
-
-    public String getDescription() {
-        return description;
-    }
 }

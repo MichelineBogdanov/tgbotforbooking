@@ -2,25 +2,34 @@ package ru.bogdanov.tgbotforbooking.servises.google;
 
 import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.Calendar;
-import com.google.api.services.calendar.model.*;
+import com.google.api.services.calendar.model.FreeBusyRequest;
+import com.google.api.services.calendar.model.FreeBusyRequestItem;
+import com.google.api.services.calendar.model.FreeBusyResponse;
+import com.google.api.services.calendar.model.TimePeriod;
 
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class FreeBusyExample {
 
-    public static void main(String[] args) throws Exception {
+    public void getFreeSlots(String start, String end) throws GeneralSecurityException, IOException {
         Calendar service = GoogleCalendarUtils.getCalendarService();
         // Задайте временные рамки
-        DateTime startTime = new DateTime("2024-12-16T00:00:00Z"); // Начало дня
-        DateTime endTime = new DateTime("2024-12-16T23:59:59Z");   // Конец дня
-        // Укажите email календаря, который вы хотите проверить
+        // "2024-12-16T00:00:00+03:00"
+        DateTime startTime = new DateTime(start); // Начало дня
+        // "2024-12-16T23:59:59+03:00"
+        DateTime endTime = new DateTime(end);   // Конец дня
+        // Укажите calendarId календаря, который вы хотите проверить
         String calendarId = "primary";
         // Создайте запрос FreeBusy
         FreeBusyRequest request = new FreeBusyRequest()
                 .setTimeMin(startTime)
                 .setTimeMax(endTime)
+                .setTimeZone("+03:00")
                 .setItems(Collections.singletonList(new FreeBusyRequestItem().setId(calendarId)));
         // Отправьте запрос
         FreeBusyResponse response = service.freebusy().query(request).execute();

@@ -10,7 +10,7 @@ import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.CallbacksHandler;
 import ru.bogdanov.tgbotforbooking.servises.telegram.commands.CommandsHandler;
 
 @Component
-public class BookingTelegramBotService extends TelegramLongPollingBot {
+public class BookingTelegramBot extends TelegramLongPollingBot {
 
     private final BotConfig config;
 
@@ -18,7 +18,7 @@ public class BookingTelegramBotService extends TelegramLongPollingBot {
 
     public final CallbacksHandler callbacksHandler;
 
-    public BookingTelegramBotService(BotConfig config, CommandsHandler commandsHandler, CallbacksHandler callbacksHandler) {
+    public BookingTelegramBot(BotConfig config, CommandsHandler commandsHandler, CallbacksHandler callbacksHandler) {
         this.config = config;
         this.commandsHandler = commandsHandler;
         this.callbacksHandler = callbacksHandler;

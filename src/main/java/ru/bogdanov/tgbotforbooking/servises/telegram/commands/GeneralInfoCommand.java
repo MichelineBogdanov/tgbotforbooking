@@ -6,6 +6,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import ru.bogdanov.tgbotforbooking.servises.telegram.JsonHandler;
+import ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities.BaseCallbackData;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.CallbackTypes;
 
 import java.util.ArrayList;
@@ -38,10 +39,11 @@ public class GeneralInfoCommand implements Command {
 
     private InlineKeyboardButton getGeneralInfoButtons(CallbackTypes type) {
         InlineKeyboardButton inlineKeyboardButton = new InlineKeyboardButton();
-        inlineKeyboardButton.setText(type.getDescription());
-        String jsonCallback = JsonHandler.toJson(List.of(type));
+        inlineKeyboardButton.setText(type.toString());
+        BaseCallbackData callbackData = new BaseCallbackData();
+        callbackData.setType(type);
+        String jsonCallback = JsonHandler.toJson(callbackData);
         inlineKeyboardButton.setCallbackData(jsonCallback);
-
         return inlineKeyboardButton;
     }
 
