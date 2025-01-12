@@ -4,7 +4,7 @@ import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.model.*;
 import org.springframework.stereotype.Service;
-import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.general_info.ScheduleUtils;
+import ru.bogdanov.tgbotforbooking.servises.telegram.utils.ScheduleUtils;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -19,17 +19,12 @@ public class GoogleCalendarService implements GoogleAPI {
     private final Calendar service = GoogleCalendarUtils.getCalendarService();
     private final String CALENDAR_ID = "primary";
 
-    public List<TimePeriod> getFreePeriods(String start, String end) {
+    public List<TimePeriod> getFreePeriods(DateTime start, DateTime end) {
         try {
-            // Задайте временные рамки
-            // "2024-12-16T00:00:00+03:00"
-            DateTime startTime = new DateTime(start); // Начало дня
-            // "2024-12-16T23:59:59+03:00"
-            DateTime endTime = new DateTime(end);   // Конец дня
             // Создайте запрос FreeBusy
             FreeBusyRequest request = new FreeBusyRequest()
-                    .setTimeMin(startTime)
-                    .setTimeMax(endTime)
+                    .setTimeMin(start)
+                    .setTimeMax(end)
                     .setTimeZone("+03:00")
                     .setItems(Collections.singletonList(new FreeBusyRequestItem().setId(CALENDAR_ID)));
             // Отправьте запрос
@@ -37,24 +32,24 @@ public class GoogleCalendarService implements GoogleAPI {
             // Получите занятые интервалы
             List<TimePeriod> busyTimes = response.getCalendars().get(CALENDAR_ID).getBusy();
             // Найдите свободные интервалы
-            return calculateFreeSlots(startTime, endTime, busyTimes);
+            return calculateFreeSlots(start, end, busyTimes);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void createVisit(LocalDate date, LocalTime time) {
-        Date date1 = Date.from(LocalDateTime.of(date, time).atZone(ZoneId.systemDefault()).toInstant());
-        Date date2 = Date.from(LocalDateTime.of(date, time.plusHours(1).plusMinutes(30)).atZone(ZoneId.systemDefault()).toInstant());
+    public void createVisit(LocalDate date, LocalTime time, String userName) {
+        Date start = Date.from(LocalDateTime.of(date, time).atZone(ZoneId.systemDefault()).toInstant());
+        Date end = Date.from(LocalDateTime.of(date, time.plusHours(1).plusMinutes(30)).atZone(ZoneId.systemDefault()).toInstant());
         Event event = new Event()
-                .setSummary("TEST")
+                .setSummary(userName)
                 .setDescription("TEST TEST TEST");
         EventDateTime startE = new EventDateTime()
-                .setDateTime(new DateTime(date1))
+                .setDateTime(new DateTime(start))
                 .setTimeZone("+03:00");
         event.setStart(startE);
         EventDateTime endE = new EventDateTime()
-                .setDateTime(new DateTime(date2))
+                .setDateTime(new DateTime(end))
                 .setTimeZone("+03:00");
         event.setEnd(endE);
         try {
@@ -65,14 +60,14 @@ public class GoogleCalendarService implements GoogleAPI {
     }
 
     @Override
-    public List<LocalDate> getFreeDays(String start, String end) {
+    public List<LocalDate> getFreeDays(DateTime start, DateTime end) {
         List<TimePeriod> freePeriods = getFreePeriods(start, end);
         Map<LocalDate, List<LocalTime>> freeSlots = ScheduleUtils.getFreeSlots(freePeriods);
         return freeSlots.keySet().stream().toList();
     }
 
     @Override
-    public List<LocalTime> getFreeSlots(String start, String end) {
+    public List<LocalTime> getFreeSlots(DateTime start, DateTime end) {
         List<TimePeriod> freePeriods = getFreePeriods(start, end);
         Map<LocalDate, List<LocalTime>> freeSlots = ScheduleUtils.getFreeSlots(freePeriods);
         for (LocalDate localDate : freeSlots.keySet()) {

@@ -39,7 +39,7 @@ public class GeneralInfoCommand implements Command {
 
     private InlineKeyboardButton getGeneralInfoButtons(CallbackTypes type) {
         InlineKeyboardButton inlineKeyboardButton = new InlineKeyboardButton();
-        inlineKeyboardButton.setText(type.toString());
+        inlineKeyboardButton.setText(type.getDescription());
         BaseCallbackData callbackData = new BaseCallbackData();
         callbackData.setType(type);
         String jsonCallback = JsonHandler.toJson(callbackData);

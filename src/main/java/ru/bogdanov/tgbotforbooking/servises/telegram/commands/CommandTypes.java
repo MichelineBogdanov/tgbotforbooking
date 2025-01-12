@@ -3,8 +3,8 @@ package ru.bogdanov.tgbotforbooking.servises.telegram.commands;
 public enum CommandTypes {
 
     START("/start"),
-    VISIT_DEALS("/visitDeals"),
-    GENERAL_INFO("/generalInfo"),
+    GENERAL_INFO("/generalinfo"),
+    VISIT_DEALS("/visitdeals"),
     UNKNOWN_COMMAND("");
 
     private final String command;

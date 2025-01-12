@@ -8,6 +8,10 @@ import ru.bogdanov.tgbotforbooking.servises.google.GoogleAPI;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities.BaseCallbackData;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities.CreateVisitCallbackData;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.CallbackHandler;
+import ru.bogdanov.tgbotforbooking.servises.telegram.utils.MessagesText;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Component
 public class CreateVisitCallback implements CallbackHandler {
@@ -21,11 +25,14 @@ public class CreateVisitCallback implements CallbackHandler {
     @Override
     public SendMessage apply(BaseCallbackData callback, Update update) {
         CreateVisitCallbackData currentCallback = (CreateVisitCallbackData) callback;
-        service.createVisit(currentCallback.getDate(), currentCallback.getTime());
+        LocalDate date = currentCallback.getDate();
+        LocalTime time = currentCallback.getTime();
+        String userName = update.getCallbackQuery().getFrom().getUserName();
+        service.createVisit(date, time, userName);
         long chatId = update.getCallbackQuery().getMessage().getChatId();
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
-        message.setText("Вы записаны на: " + currentCallback.getDate() + " " + currentCallback.getTime());
+        message.setText(String.format(MessagesText.SUCCESS_BOOKING, userName, date, time));
         return message;
     }
 

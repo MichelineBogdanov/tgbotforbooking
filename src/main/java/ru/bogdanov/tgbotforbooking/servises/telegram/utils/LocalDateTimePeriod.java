@@ -1,4 +1,4 @@
-package ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.general_info;
+package ru.bogdanov.tgbotforbooking.servises.telegram.utils;
 
 import java.time.LocalDateTime;
 

@@ -1,6 +1,7 @@
-package ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.general_info;
+package ru.bogdanov.tgbotforbooking.servises.telegram.utils;
 
 import com.google.api.services.calendar.model.TimePeriod;
+import ru.bogdanov.tgbotforbooking.servises.telegram.utils.LocalDateTimePeriod;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -41,7 +42,6 @@ public class ScheduleUtils {
             List<LocalDateTimePeriod> dividedByDays = divideByDays(localDateTimePeriod);
             dividedPeriods.addAll(dividedByDays);
         }
-        System.out.println(dividedPeriods);
         Map<LocalDate, List<LocalTime>> collect = new HashMap<>();
         for (LocalDateTimePeriod dividedPeriod : dividedPeriods) {
             LocalDate key = dividedPeriod.getStart().toLocalDate();
@@ -53,7 +53,6 @@ public class ScheduleUtils {
                 }
             }
         }
-        System.out.println(collect);
         return collect;
     }
 
@@ -77,16 +76,6 @@ public class ScheduleUtils {
     private static LocalDateTime parseDateTimeFromRFC3339(String rfc3339DateStr) {
         OffsetDateTime offsetDateTime = OffsetDateTime.parse(rfc3339DateStr);
         return offsetDateTime.toLocalDateTime();
-    }
-
-    private static LocalDate parseDateFromRFC3339(String rfc3339DateStr) {
-        OffsetDateTime offsetDateTime = OffsetDateTime.parse(rfc3339DateStr);
-        return offsetDateTime.toLocalDate();
-    }
-
-    private static LocalTime parseTimeFromRFC3339(String rfc3339DateStr) {
-        OffsetDateTime offsetDateTime = OffsetDateTime.parse(rfc3339DateStr);
-        return offsetDateTime.toLocalTime();
     }
 
 }

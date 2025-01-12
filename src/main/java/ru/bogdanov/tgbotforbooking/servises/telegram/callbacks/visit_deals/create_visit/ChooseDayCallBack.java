@@ -1,5 +1,6 @@
 package ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.visit_deals.create_visit;
 
+import com.google.api.client.util.DateTime;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -12,6 +13,7 @@ import ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities.Base
 import ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities.ChooseTimeCallbackData;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.CallbackHandler;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.CallbackTypes;
+import ru.bogdanov.tgbotforbooking.servises.telegram.utils.MessagesText;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -28,11 +30,11 @@ public class ChooseDayCallBack implements CallbackHandler {
 
     @Override
     public SendMessage apply(BaseCallbackData callback, Update update) {
-        List<LocalDate> freeDays = service.getFreeDays("2024-12-16T00:00:00+03:00", "2024-12-23T00:00:00+03:00");
+        List<LocalDate> freeDays = service.getFreeDays(new DateTime("2024-12-16T00:00:00+03:00"), new DateTime("2024-12-23T00:00:00+03:00"));
         long chatId = update.getCallbackQuery().getMessage().getChatId();
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
-        message.setText("Выберите дату:");
+        message.setText(MessagesText.CHOOSE_DATE);
         addKeyboard(message, freeDays);
         return message;
     }
