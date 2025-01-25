@@ -19,4 +19,6 @@ public interface GoogleAPI {
 
     void createVisit(LocalDate date, LocalTime time, String userName);
 
+    String deleteVisit(String userName);
+
 }

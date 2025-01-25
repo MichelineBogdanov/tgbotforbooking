@@ -16,4 +16,6 @@ public interface MessagesText {
 
     String SUCCESS_BOOKING = "Поздравляем, %s! Вы записаны на: %s %s";
 
+    String SUCCESS_CANCEL = "Поздравляем, %s! Вы удалили визит: %s";
+
 }

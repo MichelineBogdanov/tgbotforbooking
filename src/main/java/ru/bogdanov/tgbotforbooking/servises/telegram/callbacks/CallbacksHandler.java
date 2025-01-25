@@ -46,7 +46,8 @@ public class CallbacksHandler {
         CallbackTypes type = JsonHandler.getType(callbackData);
         BaseCallbackData result = null;
         switch (type) {
-            case CHOOSE_DAY, GET_SCHEDULE -> result = JsonHandler.readToObject(callbackData, BaseCallbackData.class);
+            case CHOOSE_DAY, GET_SCHEDULE, CANCEL_VISIT ->
+                    result = JsonHandler.readToObject(callbackData, BaseCallbackData.class);
             case CHOOSE_TIME -> result = JsonHandler.readToObject(callbackData, ChooseTimeCallbackData.class);
             case CREATE_VISIT -> result = JsonHandler.readToObject(callbackData, CreateVisitCallbackData.class);
         }

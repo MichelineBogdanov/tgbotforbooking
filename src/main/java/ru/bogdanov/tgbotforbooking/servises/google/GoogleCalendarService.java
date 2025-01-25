@@ -4,6 +4,9 @@ import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.model.*;
 import org.springframework.stereotype.Service;
+import ru.bogdanov.tgbotforbooking.enteties.User;
+import ru.bogdanov.tgbotforbooking.enteties.Visit;
+import ru.bogdanov.tgbotforbooking.servises.bot_services.UserVisitBotService;
 import ru.bogdanov.tgbotforbooking.servises.telegram.utils.ScheduleUtils;
 
 import java.io.IOException;
@@ -17,7 +20,14 @@ import java.util.*;
 public class GoogleCalendarService implements GoogleAPI {
 
     private final Calendar service = GoogleCalendarUtils.getCalendarService();
+
+    private final UserVisitBotService userVisitBotService;
+
     private final String CALENDAR_ID = "primary";
+
+    public GoogleCalendarService(UserVisitBotService userVisitBotService) {
+        this.userVisitBotService = userVisitBotService;
+    }
 
     public List<TimePeriod> getFreePeriods(DateTime start, DateTime end) {
         try {
@@ -41,9 +51,10 @@ public class GoogleCalendarService implements GoogleAPI {
     public void createVisit(LocalDate date, LocalTime time, String userName) {
         Date start = Date.from(LocalDateTime.of(date, time).atZone(ZoneId.systemDefault()).toInstant());
         Date end = Date.from(LocalDateTime.of(date, time.plusHours(1).plusMinutes(30)).atZone(ZoneId.systemDefault()).toInstant());
+        User user = userVisitBotService.getUserByTgAccount("@" + userName);
         Event event = new Event()
                 .setSummary(userName)
-                .setDescription("TEST TEST TEST");
+                .setDescription(user.getName());
         EventDateTime startE = new EventDateTime()
                 .setDateTime(new DateTime(start))
                 .setTimeZone("+03:00");
@@ -53,10 +64,26 @@ public class GoogleCalendarService implements GoogleAPI {
                 .setTimeZone("+03:00");
         event.setEnd(endE);
         try {
-            service.events().insert(CALENDAR_ID, event).execute();
+            Event execute = service.events().insert(CALENDAR_ID, event).execute();
+            Visit entity = new Visit();
+            entity.setVisitId(execute.getId());
+            entity.setVisitDateTime(LocalDateTime.of(date, time));
+            entity.setUser(user);
+            userVisitBotService.createVisit(entity);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public String deleteVisit(String userName) {
+        Visit visit = userVisitBotService.getVisitByUserName("@" + userName);
+        try {
+            service.events().delete(CALENDAR_ID, visit.getVisitId()).execute();
+            userVisitBotService.deleteVisit(visit);
+        } catch (Exception e) {
+            System.out.println("Произошла ошибка: " + e.getMessage());
+        }
+        return visit.getVisitDateTime().toString();
     }
 
     @Override
