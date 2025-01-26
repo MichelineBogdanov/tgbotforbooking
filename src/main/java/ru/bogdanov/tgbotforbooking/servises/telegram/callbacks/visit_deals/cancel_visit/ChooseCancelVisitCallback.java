@@ -1,4 +1,4 @@
-package ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.visit_deals;
+package ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.visit_deals.cancel_visit;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -10,11 +10,11 @@ import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.CallbackHandler;
 import ru.bogdanov.tgbotforbooking.servises.telegram.utils.MessagesText;
 
 @Component
-public class CancelVisitCallback implements CallbackHandler {
+public class ChooseCancelVisitCallback  implements CallbackHandler {
 
     private final GoogleAPI service;
 
-    public CancelVisitCallback(@Qualifier("googleCalendarService") GoogleAPI service) {
+    public ChooseCancelVisitCallback(@Qualifier("googleCalendarService") GoogleAPI service) {
         this.service = service;
     }
 

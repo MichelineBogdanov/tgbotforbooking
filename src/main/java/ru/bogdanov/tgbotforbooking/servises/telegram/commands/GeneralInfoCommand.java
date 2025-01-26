@@ -8,6 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import ru.bogdanov.tgbotforbooking.servises.telegram.JsonHandler;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities.BaseCallbackData;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.CallbackTypes;
+import ru.bogdanov.tgbotforbooking.servises.telegram.utils.MessagesText;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,8 +18,7 @@ public class GeneralInfoCommand implements Command {
 
     @Override
     public SendMessage apply(Update update) {
-        String userName = update.getMessage().getFrom().getUserName();
-        String messageText = String.format("Hi, %s nice to meet you!\n Это бот для записи на прием!", userName);
+        String messageText = String.format(MessagesText.GENERAL_INFO_COMMAND_TEXT);
         SendMessage message = new SendMessage();
         message.setChatId(update.getMessage().getChatId());
         message.setText(messageText);
@@ -29,8 +29,9 @@ public class GeneralInfoCommand implements Command {
     private void addKeyboard(SendMessage sendMessage) {
         InlineKeyboardMarkup inlineKeyboardMarkup = new InlineKeyboardMarkup();
         List<InlineKeyboardButton> keyboardButtonsRow = new ArrayList<>();
-        keyboardButtonsRow.add(getGeneralInfoButtons(CallbackTypes.GET_PLACE_INFO));
+        keyboardButtonsRow.add(getGeneralInfoButtons(CallbackTypes.GET_VISITS));
         keyboardButtonsRow.add(getGeneralInfoButtons(CallbackTypes.GET_SCHEDULE));
+        keyboardButtonsRow.add(getGeneralInfoButtons(CallbackTypes.GET_PLACE_INFO));
         List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
         rowList.add(keyboardButtonsRow);
         inlineKeyboardMarkup.setKeyboard(rowList);

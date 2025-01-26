@@ -14,7 +14,6 @@ import java.util.List;
 public class JsonHandler {
     private final static ObjectMapper mapper = JsonMapper.builder()
             .addModule(new JavaTimeModule())
-            //.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING)
             .build();
 
     public static String toJson(Object object) {

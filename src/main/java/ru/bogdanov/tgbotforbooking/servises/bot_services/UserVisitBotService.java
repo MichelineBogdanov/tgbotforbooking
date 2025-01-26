@@ -7,6 +7,9 @@ import ru.bogdanov.tgbotforbooking.enteties.Visit;
 import ru.bogdanov.tgbotforbooking.repositories.UserRepository;
 import ru.bogdanov.tgbotforbooking.repositories.VisitRepository;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class UserVisitBotService {
 
@@ -38,10 +41,12 @@ public class UserVisitBotService {
         visitRepository.save(visit);
     }
 
-    public Visit getVisitByUserName(String tgAccount) {
+    @Transactional
+    public List<Visit> getVisitByUserName(String tgAccount) {
         return visitRepository.findVisitByUserTgAccount(tgAccount);
     }
 
+    @Transactional
     public void deleteVisit(Visit visit) {
         visitRepository.delete(visit);
     }

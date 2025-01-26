@@ -16,7 +16,10 @@ import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.CallbackTypes;
 import ru.bogdanov.tgbotforbooking.servises.telegram.utils.MessagesText;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Component
@@ -30,7 +33,9 @@ public class ChooseDayCallBack implements CallbackHandler {
 
     @Override
     public SendMessage apply(BaseCallbackData callback, Update update) {
-        List<LocalDate> freeDays = service.getFreeDays(new DateTime("2024-12-16T00:00:00+03:00"), new DateTime("2024-12-23T00:00:00+03:00"));
+        List<LocalDate> freeDays = service.getFreeDays(
+                new DateTime(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant())),
+                new DateTime(Date.from(LocalDate.now().plusMonths(1).withDayOfMonth(1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant())));
         long chatId = update.getCallbackQuery().getMessage().getChatId();
         SendMessage message = new SendMessage();
         message.setChatId(chatId);

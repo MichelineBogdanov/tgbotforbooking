@@ -11,14 +11,18 @@ public enum CallbackTypes {
     CHOOSE_DAY("Выбрать дату для записи"),
     @JsonProperty("CHOOSE_TIME")
     CHOOSE_TIME("Выбрать время"),
+    @JsonProperty("CHOOSE_CANCEL_VISIT")
+    CHOOSE_CANCEL_VISIT("Отменить визит"),
     @JsonProperty("CANCEL_VISIT")
     CANCEL_VISIT("Отменить визит"),
 
     // GENERAL_INFO
+    @JsonProperty("GET_VISITS")
+    GET_VISITS("Ваши записи"),
     @JsonProperty("GET_SCHEDULE")
-    GET_SCHEDULE("Получить расписание"),
+    GET_SCHEDULE("Расписание"),
     @JsonProperty("GET_PLACE_INFO")
-    GET_PLACE_INFO("Получить информацию о месте");
+    GET_PLACE_INFO("Место приема");
 
     private final String description;
 

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import ru.bogdanov.tgbotforbooking.enteties.User;
 import ru.bogdanov.tgbotforbooking.enteties.Visit;
 import ru.bogdanov.tgbotforbooking.servises.bot_services.UserVisitBotService;
+import ru.bogdanov.tgbotforbooking.servises.telegram.utils.MessagesText;
 import ru.bogdanov.tgbotforbooking.servises.telegram.utils.ScheduleUtils;
 
 import java.io.IOException;
@@ -15,6 +16,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.*;
+import java.util.function.Consumer;
 
 @Service
 public class GoogleCalendarService implements GoogleAPI {
@@ -51,7 +53,7 @@ public class GoogleCalendarService implements GoogleAPI {
     public void createVisit(LocalDate date, LocalTime time, String userName) {
         Date start = Date.from(LocalDateTime.of(date, time).atZone(ZoneId.systemDefault()).toInstant());
         Date end = Date.from(LocalDateTime.of(date, time.plusHours(1).plusMinutes(30)).atZone(ZoneId.systemDefault()).toInstant());
-        User user = userVisitBotService.getUserByTgAccount("@" + userName);
+        User user = userVisitBotService.getUserByTgAccount(userName);
         Event event = new Event()
                 .setSummary(userName)
                 .setDescription(user.getName());
@@ -76,14 +78,19 @@ public class GoogleCalendarService implements GoogleAPI {
     }
 
     public String deleteVisit(String userName) {
-        Visit visit = userVisitBotService.getVisitByUserName("@" + userName);
+        List<Visit> visits = userVisitBotService.getVisitByUserName(userName);
         try {
-            service.events().delete(CALENDAR_ID, visit.getVisitId()).execute();
-            userVisitBotService.deleteVisit(visit);
-        } catch (Exception e) {
+            for (Visit visit : visits) {
+                service.events().delete(CALENDAR_ID, visit.getVisitId()).execute();
+                userVisitBotService.deleteVisit(visit);
+            }
+        } catch (IOException e) {
             System.out.println("Произошла ошибка: " + e.getMessage());
         }
-        return visit.getVisitDateTime().toString();
+        StringJoiner sj = new StringJoiner("\n");
+        sj.add(MessagesText.SUCCESS_CANCEL);
+        visits.forEach(visit -> sj.add(visit.getVisitDateTime().toString()));
+        return sj.toString();
     }
 
     @Override
