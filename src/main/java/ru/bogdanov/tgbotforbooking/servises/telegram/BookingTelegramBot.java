@@ -13,6 +13,7 @@ import ru.bogdanov.tgbotforbooking.configs.BotConfig;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.CallbacksHandler;
 import ru.bogdanov.tgbotforbooking.servises.telegram.commands.CommandTypes;
 import ru.bogdanov.tgbotforbooking.servises.telegram.commands.CommandsHandler;
+import ru.bogdanov.tgbotforbooking.servises.telegram.utils.MessagesText;
 
 import java.util.ArrayList;
 
@@ -58,7 +59,7 @@ public class BookingTelegramBot extends TelegramLongPollingBot {
             if (update.getMessage().getText().startsWith("/")) {
                 sendMessage(commandsHandler.handleCommands(update));
             } else {
-                sendMessage(new SendMessage(chatId, "UNKNOWN_COMMAND"));
+                sendMessage(new SendMessage(chatId, MessagesText.UNKNOWN_COMMAND));
             }
         } else if (update.hasCallbackQuery()) {
             sendMessage(callbacksHandler.handleCallbacks(update));

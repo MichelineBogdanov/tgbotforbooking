@@ -24,8 +24,7 @@ public class CommandsHandler {
 
     public SendMessage handleCommands(Update update) {
         String text = update.getMessage().getText();
-        String commandText = text.split(" ")[0];
-        Command command = handler.get(CommandTypes.fromCommandString(commandText));
+        Command command = handler.get(CommandTypes.fromCommandString(text));
         return command.apply(update);
     }
 

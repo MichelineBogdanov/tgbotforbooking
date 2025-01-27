@@ -7,7 +7,7 @@ public interface MessagesText {
             Это бот для записи на прием!
             Доступные команды:
             /start - Начать работу с ботом
-            /generalinfo - Получение информации о номерках/месту приема
+            /generalinfo - Получение информации о номерках/месте приема
             /visitdeals - Запись на прием/отмена записи
             """;
 
@@ -47,5 +47,7 @@ public interface MessagesText {
     String SUCCESS_CANCEL = """
             Поздравляем! Был(и) удалены следующие визиты:
             """;
+
+    String UNKNOWN_COMMAND = "Данная команда не может быть обработана!";
 
 }
