@@ -15,6 +15,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +47,7 @@ public class ScheduleInfoCallback implements CallbackHandler {
         StringBuilder result = new StringBuilder();
         int index = 1;
         for (Map.Entry<LocalDate, List<LocalTime>> entry : freeSlots.entrySet()) {
-            result.append(index).append(") ").append(entry.getKey().toString()).append(": ");
+            result.append(index).append(") ").append(entry.getKey().format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))).append(": ");
             String values = String.join(", ", entry.getValue().toString());
             result.append(values).append("\n");
             index++;

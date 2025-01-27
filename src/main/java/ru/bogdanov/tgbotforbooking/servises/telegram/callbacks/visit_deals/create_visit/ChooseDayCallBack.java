@@ -18,6 +18,7 @@ import ru.bogdanov.tgbotforbooking.servises.telegram.utils.MessagesText;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -58,7 +59,7 @@ public class ChooseDayCallBack implements CallbackHandler {
 
     private InlineKeyboardButton getDateInfoButtons(LocalDate date) {
         InlineKeyboardButton inlineKeyboardButton = new InlineKeyboardButton();
-        inlineKeyboardButton.setText(date.toString());
+        inlineKeyboardButton.setText(date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
         ChooseTimeCallbackData callbackData = new ChooseTimeCallbackData();
         callbackData.setType(CallbackTypes.CHOOSE_TIME);
         callbackData.setDate(date);

@@ -21,6 +21,7 @@ import java.util.*;
 @Service
 public class GoogleCalendarService implements GoogleAPI {
 
+    public static final String TIME_ZONE = "+03:00";
     private final Calendar service = GoogleCalendarUtils.getCalendarService();
 
     private final UserVisitBotService userVisitBotService;
@@ -59,11 +60,11 @@ public class GoogleCalendarService implements GoogleAPI {
                 .setDescription(user.getName());
         EventDateTime startE = new EventDateTime()
                 .setDateTime(new DateTime(start))
-                .setTimeZone("+03:00");
+                .setTimeZone(TIME_ZONE);
         event.setStart(startE);
         EventDateTime endE = new EventDateTime()
                 .setDateTime(new DateTime(end))
-                .setTimeZone("+03:00");
+                .setTimeZone(TIME_ZONE);
         event.setEnd(endE);
         try {
             Event execute = service.events().insert(CALENDAR_ID, event).execute();

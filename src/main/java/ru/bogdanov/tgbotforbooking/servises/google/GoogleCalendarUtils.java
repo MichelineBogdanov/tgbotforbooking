@@ -12,8 +12,6 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
-import com.google.api.services.calendar.model.CalendarList;
-import com.google.api.services.calendar.model.Event;
 
 import java.io.*;
 import java.security.GeneralSecurityException;
@@ -38,10 +36,11 @@ public class GoogleCalendarUtils {
      * Global instance of the scopes required by this quickstart.
      * If modifying these scopes, delete your previously saved tokens/ folder.
      */
-    private static final List<String> SCOPES = Collections.singletonList(CalendarScopes.CALENDAR_READONLY);
+    private static final List<String> SCOPES = Collections.singletonList(CalendarScopes.CALENDAR);
     private static final String CREDENTIALS_FILE_PATH = "credentials.json";
-    public static final String SCOUPE_CALENDAR = "https://www.googleapis.com/auth/calendar";
     public static final String USER_ID = "432721917835-roanjq6vc0ukasmqrlml2ej8ceuimp5v.apps.googleusercontent.com";
+    public static final String ACCESS_TYPE = "offline";
+    public static final int PORT = 8888;
 
 
     public static Calendar getCalendarService() {
@@ -59,30 +58,15 @@ public class GoogleCalendarUtils {
     }
 
     public static Credential getCredential() throws IOException, GeneralSecurityException {
-        InputStream in = new FileInputStream(CREDENTIALS_FILE_PATH);
-        GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
+        GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new FileReader(CREDENTIALS_FILE_PATH));
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
         GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
                 HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
                 .setDataStoreFactory(new FileDataStoreFactory(new File(TOKENS_DIRECTORY_PATH)))
-                .setAccessType("offline")
-                .setScopes(List.of(SCOUPE_CALENDAR))
+                .setAccessType(ACCESS_TYPE)
                 .build();
-        LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8888).build();
+        LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(PORT).build();
         return new AuthorizationCodeInstalledApp(flow, receiver).authorize(USER_ID);
-    }
-
-    public static Event getEvents() throws GeneralSecurityException, IOException {
-        Credential credential = getCredential();
-        Calendar service = new Calendar.Builder(
-                GoogleNetHttpTransport.newTrustedTransport(),
-                JSON_FACTORY,
-                credential)
-                .setApplicationName(APPLICATION_NAME)
-                .build();
-        CalendarList execute = service.calendarList().list().execute();
-        execute.getItems().forEach(calendarListEntry -> System.out.println(calendarListEntry.getId()));
-        return service.events().get("primary", "eve").execute();
     }
 
 }
