@@ -8,6 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import ru.bogdanov.tgbotforbooking.servises.telegram.JsonHandler;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities.BaseCallbackData;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.CallbackTypes;
+import ru.bogdanov.tgbotforbooking.servises.telegram.utils.MessagesText;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,14 +18,9 @@ public class VisitDealsCommand implements Command {
 
     @Override
     public SendMessage apply(Update update) {
-        String messageText = """
-                Тут вы можете просмотреть информацию:
-                - свободные номерки
-                - записаться на прием
-                - отменить запись""";
         SendMessage message = new SendMessage();
         message.setChatId(update.getMessage().getChatId());
-        message.setText(messageText);
+        message.setText(MessagesText.VISIT_DEALS_COMMAND_TEXT);
         addKeyboard(message);
         return message;
     }

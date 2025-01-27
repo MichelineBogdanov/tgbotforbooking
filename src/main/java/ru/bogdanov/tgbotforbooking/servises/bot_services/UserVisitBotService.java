@@ -7,8 +7,8 @@ import ru.bogdanov.tgbotforbooking.enteties.Visit;
 import ru.bogdanov.tgbotforbooking.repositories.UserRepository;
 import ru.bogdanov.tgbotforbooking.repositories.VisitRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserVisitBotService {
@@ -42,8 +42,8 @@ public class UserVisitBotService {
     }
 
     @Transactional
-    public List<Visit> getVisitByUserName(String tgAccount) {
-        return visitRepository.findVisitByUserTgAccount(tgAccount);
+    public List<Visit> getFutureVisitsByUserName(String tgAccount) {
+        return visitRepository.findVisitByUserTgAccountAndVisitDateTimeGreaterThan(tgAccount, LocalDateTime.now());
     }
 
     @Transactional

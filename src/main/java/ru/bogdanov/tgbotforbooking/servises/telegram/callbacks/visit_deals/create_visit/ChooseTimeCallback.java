@@ -16,12 +16,12 @@ import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.CallbackHandler;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.CallbackTypes;
 import ru.bogdanov.tgbotforbooking.servises.telegram.utils.MessagesText;
 
-import java.time.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 @Component
 public class ChooseTimeCallback implements CallbackHandler {
@@ -42,7 +42,7 @@ public class ChooseTimeCallback implements CallbackHandler {
         long chatId = update.getCallbackQuery().getMessage().getChatId();
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
-        message.setText(MessagesText.CHOOSE_TIME);
+        message.setText(String.format(MessagesText.CHOOSE_TIME, date));
         addKeyboard(message, date, freeSlots);
         return message;
     }

@@ -8,7 +8,8 @@ public interface MessagesText {
             Доступные команды:
             /start - Начать работу с ботом
             /generalinfo - Получение информации о номерках/месту приема
-            /visitdeals - Запись на прием/отмена записи""";
+            /visitdeals - Запись на прием/отмена записи
+            """;
 
     String GENERAL_INFO_COMMAND_TEXT = """
             Тут вы можете получить информацию о:
@@ -16,6 +17,12 @@ public interface MessagesText {
             - свободных номерках
             - месте приема
             """;
+
+    String VISIT_DEALS_COMMAND_TEXT = """
+                Тут вы можете осуществить:
+                - запись на прием
+                - отмену записи
+                """;
 
     String PLACE_INFO_TEXT = """
             https://yandex.ru/maps/2/saint-petersburg/house/moskovskiy_prospekt_109/Z0kYdQZoTkAFQFtjfXR5eHRnYg==/?ll=30.320563%2C59.890760&z=16.64
@@ -30,10 +37,15 @@ public interface MessagesText {
 
     String CHOOSE_DATE = "Выберите дату:";
 
-    String CHOOSE_TIME = "Выберите время:";
+    String CHOOSE_TIME = """
+            Выбранная дата: %s
+            Теперь выберите время:
+            """;
 
-    String SUCCESS_BOOKING = "Поздравляем, %s! Вы записаны на: %s %s";
+    String SUCCESS_BOOKING = "Поздравляем, %s! Вы записаны на: %s";
 
-    String SUCCESS_CANCEL = "Поздравляем! Был(и) удалены следующие визиты:";
+    String SUCCESS_CANCEL = """
+            Поздравляем! Был(и) удалены следующие визиты:
+            """;
 
 }

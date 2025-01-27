@@ -15,8 +15,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.function.Consumer;
 
 @Service
 public class GoogleCalendarService implements GoogleAPI {
@@ -78,18 +78,18 @@ public class GoogleCalendarService implements GoogleAPI {
     }
 
     public String deleteVisit(String userName) {
-        List<Visit> visits = userVisitBotService.getVisitByUserName(userName);
-        try {
-            for (Visit visit : visits) {
+        List<Visit> visits = userVisitBotService.getFutureVisitsByUserName(userName);
+        for (Visit visit : visits) {
+            try {
                 service.events().delete(CALENDAR_ID, visit.getVisitId()).execute();
                 userVisitBotService.deleteVisit(visit);
+            } catch (IOException e) {
+                System.out.println("Произошла ошибка: " + e.getMessage());
             }
-        } catch (IOException e) {
-            System.out.println("Произошла ошибка: " + e.getMessage());
         }
         StringJoiner sj = new StringJoiner("\n");
         sj.add(MessagesText.SUCCESS_CANCEL);
-        visits.forEach(visit -> sj.add(visit.getVisitDateTime().toString()));
+        visits.forEach(visit -> sj.add(visit.getVisitDateTime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"))));
         return sj.toString();
     }
 

@@ -9,10 +9,9 @@ import ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities.Base
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.CallbackHandler;
 import ru.bogdanov.tgbotforbooking.servises.telegram.utils.MessagesText;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
 import java.util.StringJoiner;
-import java.util.function.Consumer;
 
 @Component
 public class GetVisitsCallback implements CallbackHandler {
@@ -27,11 +26,11 @@ public class GetVisitsCallback implements CallbackHandler {
     public SendMessage apply(BaseCallbackData callback, Update update) {
         Long chatId = update.getCallbackQuery().getMessage().getChatId();
         String userName = update.getCallbackQuery().getFrom().getUserName();
-        List<Visit> visits = userVisitBotService.getVisitByUserName(userName);
+        List<Visit> visits = userVisitBotService.getFutureVisitsByUserName(userName);
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
         StringJoiner sj = new StringJoiner("\n");
-        visits.forEach(visit -> sj.add(visit.getVisitDateTime().toString()));
+        visits.forEach(visit -> sj.add(visit.getVisitDateTime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"))));
         String text = visits.isEmpty()
                 ? MessagesText.NO_VISITS
                 : String.format(MessagesText.YOUR_VISITS_TEXT, sj);

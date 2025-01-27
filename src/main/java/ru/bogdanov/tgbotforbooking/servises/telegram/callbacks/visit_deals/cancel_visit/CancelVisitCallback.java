@@ -7,7 +7,6 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.bogdanov.tgbotforbooking.servises.google.GoogleAPI;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities.BaseCallbackData;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.CallbackHandler;
-import ru.bogdanov.tgbotforbooking.servises.telegram.utils.MessagesText;
 
 @Component
 public class CancelVisitCallback implements CallbackHandler {
@@ -25,7 +24,7 @@ public class CancelVisitCallback implements CallbackHandler {
         long chatId = update.getCallbackQuery().getMessage().getChatId();
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
-        message.setText(String.format(MessagesText.SUCCESS_CANCEL, userName, deletedVisit));
+        message.setText(deletedVisit);
         return message;
     }
 
