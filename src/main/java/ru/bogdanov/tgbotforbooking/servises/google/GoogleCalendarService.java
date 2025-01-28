@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import ru.bogdanov.tgbotforbooking.enteties.User;
 import ru.bogdanov.tgbotforbooking.enteties.Visit;
 import ru.bogdanov.tgbotforbooking.servises.bot_services.UserVisitBotService;
-import ru.bogdanov.tgbotforbooking.servises.telegram.utils.MessagesText;
 import ru.bogdanov.tgbotforbooking.servises.telegram.utils.ScheduleUtils;
 
 import java.io.IOException;
@@ -15,7 +14,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
@@ -38,7 +36,7 @@ public class GoogleCalendarService implements GoogleAPI {
             FreeBusyRequest request = new FreeBusyRequest()
                     .setTimeMin(start)
                     .setTimeMax(end)
-                    .setTimeZone("+03:00")
+                    .setTimeZone(TIME_ZONE)
                     .setItems(Collections.singletonList(new FreeBusyRequestItem().setId(CALENDAR_ID)));
             // Отправьте запрос
             FreeBusyResponse response = service.freebusy().query(request).execute();
@@ -78,20 +76,17 @@ public class GoogleCalendarService implements GoogleAPI {
         }
     }
 
-    public String deleteVisit(String userName) {
+    public List<Visit> deleteVisit(String userName) {
         List<Visit> visits = userVisitBotService.getFutureVisitsByUserName(userName);
         for (Visit visit : visits) {
             try {
-                service.events().delete(CALENDAR_ID, visit.getVisitId()).execute();
                 userVisitBotService.deleteVisit(visit);
+                service.events().delete(CALENDAR_ID, visit.getVisitId()).execute();
             } catch (IOException e) {
-                System.out.println("Произошла ошибка: " + e.getMessage());
+                System.out.println("ERROR: " + e.getMessage());
             }
         }
-        StringJoiner sj = new StringJoiner("\n");
-        sj.add(MessagesText.SUCCESS_CANCEL);
-        visits.forEach(visit -> sj.add(visit.getVisitDateTime().format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"))));
-        return sj.toString();
+        return visits;
     }
 
     @Override

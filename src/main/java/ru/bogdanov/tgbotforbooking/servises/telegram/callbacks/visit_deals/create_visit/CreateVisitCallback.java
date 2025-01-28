@@ -8,12 +8,12 @@ import ru.bogdanov.tgbotforbooking.servises.google.GoogleAPI;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities.BaseCallbackData;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities.CreateVisitCallbackData;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.CallbackHandler;
+import ru.bogdanov.tgbotforbooking.servises.telegram.utils.DateTimeUtils;
 import ru.bogdanov.tgbotforbooking.servises.telegram.utils.MessagesText;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 
 @Component
 public class CreateVisitCallback implements CallbackHandler {
@@ -34,7 +34,7 @@ public class CreateVisitCallback implements CallbackHandler {
         long chatId = update.getCallbackQuery().getMessage().getChatId();
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
-        message.setText(String.format(MessagesText.SUCCESS_BOOKING, userName, LocalDateTime.of(date, time).format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm"))));
+        message.setText(String.format(MessagesText.SUCCESS_BOOKING, userName, DateTimeUtils.fromLocalDateTimeToDateTimeString(LocalDateTime.of(date, time))));
         return message;
     }
 

@@ -46,6 +46,7 @@ public interface MessagesText {
 
     String SUCCESS_CANCEL = """
             Поздравляем! Был(и) удалены следующие визиты:
+            %s
             """;
 
     String UNKNOWN_COMMAND = "Данная команда не может быть обработана!";

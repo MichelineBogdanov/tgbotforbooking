@@ -14,6 +14,7 @@ import ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities.Choo
 import ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities.CreateVisitCallbackData;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.CallbackHandler;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.CallbackTypes;
+import ru.bogdanov.tgbotforbooking.servises.telegram.utils.DateTimeUtils;
 import ru.bogdanov.tgbotforbooking.servises.telegram.utils.MessagesText;
 
 import java.time.LocalDate;
@@ -42,7 +43,7 @@ public class ChooseTimeCallback implements CallbackHandler {
         long chatId = update.getCallbackQuery().getMessage().getChatId();
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
-        message.setText(String.format(MessagesText.CHOOSE_TIME, date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))));
+        message.setText(String.format(MessagesText.CHOOSE_TIME, DateTimeUtils.fromLocalDateToDateString(date)));
         addKeyboard(message, date, freeSlots);
         return message;
     }

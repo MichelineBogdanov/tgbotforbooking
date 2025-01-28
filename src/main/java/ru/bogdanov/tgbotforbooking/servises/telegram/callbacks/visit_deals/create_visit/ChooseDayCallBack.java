@@ -13,14 +13,12 @@ import ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities.Base
 import ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities.ChooseTimeCallbackData;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.CallbackHandler;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.CallbackTypes;
+import ru.bogdanov.tgbotforbooking.servises.telegram.utils.DateTimeUtils;
 import ru.bogdanov.tgbotforbooking.servises.telegram.utils.MessagesText;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Component
@@ -35,8 +33,8 @@ public class ChooseDayCallBack implements CallbackHandler {
     @Override
     public SendMessage apply(BaseCallbackData callback, Update update) {
         List<LocalDate> freeDays = service.getFreeDays(
-                new DateTime(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant())),
-                new DateTime(Date.from(LocalDate.now().plusMonths(1).withDayOfMonth(1).atStartOfDay().atZone(ZoneId.systemDefault()).toInstant())));
+                new DateTime(DateTimeUtils.fromLocalDateTimeToDate(LocalDateTime.now())),
+                new DateTime(DateTimeUtils.fromLocalDateTimeToDate(LocalDate.now().plusMonths(1).withDayOfMonth(1).atStartOfDay())));
         long chatId = update.getCallbackQuery().getMessage().getChatId();
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
@@ -59,7 +57,7 @@ public class ChooseDayCallBack implements CallbackHandler {
 
     private InlineKeyboardButton getDateInfoButtons(LocalDate date) {
         InlineKeyboardButton inlineKeyboardButton = new InlineKeyboardButton();
-        inlineKeyboardButton.setText(date.format(DateTimeFormatter.ofPattern("dd-MM-yyyy")));
+        inlineKeyboardButton.setText(DateTimeUtils.fromLocalDateToDateString(date));
         ChooseTimeCallbackData callbackData = new ChooseTimeCallbackData();
         callbackData.setType(CallbackTypes.CHOOSE_TIME);
         callbackData.setDate(date);

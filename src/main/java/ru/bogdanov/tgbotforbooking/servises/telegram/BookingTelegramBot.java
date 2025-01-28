@@ -2,6 +2,7 @@ package ru.bogdanov.tgbotforbooking.servises.telegram;
 
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
@@ -63,6 +64,15 @@ public class BookingTelegramBot extends TelegramLongPollingBot {
             }
         } else if (update.hasCallbackQuery()) {
             sendMessage(callbacksHandler.handleCallbacks(update));
+            sendAnswerCallback(update.getCallbackQuery().getId());
+        }
+    }
+
+    private void sendAnswerCallback(String chatId) {
+        try {
+            execute(new AnswerCallbackQuery(chatId));
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
         }
     }
 
