@@ -6,6 +6,7 @@ import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
+import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
 import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
@@ -63,7 +64,9 @@ public class BookingTelegramBot extends TelegramLongPollingBot {
                 sendMessage(new SendMessage(chatId, MessagesText.UNKNOWN_COMMAND));
             }
         } else if (update.hasCallbackQuery()) {
+            Message message = update.getCallbackQuery().getMessage();
             sendMessage(callbacksHandler.handleCallbacks(update));
+            deleteMessage(message.getChatId().toString(), message.getMessageId());
             sendAnswerCallback(update.getCallbackQuery().getId());
         }
     }

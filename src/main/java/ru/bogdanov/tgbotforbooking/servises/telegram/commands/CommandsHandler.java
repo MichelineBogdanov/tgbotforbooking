@@ -28,4 +28,9 @@ public class CommandsHandler {
         return command.apply(update);
     }
 
+    public SendMessage handleCommands(CommandTypes commandType, Update update) {
+        Command command = handler.get(commandType);
+        return command.apply(update);
+    }
+
 }

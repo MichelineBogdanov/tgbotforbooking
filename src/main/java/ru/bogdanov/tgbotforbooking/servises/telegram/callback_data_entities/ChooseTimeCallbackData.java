@@ -3,6 +3,7 @@ package ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.CallbackTypes;
 
 import java.time.LocalDate;
 

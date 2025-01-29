@@ -51,4 +51,6 @@ public interface MessagesText {
 
     String UNKNOWN_COMMAND = "Данная команда не может быть обработана!";
 
+    String BACK_TEXT = "Назад";
+
 }

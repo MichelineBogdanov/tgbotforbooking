@@ -22,7 +22,11 @@ public enum CallbackTypes {
     @JsonProperty("GET_SCHEDULE")
     GET_SCHEDULE("Расписание"),
     @JsonProperty("GET_PLACE_INFO")
-    GET_PLACE_INFO("Место приема");
+    GET_PLACE_INFO("Место приема"),
+
+    // COMMON
+    @JsonProperty("BACK")
+    BACK("Назад");
 
     private final String description;
 

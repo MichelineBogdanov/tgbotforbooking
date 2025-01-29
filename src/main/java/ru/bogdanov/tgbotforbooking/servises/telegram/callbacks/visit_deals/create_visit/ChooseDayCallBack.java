@@ -9,10 +9,12 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import ru.bogdanov.tgbotforbooking.servises.google.GoogleAPI;
 import ru.bogdanov.tgbotforbooking.servises.telegram.JsonHandler;
+import ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities.BackCallBackData;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities.BaseCallbackData;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities.ChooseTimeCallbackData;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.CallbackHandler;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.CallbackTypes;
+import ru.bogdanov.tgbotforbooking.servises.telegram.commands.CommandTypes;
 import ru.bogdanov.tgbotforbooking.servises.telegram.utils.DateTimeUtils;
 import ru.bogdanov.tgbotforbooking.servises.telegram.utils.MessagesText;
 
@@ -51,6 +53,7 @@ public class ChooseDayCallBack implements CallbackHandler {
         }
         List<List<InlineKeyboardButton>> rowList = new ArrayList<>();
         rowList.add(keyboardButtonsRow);
+        rowList.add(List.of(getBackButton()));
         inlineKeyboardMarkup.setKeyboard(rowList);
         sendMessage.setReplyMarkup(inlineKeyboardMarkup);
     }
@@ -61,6 +64,17 @@ public class ChooseDayCallBack implements CallbackHandler {
         ChooseTimeCallbackData callbackData = new ChooseTimeCallbackData();
         callbackData.setType(CallbackTypes.CHOOSE_TIME);
         callbackData.setDate(date);
+        String jsonCallback = JsonHandler.toJson(callbackData);
+        inlineKeyboardButton.setCallbackData(jsonCallback);
+        return inlineKeyboardButton;
+    }
+
+    private InlineKeyboardButton getBackButton() {
+        InlineKeyboardButton inlineKeyboardButton = new InlineKeyboardButton();
+        inlineKeyboardButton.setText(MessagesText.BACK_TEXT);
+        BackCallBackData callbackData = new BackCallBackData();
+        callbackData.setType(CallbackTypes.BACK);
+        callbackData.setCommand(CommandTypes.VISIT_DEALS);
         String jsonCallback = JsonHandler.toJson(callbackData);
         inlineKeyboardButton.setCallbackData(jsonCallback);
         return inlineKeyboardButton;
