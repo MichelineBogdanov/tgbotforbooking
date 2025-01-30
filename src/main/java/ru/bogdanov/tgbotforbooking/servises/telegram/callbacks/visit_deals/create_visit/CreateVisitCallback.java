@@ -38,7 +38,7 @@ public class CreateVisitCallback implements CallbackHandler {
         long chatId = update.getCallbackQuery().getMessage().getChatId();
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
-        message.setText(String.format(MessagesText.SUCCESS_BOOKING, userName, DateTimeUtils.fromLocalDateTimeToDateTimeString(LocalDateTime.of(date, time))));
+        message.setText(String.format(MessagesText.SUCCESS_BOOKING_TEXT, userName, DateTimeUtils.fromLocalDateTimeToDateTimeString(LocalDateTime.of(date, time))));
 
         KeyboardBuilder keyboardBuilder = new KeyboardBuilder();
         InlineKeyboardMarkup keyboardMarkup = keyboardBuilder.addBackButton(CommandTypes.VISIT_DEALS).build();

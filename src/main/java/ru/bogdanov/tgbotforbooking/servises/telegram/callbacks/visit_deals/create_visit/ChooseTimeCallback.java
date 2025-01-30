@@ -43,7 +43,7 @@ public class ChooseTimeCallback implements CallbackHandler {
         long chatId = update.getCallbackQuery().getMessage().getChatId();
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
-        message.setText(String.format(MessagesText.CHOOSE_TIME, DateTimeUtils.fromLocalDateToDateString(date)));
+        message.setText(String.format(MessagesText.CHOOSE_TIME_TEXT, DateTimeUtils.fromLocalDateToDateString(date)));
 
         KeyboardBuilder keyboardBuilder = new KeyboardBuilder();
         for (LocalTime freeSlot : freeSlots) {

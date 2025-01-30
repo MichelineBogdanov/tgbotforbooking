@@ -32,7 +32,7 @@ public class ChooseCancelVisitCallback implements CallbackHandler {
         deletedVisit.forEach(visit -> sj.add(DateTimeUtils.fromLocalDateTimeToDateTimeString(visit.getVisitDateTime())));
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
-        message.setText(String.format(MessagesText.SUCCESS_CANCEL, sj));
+        message.setText(String.format(MessagesText.SUCCESS_CANCEL_TEXT, sj));
         return message;
     }
 

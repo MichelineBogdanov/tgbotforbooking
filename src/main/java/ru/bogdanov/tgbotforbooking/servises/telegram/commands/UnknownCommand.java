@@ -11,7 +11,7 @@ public class UnknownCommand implements Command {
     @Override
     public SendMessage apply(Update update) {
         Long chatId = update.getMessage().getChatId();
-        return new SendMessage(chatId.toString(), MessagesText.UNKNOWN_COMMAND);
+        return new SendMessage(chatId.toString(), MessagesText.UNKNOWN_COMMAND_TEXT);
     }
 
 }

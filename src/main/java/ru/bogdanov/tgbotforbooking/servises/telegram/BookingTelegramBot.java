@@ -63,20 +63,20 @@ public class BookingTelegramBot extends TelegramLongPollingBot {
 
     @Override
     public void onUpdateReceived(Update update) {
-        String userName = update.getMessage().getFrom().getFirstName();
-        String userTgAccount = update.getMessage().getFrom().getUserName();
-        if (!userVisitBotService.isUserExistsByTgAccount(userName)) {
-            User user = new User();
-            user.setName(userName);
-            user.setTgAccount(userTgAccount);
-            userVisitBotService.createUser(user);
-        }
         if (update.hasMessage() && update.getMessage().hasText()) {
             String chatId = update.getMessage().getChatId().toString();
             if (update.getMessage().getText().startsWith("/")) {
+                String userName = update.getMessage().getFrom().getFirstName();
+                String userTgAccount = update.getMessage().getFrom().getUserName();
+                if (userVisitBotService.isUserExistsByTgAccount(userName)) {
+                    User user = new User();
+                    user.setName(userName);
+                    user.setTgAccount(userTgAccount);
+                    userVisitBotService.createUser(user);
+                }
                 sendMessage(commandsHandler.handleCommands(update));
             } else {
-                sendMessage(new SendMessage(chatId, MessagesText.UNKNOWN_COMMAND));
+                sendMessage(new SendMessage(chatId, MessagesText.UNKNOWN_COMMAND_TEXT));
             }
         } else if (update.hasCallbackQuery()) {
             Message message = update.getCallbackQuery().getMessage();

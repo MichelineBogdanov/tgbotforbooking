@@ -33,23 +33,23 @@ public interface MessagesText {
             %s
             """;
 
-    String NO_VISITS = "У вас нет записей!";
+    String NO_VISITS_TEXT = "У вас нет записей!";
 
-    String CHOOSE_DATE = "Выберите дату:";
+    String CHOOSE_DATE_TEXT = "Выберите дату:";
 
-    String CHOOSE_TIME = """
+    String CHOOSE_TIME_TEXT = """
             Выбранная дата: %s
             Теперь выберите время:
             """;
 
-    String SUCCESS_BOOKING = "Поздравляем, %s! Вы записаны на: %s";
+    String SUCCESS_BOOKING_TEXT = "Поздравляем, %s! Вы записаны на: %s";
 
-    String SUCCESS_CANCEL = """
+    String SUCCESS_CANCEL_TEXT = """
             Поздравляем! Был(и) удалены следующие визиты:
             %s
             """;
 
-    String UNKNOWN_COMMAND = "Данная команда не может быть обработана!";
+    String UNKNOWN_COMMAND_TEXT = "Данная команда не может быть обработана!";
 
     String BACK_TEXT = "Назад";
 

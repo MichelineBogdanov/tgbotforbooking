@@ -32,11 +32,6 @@ public class UserVisitBotService {
     }
 
     @Transactional
-    public User getUserById(Long id) {
-        return userRepository.findById(id).get();
-    }
-
-    @Transactional
     public void createVisit(Visit visit) {
         visitRepository.save(visit);
     }

@@ -35,7 +35,7 @@ public class GetVisitsCallback implements CallbackHandler {
         StringJoiner sj = new StringJoiner("\n");
         visits.forEach(visit -> sj.add(DateTimeUtils.fromLocalDateTimeToDateTimeString(visit.getVisitDateTime())));
         String text = visits.isEmpty()
-                ? MessagesText.NO_VISITS
+                ? MessagesText.NO_VISITS_TEXT
                 : String.format(MessagesText.YOUR_VISITS_TEXT, sj);
         message.setText(text);
 

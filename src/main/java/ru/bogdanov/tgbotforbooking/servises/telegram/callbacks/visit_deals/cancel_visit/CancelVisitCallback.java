@@ -39,7 +39,7 @@ public class CancelVisitCallback implements CallbackHandler {
         // Создаем сообщение
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
-        message.setText(String.format(MessagesText.SUCCESS_CANCEL, sj));
+        message.setText(String.format(MessagesText.SUCCESS_CANCEL_TEXT, sj));
 
         // Клавиатура
         InlineKeyboardMarkup keyboardMarkup = new KeyboardBuilder().addBackButton(CommandTypes.VISIT_DEALS).build();
