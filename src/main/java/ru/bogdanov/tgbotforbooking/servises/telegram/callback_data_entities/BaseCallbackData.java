@@ -11,6 +11,10 @@ public class BaseCallbackData {
     public BaseCallbackData() {
     }
 
+    public BaseCallbackData(CallbackTypes type) {
+        this.type = type;
+    }
+
     public CallbackTypes getType() {
         return type;
     }

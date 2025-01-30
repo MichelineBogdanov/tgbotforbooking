@@ -3,7 +3,7 @@ package ru.bogdanov.tgbotforbooking.servises.google;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.model.TimePeriod;
 import org.springframework.stereotype.Service;
-import ru.bogdanov.tgbotforbooking.enteties.Visit;
+import ru.bogdanov.tgbotforbooking.entities.Visit;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

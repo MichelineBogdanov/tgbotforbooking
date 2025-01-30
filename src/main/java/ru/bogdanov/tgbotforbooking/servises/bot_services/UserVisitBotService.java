@@ -2,8 +2,8 @@ package ru.bogdanov.tgbotforbooking.servises.bot_services;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.bogdanov.tgbotforbooking.enteties.User;
-import ru.bogdanov.tgbotforbooking.enteties.Visit;
+import ru.bogdanov.tgbotforbooking.entities.User;
+import ru.bogdanov.tgbotforbooking.entities.Visit;
 import ru.bogdanov.tgbotforbooking.repositories.UserRepository;
 import ru.bogdanov.tgbotforbooking.repositories.VisitRepository;
 

@@ -1,4 +1,4 @@
-package ru.bogdanov.tgbotforbooking.enteties;
+package ru.bogdanov.tgbotforbooking.entities;
 
 import jakarta.persistence.*;
 

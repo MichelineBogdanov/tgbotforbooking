@@ -4,8 +4,8 @@ import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.model.*;
 import org.springframework.stereotype.Service;
-import ru.bogdanov.tgbotforbooking.enteties.User;
-import ru.bogdanov.tgbotforbooking.enteties.Visit;
+import ru.bogdanov.tgbotforbooking.entities.User;
+import ru.bogdanov.tgbotforbooking.entities.Visit;
 import ru.bogdanov.tgbotforbooking.servises.bot_services.UserVisitBotService;
 import ru.bogdanov.tgbotforbooking.servises.telegram.utils.ScheduleUtils;
 

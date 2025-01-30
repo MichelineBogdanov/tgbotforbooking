@@ -2,7 +2,7 @@ package ru.bogdanov.tgbotforbooking.repositories;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
-import ru.bogdanov.tgbotforbooking.enteties.Visit;
+import ru.bogdanov.tgbotforbooking.entities.Visit;
 
 import java.time.LocalDateTime;
 import java.util.List;
