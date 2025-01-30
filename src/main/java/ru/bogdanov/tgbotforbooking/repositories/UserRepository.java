@@ -9,4 +9,6 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     User findByTgAccount(String tgAccount);
 
+    boolean existsUserByTgAccount(String tgAccount);
+
 }

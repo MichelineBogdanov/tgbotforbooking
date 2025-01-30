@@ -50,4 +50,9 @@ public class UserVisitBotService {
     public void deleteVisit(Visit visit) {
         visitRepository.delete(visit);
     }
+
+    @Transactional
+    public boolean isUserExistsByTgAccount(String tgAccount) {
+        return userRepository.existsUserByTgAccount(tgAccount);
+    }
 }
