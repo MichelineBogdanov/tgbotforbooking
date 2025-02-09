@@ -93,7 +93,7 @@ public class GoogleCalendarService implements GoogleAPI {
     public List<LocalDate> getFreeDays(DateTime start, DateTime end) {
         List<TimePeriod> freePeriods = getFreePeriods(start, end);
         Map<LocalDate, List<LocalTime>> freeSlots = ScheduleUtils.getFreeSlots(freePeriods);
-        return freeSlots.keySet().stream().toList();
+        return freeSlots.keySet().stream().sorted(LocalDate::compareTo).toList();
     }
 
     @Override

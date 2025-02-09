@@ -26,7 +26,12 @@ public class KeyboardBuilder {
         InlineKeyboardButton button = new InlineKeyboardButton(text);
         String toJson = JsonHandler.toJson(callbackData);
         button.setCallbackData(toJson);
-        currentRow.add(button);
+        if (currentRow.size() < 3) {
+            currentRow.add(button);
+        } else {
+            keyboard.add(new ArrayList<>(currentRow));
+            currentRow.clear();
+        }
         return this;
     }
 

@@ -138,6 +138,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>tgbotforbooking</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

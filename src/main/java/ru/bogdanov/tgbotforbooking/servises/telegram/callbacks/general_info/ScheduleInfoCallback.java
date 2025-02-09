@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 @Component
 public class ScheduleInfoCallback implements CallbackHandler {
@@ -48,20 +49,21 @@ public class ScheduleInfoCallback implements CallbackHandler {
 
     private String getStringForMessage(Map<LocalDate, List<LocalTime>> freeSlots) {
         StringBuilder result = new StringBuilder();
-        int index = 1;
-        for (Map.Entry<LocalDate, List<LocalTime>> entry : freeSlots.entrySet()) {
-            List<String> elements = entry.getValue()
-                    .stream()
+        final int[] index = {1};
+        TreeMap<LocalDate, List<LocalTime>> freeSlotsTreeMap = new TreeMap<>(freeSlots);
+        freeSlotsTreeMap.forEach((localDate, times) -> {
+            List<String> elements = times.stream()
+                    .sorted(LocalTime::compareTo)
                     .map(LocalTime::toString)
                     .toList();
-            result.append(index)
+            result.append(index[0])
                     .append(") ")
-                    .append(DateTimeUtils.fromLocalDateToDateString(entry.getKey()))
+                    .append(DateTimeUtils.fromLocalDateToDateString(localDate))
                     .append(": ")
                     .append(String.join(",\t", elements))
                     .append("\n");
-            index++;
-        }
+            index[0]++;
+        });
         return result.toString();
     }
 
