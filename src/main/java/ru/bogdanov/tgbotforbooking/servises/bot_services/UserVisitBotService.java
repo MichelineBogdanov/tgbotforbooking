@@ -48,6 +48,6 @@ public class UserVisitBotService {
 
     @Transactional
     public boolean isUserExistsByTgAccount(String tgAccount) {
-        return userRepository.existsUserByTgAccount(tgAccount);
+        return userRepository.existsByTgAccount(tgAccount);
     }
 }

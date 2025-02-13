@@ -1,9 +1,36 @@
+x-timezone: &timezone
+  TZ: Europe/Moscow
+
 services:
-  postgres:
-    image: 'postgres:latest'
+  java_app:
+    image: java_app
+    container_name: java_app
+    restart: always
     environment:
-      - 'POSTGRES_DB=mydatabase'
-      - 'POSTGRES_PASSWORD=secret'
-      - 'POSTGRES_USER=myuser'
+      SPRING_DATASOURCE_URL: ${DB_URL}
+      SPRING_DATASOURCE_USERNAME: ${DB_USER}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      SPRING_JPA_HIBERNATE_DDL-AUTO: update
+      BOT_TOKEN: ${BOT_TOKEN}
+      <<: *timezone
     ports:
-      - '5433:5432'
+      - 8888:8888
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:14
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_DB: ${DB}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      <<: *timezone
+    ports:
+      - 5440:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata: { }

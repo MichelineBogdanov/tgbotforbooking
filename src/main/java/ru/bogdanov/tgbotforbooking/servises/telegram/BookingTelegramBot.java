@@ -1,5 +1,6 @@
 package ru.bogdanov.tgbotforbooking.servises.telegram;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
@@ -22,6 +23,7 @@ import ru.bogdanov.tgbotforbooking.servises.telegram.utils.MessagesText;
 import java.util.ArrayList;
 
 @Component
+@Slf4j
 public class BookingTelegramBot extends TelegramLongPollingBot {
 
     private final BotConfig config;
@@ -30,6 +32,10 @@ public class BookingTelegramBot extends TelegramLongPollingBot {
 
     public final CallbacksHandler callbacksHandler;
     public final UserVisitBotService userVisitBotService;
+
+    static {
+        log.info("Application started!");
+    }
 
     public BookingTelegramBot(BotConfig config
             , CommandsHandler commandsHandler
@@ -68,7 +74,7 @@ public class BookingTelegramBot extends TelegramLongPollingBot {
             if (update.getMessage().getText().startsWith("/")) {
                 String userName = update.getMessage().getFrom().getFirstName();
                 String userTgAccount = update.getMessage().getFrom().getUserName();
-                if (userVisitBotService.isUserExistsByTgAccount(userName)) {
+                if (!userVisitBotService.isUserExistsByTgAccount(userTgAccount)) {
                     User user = new User();
                     user.setName(userName);
                     user.setTgAccount(userTgAccount);
