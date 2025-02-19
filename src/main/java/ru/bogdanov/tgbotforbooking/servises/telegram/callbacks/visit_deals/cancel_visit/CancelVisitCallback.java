@@ -8,14 +8,15 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import ru.bogdanov.tgbotforbooking.entities.Visit;
 import ru.bogdanov.tgbotforbooking.servises.google.GoogleAPI;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities.BaseCallbackData;
+import ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities.ChooseCancelVisitCallbackData;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.CallbackHandler;
+import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.CallbackTypes;
 import ru.bogdanov.tgbotforbooking.servises.telegram.commands.CommandTypes;
 import ru.bogdanov.tgbotforbooking.servises.telegram.utils.DateTimeUtils;
 import ru.bogdanov.tgbotforbooking.servises.telegram.utils.KeyboardBuilder;
 import ru.bogdanov.tgbotforbooking.servises.telegram.utils.MessagesText;
 
 import java.util.List;
-import java.util.StringJoiner;
 
 @Component
 public class CancelVisitCallback implements CallbackHandler {
@@ -30,19 +31,24 @@ public class CancelVisitCallback implements CallbackHandler {
     public SendMessage apply(BaseCallbackData callback, Update update) {
         // Удаляем визиты
         String userName = update.getCallbackQuery().getFrom().getUserName();
-        List<Visit> deletedVisits = service.deleteVisit(userName);
-
+        List<Visit> visits = service.getUserVisits(userName);
         long chatId = update.getCallbackQuery().getMessage().getChatId();
-        StringJoiner sj = new StringJoiner("\n");
-        deletedVisits.forEach(visit -> sj.add(DateTimeUtils.fromLocalDateTimeToDateTimeString(visit.getVisitDateTime())));
 
         // Создаем сообщение
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
-        message.setText(String.format(MessagesText.SUCCESS_CANCEL_TEXT, sj));
+        message.setText(MessagesText.YOUR_VISITS_FOR_CANCEL_TEXT);
 
         // Клавиатура
-        InlineKeyboardMarkup keyboardMarkup = new KeyboardBuilder().addBackButton(CommandTypes.VISIT_DEALS).build();
+        KeyboardBuilder keyboardBuilder = new KeyboardBuilder();
+        for (Visit visit : visits) {
+            ChooseCancelVisitCallbackData callbackData = new ChooseCancelVisitCallbackData();
+            callbackData.setType(CallbackTypes.CHOOSE_CANCEL_VISIT);
+            callbackData.setVisitId(visit.getId().toString());
+            keyboardBuilder.addButton(DateTimeUtils.fromLocalDateTimeToDateTimeString(visit.getVisitDateTime()), callbackData);
+            keyboardBuilder.goToNewLine();
+        }
+        InlineKeyboardMarkup keyboardMarkup = keyboardBuilder.addBackButton(CommandTypes.VISIT_DEALS).build();
         message.setReplyMarkup(keyboardMarkup);
         return message;
     }

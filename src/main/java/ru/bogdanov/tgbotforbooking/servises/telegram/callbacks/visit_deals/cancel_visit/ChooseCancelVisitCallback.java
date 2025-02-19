@@ -4,15 +4,16 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import ru.bogdanov.tgbotforbooking.entities.Visit;
 import ru.bogdanov.tgbotforbooking.servises.google.GoogleAPI;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities.BaseCallbackData;
+import ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities.ChooseCancelVisitCallbackData;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.CallbackHandler;
+import ru.bogdanov.tgbotforbooking.servises.telegram.commands.CommandTypes;
 import ru.bogdanov.tgbotforbooking.servises.telegram.utils.DateTimeUtils;
+import ru.bogdanov.tgbotforbooking.servises.telegram.utils.KeyboardBuilder;
 import ru.bogdanov.tgbotforbooking.servises.telegram.utils.MessagesText;
-
-import java.util.List;
-import java.util.StringJoiner;
 
 @Component
 public class ChooseCancelVisitCallback implements CallbackHandler {
@@ -25,14 +26,21 @@ public class ChooseCancelVisitCallback implements CallbackHandler {
 
     @Override
     public SendMessage apply(BaseCallbackData callback, Update update) {
-        String userName = update.getCallbackQuery().getFrom().getUserName();
-        List<Visit> deletedVisit = service.deleteVisit(userName);
+        ChooseCancelVisitCallbackData currentCallbackData = (ChooseCancelVisitCallbackData) callback;
+        String id = currentCallbackData.getVisitId();
+
+        // Удаляем визиты
+        Visit visit = service.deleteVisit(id);
         long chatId = update.getCallbackQuery().getMessage().getChatId();
-        StringJoiner sj = new StringJoiner("\n");
-        deletedVisit.forEach(visit -> sj.add(DateTimeUtils.fromLocalDateTimeToDateTimeString(visit.getVisitDateTime())));
+
+        // Создаем сообщение
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
-        message.setText(String.format(MessagesText.SUCCESS_CANCEL_TEXT, sj));
+        message.setText(String.format(MessagesText.SUCCESS_CANCEL_TEXT, DateTimeUtils.fromLocalDateTimeToDateTimeString(visit.getVisitDateTime())));
+
+        // Клавиатура
+        InlineKeyboardMarkup keyboardMarkup = new KeyboardBuilder().addBackButton(CommandTypes.VISIT_DEALS).build();
+        message.setReplyMarkup(keyboardMarkup);
         return message;
     }
 

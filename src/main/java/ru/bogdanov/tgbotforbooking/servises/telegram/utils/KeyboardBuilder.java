@@ -56,6 +56,11 @@ public class KeyboardBuilder {
         return this;
     }
 
+    public void goToNewLine() {
+        keyboard.add(new ArrayList<>(currentRow));
+        currentRow.clear();
+    }
+
     public InlineKeyboardMarkup build() {
         // Если текущая строка не пуста, добавляем её в клавиатуру перед возвратом
         if (!currentRow.isEmpty()) {

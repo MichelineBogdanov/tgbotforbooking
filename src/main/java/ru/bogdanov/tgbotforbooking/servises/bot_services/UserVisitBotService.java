@@ -32,16 +32,6 @@ public class UserVisitBotService {
     }
 
     @Transactional
-    public void createUser(User user) {
-        userRepository.save(user);
-    }
-
-    @Transactional
-    public User getUserByTgAccount(String tgAccount) {
-        return userRepository.findByTgAccount(tgAccount);
-    }
-
-    @Transactional
     public void createVisit(Visit visit) {
         visitRepository.save(visit);
     }
@@ -52,8 +42,21 @@ public class UserVisitBotService {
     }
 
     @Transactional
-    public void deleteVisit(Visit visit) {
+    public Visit deleteVisitById(String id) {
+        long parseLong = Long.parseLong(id);
+        Visit visit = visitRepository.findById(parseLong).get();
         visitRepository.delete(visit);
+        return visit;
+    }
+
+    @Transactional
+    public void createUser(User user) {
+        userRepository.save(user);
+    }
+
+    @Transactional
+    public User getUserByTgAccount(String tgAccount) {
+        return userRepository.findByTgAccount(tgAccount);
     }
 
     @Transactional

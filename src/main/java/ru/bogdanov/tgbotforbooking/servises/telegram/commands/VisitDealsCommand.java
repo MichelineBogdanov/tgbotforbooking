@@ -18,7 +18,8 @@ public class VisitDealsCommand implements Command {
         message.setChatId(update.getMessage().getChatId());
         message.setText(MessagesText.VISIT_DEALS_COMMAND_TEXT);
 
-        InlineKeyboardMarkup keyboardMarkup = new KeyboardBuilder().addButton(CallbackTypes.CHOOSE_DAY.getDescription(), new BaseCallbackData(CallbackTypes.CHOOSE_DAY))
+        InlineKeyboardMarkup keyboardMarkup = new KeyboardBuilder()
+                .addButton(CallbackTypes.CHOOSE_DAY.getDescription(), new BaseCallbackData(CallbackTypes.CHOOSE_DAY))
                 .addButton(CallbackTypes.CANCEL_VISIT.getDescription(), new BaseCallbackData(CallbackTypes.CANCEL_VISIT))
                 .build();
         message.setReplyMarkup(keyboardMarkup);

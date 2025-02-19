@@ -19,10 +19,10 @@ public interface MessagesText {
             """;
 
     String VISIT_DEALS_COMMAND_TEXT = """
-                Тут вы можете осуществить:
-                - запись на прием
-                - отмену записи
-                """;
+            Тут вы можете осуществить:
+            - запись на прием
+            - отмену записи
+            """;
 
     String PLACE_INFO_TEXT = """
             https://yandex.ru/maps/2/saint-petersburg/house/moskovskiy_prospekt_109/Z0kYdQZoTkAFQFtjfXR5eHRnYg==/?ll=30.320563%2C59.890760&z=16.64
@@ -32,6 +32,8 @@ public interface MessagesText {
             Список ваших визитов:
             %s
             """;
+
+    String YOUR_VISITS_FOR_CANCEL_TEXT = "Список ваших визитов:";
 
     String NO_VISITS_TEXT = "У вас нет записей!";
 
@@ -49,7 +51,7 @@ public interface MessagesText {
     String MAX_COUNT_BOOKING_TEXT = "Вы записались на прием более трех раз!";
 
     String SUCCESS_CANCEL_TEXT = """
-            Поздравляем! Был(и) удалены следующие визиты:
+            Поздравляем! Был удален следующий визит:
             %s
             """;
 

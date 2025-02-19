@@ -90,17 +90,18 @@ public class GoogleCalendarService implements GoogleAPI {
         }
     }
 
-    public List<Visit> deleteVisit(String userName) {
-        List<Visit> visits = userVisitBotService.getFutureVisitsByUserName(userName);
-        for (Visit visit : visits) {
-            try {
-                userVisitBotService.deleteVisit(visit);
-                service.events().delete(CALENDAR_ID, visit.getVisitId()).execute();
-            } catch (IOException e) {
-                System.out.println("ERROR: " + e.getMessage());
-            }
+    public Visit deleteVisit(String id) {
+        Visit visit = userVisitBotService.deleteVisitById(id);
+        try {
+            service.events().delete(CALENDAR_ID, visit.getVisitId()).execute();
+        } catch (IOException e) {
+            System.out.println("ERROR: " + e.getMessage());
         }
-        return visits;
+        return visit;
+    }
+
+    public List<Visit> getUserVisits(String tgAccount) {
+        return userVisitBotService.getFutureVisitsByUserName(tgAccount);
     }
 
     @Override

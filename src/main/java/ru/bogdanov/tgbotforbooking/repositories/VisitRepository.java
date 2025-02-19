@@ -15,4 +15,6 @@ public interface VisitRepository extends CrudRepository<Visit, Long> {
     boolean existsByVisitDateTime(LocalDateTime visitDateTime);
 
     Integer countByUserIdAndVisitDateTimeAfter(Long userId, LocalDateTime visitDateTime);
+
+    void deleteById(Long id);
 }
