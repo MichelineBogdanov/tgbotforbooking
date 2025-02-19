@@ -3,10 +3,13 @@ package ru.bogdanov.tgbotforbooking.servises.google;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.model.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.bogdanov.tgbotforbooking.entities.User;
 import ru.bogdanov.tgbotforbooking.entities.Visit;
 import ru.bogdanov.tgbotforbooking.servises.bot_services.UserVisitBotService;
+import ru.bogdanov.tgbotforbooking.servises.telegram.utils.DateTimeUtils;
+import ru.bogdanov.tgbotforbooking.servises.telegram.utils.MessagesText;
 import ru.bogdanov.tgbotforbooking.servises.telegram.utils.ScheduleUtils;
 
 import java.io.IOException;
@@ -17,6 +20,7 @@ import java.time.ZoneId;
 import java.util.*;
 
 @Service
+@Slf4j
 public class GoogleCalendarService implements GoogleAPI {
 
     public static final String TIME_ZONE = "+03:00";
@@ -49,28 +53,38 @@ public class GoogleCalendarService implements GoogleAPI {
         }
     }
 
-    public void createVisit(LocalDate date, LocalTime time, String userName) {
+    public CreateVisitResult createVisit(LocalDate date, LocalTime time, String userName) {
+        User user = userVisitBotService.getUserByTgAccount(userName);
+        if (userVisitBotService.checkVisitPresent(LocalDateTime.of(date, time))) {
+            return new CreateVisitResult(MessagesText.FAULT_BOOKING_TEXT);
+        }
+        if (userVisitBotService.checkCountOfVisitsPresent(user.getId(), LocalDateTime.now()) > 3) {
+            return new CreateVisitResult(MessagesText.MAX_COUNT_BOOKING_TEXT);
+        }
         Date start = Date.from(LocalDateTime.of(date, time).atZone(ZoneId.systemDefault()).toInstant());
         Date end = Date.from(LocalDateTime.of(date, time.plusHours(1).plusMinutes(30)).atZone(ZoneId.systemDefault()).toInstant());
-        User user = userVisitBotService.getUserByTgAccount(userName);
         Event event = new Event()
                 .setSummary(userName)
                 .setDescription(user.getName());
-        EventDateTime startE = new EventDateTime()
+        EventDateTime startEvent = new EventDateTime()
                 .setDateTime(new DateTime(start))
                 .setTimeZone(TIME_ZONE);
-        event.setStart(startE);
-        EventDateTime endE = new EventDateTime()
+        event.setStart(startEvent);
+        EventDateTime endEvent = new EventDateTime()
                 .setDateTime(new DateTime(end))
                 .setTimeZone(TIME_ZONE);
-        event.setEnd(endE);
+        event.setEnd(endEvent);
         try {
             Event execute = service.events().insert(CALENDAR_ID, event).execute();
-            Visit entity = new Visit();
-            entity.setVisitId(execute.getId());
-            entity.setVisitDateTime(LocalDateTime.of(date, time));
-            entity.setUser(user);
-            userVisitBotService.createVisit(entity);
+            Visit visit = new Visit();
+            visit.setVisitId(execute.getId());
+            visit.setVisitDateTime(LocalDateTime.of(date, time));
+            visit.setUser(user);
+            userVisitBotService.createVisit(visit);
+            String message = String.format(MessagesText.SUCCESS_BOOKING_TEXT
+                    , userName
+                    , DateTimeUtils.fromLocalDateTimeToDateTimeString(LocalDateTime.of(date, time)));
+            return new CreateVisitResult(message);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

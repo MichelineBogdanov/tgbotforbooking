@@ -22,6 +22,16 @@ public class UserVisitBotService {
     }
 
     @Transactional
+    public boolean checkVisitPresent(LocalDateTime visitDateTime) {
+        return visitRepository.existsByVisitDateTime(visitDateTime);
+    }
+
+    @Transactional
+    public Integer checkCountOfVisitsPresent(Long userId, LocalDateTime visitDateTime) {
+        return visitRepository.countByUserIdAndVisitDateTimeAfter(userId, visitDateTime);
+    }
+
+    @Transactional
     public void createUser(User user) {
         userRepository.save(user);
     }

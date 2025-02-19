@@ -44,6 +44,10 @@ public interface MessagesText {
 
     String SUCCESS_BOOKING_TEXT = "Поздравляем, %s! Вы записаны на: %s";
 
+    String FAULT_BOOKING_TEXT = "К сожалению на данное время успел записаться кто-то другой, выберите другое время.";
+
+    String MAX_COUNT_BOOKING_TEXT = "Вы записались на прием более трех раз!";
+
     String SUCCESS_CANCEL_TEXT = """
             Поздравляем! Был(и) удалены следующие визиты:
             %s
