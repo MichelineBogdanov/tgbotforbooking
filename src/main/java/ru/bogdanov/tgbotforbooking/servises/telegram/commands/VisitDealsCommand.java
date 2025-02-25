@@ -20,6 +20,7 @@ public class VisitDealsCommand implements Command {
 
         InlineKeyboardMarkup keyboardMarkup = new KeyboardBuilder()
                 .addButton(CallbackTypes.CHOOSE_DAY.getDescription(), new BaseCallbackData(CallbackTypes.CHOOSE_DAY))
+                .goToNewLine()
                 .addButton(CallbackTypes.CANCEL_VISIT.getDescription(), new BaseCallbackData(CallbackTypes.CANCEL_VISIT))
                 .build();
         message.setReplyMarkup(keyboardMarkup);

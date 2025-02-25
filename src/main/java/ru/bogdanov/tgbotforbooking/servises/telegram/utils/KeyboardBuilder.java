@@ -56,9 +56,10 @@ public class KeyboardBuilder {
         return this;
     }
 
-    public void goToNewLine() {
+    public KeyboardBuilder goToNewLine() {
         keyboard.add(new ArrayList<>(currentRow));
         currentRow.clear();
+        return this;
     }
 
     public InlineKeyboardMarkup build() {

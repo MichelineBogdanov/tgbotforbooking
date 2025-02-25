@@ -58,14 +58,14 @@ public class GoogleCalendarService implements GoogleAPI {
         if (userVisitBotService.checkVisitPresent(LocalDateTime.of(date, time))) {
             return new CreateVisitResult(MessagesText.FAULT_BOOKING_TEXT);
         }
-        if (userVisitBotService.checkCountOfVisitsPresent(user.getId(), LocalDateTime.now()) > 3) {
+        if (userVisitBotService.checkCountOfVisitsPresent(user.getId(), LocalDateTime.now()) > 2) {
             return new CreateVisitResult(MessagesText.MAX_COUNT_BOOKING_TEXT);
         }
         Date start = Date.from(LocalDateTime.of(date, time).atZone(ZoneId.systemDefault()).toInstant());
         Date end = Date.from(LocalDateTime.of(date, time.plusHours(1).plusMinutes(30)).atZone(ZoneId.systemDefault()).toInstant());
         Event event = new Event()
                 .setSummary(userName)
-                .setDescription(user.getName());
+                .setDescription(user.getFirstName() + " " + user.getLastName());
         EventDateTime startEvent = new EventDateTime()
                 .setDateTime(new DateTime(start))
                 .setTimeZone(TIME_ZONE);

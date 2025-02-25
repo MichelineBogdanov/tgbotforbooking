@@ -19,9 +19,13 @@ public class GeneralInfoCommand implements Command {
         message.setChatId(update.getMessage().getChatId());
         message.setText(messageText);
 
-        InlineKeyboardMarkup keyboardMarkup = new KeyboardBuilder().addButton(CallbackTypes.GET_VISITS.getDescription(), new BaseCallbackData(CallbackTypes.GET_VISITS))
+        InlineKeyboardMarkup keyboardMarkup = new KeyboardBuilder()
+                .addButton(CallbackTypes.GET_VISITS.getDescription(), new BaseCallbackData(CallbackTypes.GET_VISITS))
+                .goToNewLine()
                 .addButton(CallbackTypes.GET_SCHEDULE.getDescription(), new BaseCallbackData(CallbackTypes.GET_SCHEDULE))
+                .goToNewLine()
                 .addButton(CallbackTypes.GET_PLACE_INFO.getDescription(), new BaseCallbackData(CallbackTypes.GET_PLACE_INFO))
+                .goToNewLine()
                 .build();
         message.setReplyMarkup(keyboardMarkup);
 
