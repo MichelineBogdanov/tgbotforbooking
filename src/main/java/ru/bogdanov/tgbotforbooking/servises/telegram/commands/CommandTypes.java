@@ -2,19 +2,26 @@ package ru.bogdanov.tgbotforbooking.servises.telegram.commands;
 
 public enum CommandTypes {
 
-    START("/start"),
-    GENERAL_INFO("/generalinfo"),
-    VISIT_DEALS("/visitdeals"),
-    UNKNOWN_COMMAND("");
+    START("/start", "Начать работу с ботом"),
+    GENERAL_INFO("/generalinfo", "Получение информации и номерках/месту приема"),
+    VISIT_DEALS("/visitdeals", "Запись на прием/отмена записи"),
+    UNKNOWN_COMMAND("", "Неизвестная команда");
 
     private final String command;
 
-    CommandTypes(String command) {
+    private final String description;
+
+    CommandTypes(String command, String description) {
         this.command = command;
+        this.description = description;
     }
 
     public String getCommand() {
         return command;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public static CommandTypes fromCommandString(String commandString) {

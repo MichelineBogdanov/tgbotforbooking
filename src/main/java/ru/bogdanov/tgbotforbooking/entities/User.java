@@ -9,9 +9,13 @@ import java.util.List;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_seq")
+    @SequenceGenerator(name = "users_seq", sequenceName = "users_seq", schema = "public", allocationSize = 1)
     @Column(name = "id")
     private Long id;
+
+    @Column(name = "tg_account")
+    private String tgAccount;
 
     @Column(name = "first_name")
     private String firstName;
@@ -19,8 +23,17 @@ public class User {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "tg_account")
-    private String tgAccount;
+    @Column(name = "chat_id")
+    private Long chatId;
+
+    @Column(name = "tg_user_id")
+    private Long tgUserId;
+
+    @Column(name = "is_active")
+    private Boolean isActive = true;
+
+    @Column(name = "notifications_on")
+    private Boolean notificationsOn = true;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<Visit> visits;
@@ -60,6 +73,38 @@ public class User {
         this.tgAccount = tgAccount;
     }
 
+    public Long getChatId() {
+        return chatId;
+    }
+
+    public void setChatId(Long chatId) {
+        this.chatId = chatId;
+    }
+
+    public Long getTgUserId() {
+        return tgUserId;
+    }
+
+    public void setTgUserId(Long tgUserId) {
+        this.tgUserId = tgUserId;
+    }
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
+    }
+
+    public Boolean getNotificationsOn() {
+        return notificationsOn;
+    }
+
+    public void setNotificationsOn(Boolean notificationsOn) {
+        this.notificationsOn = notificationsOn;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -67,6 +112,10 @@ public class User {
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
                 ", tgAccount='" + tgAccount + '\'' +
+                ", chatId='" + chatId + '\'' +
+                ", tgUserId='" + tgUserId + '\'' +
+                ", isActive=" + isActive +
+                ", notificationsOn=" + notificationsOn +
                 '}';
     }
 }

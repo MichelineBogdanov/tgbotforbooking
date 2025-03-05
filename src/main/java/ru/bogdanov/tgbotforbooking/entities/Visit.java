@@ -9,7 +9,8 @@ import java.time.LocalDateTime;
 public class Visit {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "visits_seq")
+    @SequenceGenerator(name = "visits_seq", sequenceName = "visits_seq", schema = "public", allocationSize = 1)
     @Column(name = "id")
     private Long id;
 
@@ -20,8 +21,15 @@ public class Visit {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "visit_id")
-    private String visitId;
+    @Column(name = "google_event_id")
+    private String googleEventId;
+
+    @OneToOne
+    @JoinColumn(name = "service_id")
+    private Service service;
+
+    @OneToOne(mappedBy = "visit", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Notification notification;
 
     public Visit() {
     }
@@ -38,8 +46,8 @@ public class Visit {
         return visitDateTime;
     }
 
-    public void setVisitDateTime(LocalDateTime name) {
-        this.visitDateTime = name;
+    public void setVisitDateTime(LocalDateTime visitDateTime) {
+        this.visitDateTime = visitDateTime;
     }
 
     public User getUser() {
@@ -50,12 +58,28 @@ public class Visit {
         this.user = user;
     }
 
-    public String getVisitId() {
-        return visitId;
+    public String getGoogleEventId() {
+        return googleEventId;
     }
 
-    public void setVisitId(String visitId) {
-        this.visitId = visitId;
+    public void setGoogleEventId(String googleEventId) {
+        this.googleEventId = googleEventId;
+    }
+
+    public Service getService() {
+        return service;
+    }
+
+    public void setService(Service service) {
+        this.service = service;
+    }
+
+    public Notification getNotification() {
+        return notification;
+    }
+
+    public void setNotification(Notification notification) {
+        this.notification = notification;
     }
 
     @Override
@@ -63,8 +87,7 @@ public class Visit {
         return "Visit{" +
                 "id=" + id +
                 ", visitDateTime=" + visitDateTime +
-                ", user=" + user +
-                ", visitId='" + visitId + '\'' +
+                ", googleEventId='" + googleEventId + '\'' +
                 '}';
     }
 }

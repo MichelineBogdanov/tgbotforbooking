@@ -31,6 +31,7 @@ public class KeyboardBuilder {
         } else {
             keyboard.add(new ArrayList<>(currentRow));
             currentRow.clear();
+            currentRow.add(button);
         }
         return this;
     }

@@ -18,35 +18,36 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Slf4j
 public class GoogleCalendarService implements GoogleAPI {
 
-    public static final String TIME_ZONE = "+03:00";
-    private final Calendar service = GoogleCalendarUtils.getCalendarService();
-
     private final UserVisitBotService userVisitBotService;
+
+    public static final String TIME_ZONE = "+03:00";
+
+    private final Calendar calendarService;
 
     private final String CALENDAR_ID = "primary";
 
-    public GoogleCalendarService(UserVisitBotService userVisitBotService) {
+    public GoogleCalendarService(UserVisitBotService userVisitBotService
+            , Calendar calendarService) {
         this.userVisitBotService = userVisitBotService;
+        this.calendarService = calendarService;
     }
 
     public List<TimePeriod> getFreePeriods(DateTime start, DateTime end) {
         try {
-            // Создайте запрос FreeBusy
             FreeBusyRequest request = new FreeBusyRequest()
                     .setTimeMin(start)
                     .setTimeMax(end)
                     .setTimeZone(TIME_ZONE)
                     .setItems(Collections.singletonList(new FreeBusyRequestItem().setId(CALENDAR_ID)));
-            // Отправьте запрос
-            FreeBusyResponse response = service.freebusy().query(request).execute();
-            // Получите занятые интервалы
+            FreeBusyResponse response = calendarService.freebusy().query(request).execute();
             List<TimePeriod> busyTimes = response.getCalendars().get(CALENDAR_ID).getBusy();
-            // Найдите свободные интервалы
             return calculateFreeSlots(start, end, busyTimes);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -54,7 +55,8 @@ public class GoogleCalendarService implements GoogleAPI {
     }
 
     public CreateVisitResult createVisit(LocalDate date, LocalTime time, String userName) {
-        User user = userVisitBotService.getUserByTgAccount(userName);
+        Optional<User> userOptional = userVisitBotService.getUserByTgAccount(userName);
+        User user = userOptional.get();
         if (userVisitBotService.checkVisitPresent(LocalDateTime.of(date, time))) {
             return new CreateVisitResult(MessagesText.FAULT_BOOKING_TEXT);
         }
@@ -63,9 +65,12 @@ public class GoogleCalendarService implements GoogleAPI {
         }
         Date start = Date.from(LocalDateTime.of(date, time).atZone(ZoneId.systemDefault()).toInstant());
         Date end = Date.from(LocalDateTime.of(date, time.plusHours(1).plusMinutes(30)).atZone(ZoneId.systemDefault()).toInstant());
+        String description = Stream.of(user.getFirstName(), user.getLastName())
+                .filter(Objects::nonNull)
+                .collect(Collectors.joining());
         Event event = new Event()
                 .setSummary(userName)
-                .setDescription(user.getFirstName() + " " + user.getLastName());
+                .setDescription(description);
         EventDateTime startEvent = new EventDateTime()
                 .setDateTime(new DateTime(start))
                 .setTimeZone(TIME_ZONE);
@@ -75,9 +80,9 @@ public class GoogleCalendarService implements GoogleAPI {
                 .setTimeZone(TIME_ZONE);
         event.setEnd(endEvent);
         try {
-            Event execute = service.events().insert(CALENDAR_ID, event).execute();
+            Event execute = calendarService.events().insert(CALENDAR_ID, event).execute();
             Visit visit = new Visit();
-            visit.setVisitId(execute.getId());
+            visit.setGoogleEventId(execute.getId());
             visit.setVisitDateTime(LocalDateTime.of(date, time));
             visit.setUser(user);
             userVisitBotService.createVisit(visit);
@@ -93,9 +98,9 @@ public class GoogleCalendarService implements GoogleAPI {
     public Visit deleteVisit(String id) {
         Visit visit = userVisitBotService.deleteVisitById(id);
         try {
-            service.events().delete(CALENDAR_ID, visit.getVisitId()).execute();
+            calendarService.events().delete(CALENDAR_ID, visit.getGoogleEventId()).execute();
         } catch (IOException e) {
-            System.out.println("ERROR: " + e.getMessage());
+            e.printStackTrace();
         }
         return visit;
     }

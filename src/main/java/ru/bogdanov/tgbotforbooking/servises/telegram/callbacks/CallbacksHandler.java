@@ -9,6 +9,7 @@ import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.common.BackCallba
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.general_info.GetVisitsCallback;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.general_info.PlaceInfoCallback;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.general_info.ScheduleInfoCallback;
+import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.general_info.UserNotificationSwitchCallback;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.visit_deals.cancel_visit.CancelVisitCallback;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.visit_deals.cancel_visit.ChooseCancelVisitCallback;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.visit_deals.create_visit.ChooseDayCallBack;
@@ -16,6 +17,7 @@ import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.visit_deals.creat
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.visit_deals.create_visit.CreateVisitCallback;
 
 import java.util.Map;
+import java.util.Objects;
 
 @Component
 public class CallbacksHandler {
@@ -25,6 +27,7 @@ public class CallbacksHandler {
     public CallbacksHandler(GetVisitsCallback getVisitsCallback
             , PlaceInfoCallback placeInfoCallback
             , ScheduleInfoCallback scheduleInfoCallback
+            , UserNotificationSwitchCallback userNotificationSwitchCallback
             , ChooseDayCallBack chooseDayCallBack
             , ChooseTimeCallback chooseTimeCallback
             , CreateVisitCallback createVisitCallback
@@ -34,6 +37,7 @@ public class CallbacksHandler {
         this.handler = Map.of(CallbackTypes.GET_VISITS, getVisitsCallback
                 , CallbackTypes.GET_PLACE_INFO, placeInfoCallback
                 , CallbackTypes.GET_SCHEDULE, scheduleInfoCallback
+                , CallbackTypes.NOTIFICATIONS_SWITCH, userNotificationSwitchCallback
                 , CallbackTypes.CHOOSE_DAY, chooseDayCallBack
                 , CallbackTypes.CHOOSE_TIME, chooseTimeCallback
                 , CallbackTypes.CREATE_VISIT, createVisitCallback
@@ -52,8 +56,8 @@ public class CallbacksHandler {
         String callbackData = update.getCallbackQuery().getData();
         CallbackTypes type = JsonHandler.getType(callbackData);
         BaseCallbackData result = null;
-        switch (type) {
-            case GET_VISITS, GET_PLACE_INFO, GET_SCHEDULE, CHOOSE_DAY, CANCEL_VISIT ->
+        switch (Objects.requireNonNull(type)) {
+            case GET_VISITS, GET_PLACE_INFO, GET_SCHEDULE, CHOOSE_DAY, CANCEL_VISIT, NOTIFICATIONS_SWITCH ->
                     result = JsonHandler.readToObject(callbackData, BaseCallbackData.class);
             case CHOOSE_TIME -> result = JsonHandler.readToObject(callbackData, ChooseTimeCallbackData.class);
             case CREATE_VISIT -> result = JsonHandler.readToObject(callbackData, CreateVisitCallbackData.class);

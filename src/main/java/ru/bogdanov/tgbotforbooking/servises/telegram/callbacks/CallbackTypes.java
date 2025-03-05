@@ -26,7 +26,11 @@ public enum CallbackTypes {
 
     // COMMON
     @JsonProperty("BACK")
-    BACK("Назад");
+    BACK("Назад"),
+
+    // NOTIFICATIONS
+    @JsonProperty("NOTIFICATIONS_SWITCH")
+    NOTIFICATIONS_SWITCH("");
 
     private final String description;
 

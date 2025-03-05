@@ -16,6 +16,7 @@ public interface MessagesText {
             - ваших записях
             - свободных номерках
             - месте приема
+            - включить/отключить отправку вам уведомлений
             """;
 
     String VISIT_DEALS_COMMAND_TEXT = """
@@ -55,8 +56,16 @@ public interface MessagesText {
             %s
             """;
 
-    String UNKNOWN_COMMAND_TEXT = "Данная команда не может быть обработана!";
-
     String BACK_TEXT = "Назад";
+
+    String NOTIFICATIONS_ON_TEXT = "Включить уведомления";
+
+    String NOTIFICATIONS_STATUS_ON_TEXT = "Уведомления включены";
+
+    String NOTIFICATIONS_OFF_TEXT = "Отключить уведомления";
+
+    String NOTIFICATIONS_STATUS_OFF_TEXT = "Уведомления отключены";
+
+    String NOTIFICATION_MESSAGE_TEXT = "Напоминание: у вас запись к косметологу через 1 час!";
 
 }

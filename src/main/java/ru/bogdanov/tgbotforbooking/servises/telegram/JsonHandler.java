@@ -9,6 +9,7 @@ import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.CallbackTypes;
 
 
 public class JsonHandler {
+
     private final static ObjectMapper mapper = JsonMapper.builder()
             .addModule(new JavaTimeModule())
             .build();

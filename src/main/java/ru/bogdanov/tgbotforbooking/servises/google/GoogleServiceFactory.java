@@ -12,38 +12,51 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
 import java.util.List;
 
-public class GoogleCalendarUtils {
+@Component
+public class GoogleServiceFactory {
 
     /**
      * Application name.
      */
     private static final String APPLICATION_NAME = "TGBotForBooking";
+
     /**
      * Global instance of the JSON factory.
      */
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
-    /**
-     * Directory to store authorization tokens for this application.
-     */
-    private static final String TOKENS_DIRECTORY_PATH = "tokens";
+
     /**
      * Global instance of the scopes required by this quickstart.
      * If modifying these scopes, delete your previously saved tokens/ folder.
      */
     private static final List<String> SCOPES = Collections.singletonList(CalendarScopes.CALENDAR);
-    private static final String CREDENTIALS_FILE_PATH = "credentials.json";
-    public static final String USER_ID = "432721917835-roanjq6vc0ukasmqrlml2ej8ceuimp5v.apps.googleusercontent.com";
-    public static final String ACCESS_TYPE = "offline";
-    public static final int PORT = 8888;
 
+    private static final String ACCESS_TYPE = "offline";
 
-    public static Calendar getCalendarService() {
+    /**
+     * Directory to store authorization tokens for this application.
+     */
+    @Value("${google.calendar.tokens_path}")
+    private String tokensPath;
+
+    @Value("${google.calendar.credentials_file_path}")
+    private String credentialsFilePath;
+
+    @Value("${google.calendar.user_id}")
+    private String userId;
+    private static final int PORT = 8888;
+
+    public Calendar getCalendarService() {
         // Load client secrets.
         Calendar build = null;
         try {
@@ -51,22 +64,34 @@ public class GoogleCalendarUtils {
             build = new Calendar.Builder(GoogleNetHttpTransport.newTrustedTransport(), JSON_FACTORY, credential)
                     .setApplicationName(APPLICATION_NAME)
                     .build();
+            /*// Создание канала уведомлений
+            Channel channel = new Channel()
+                    .setId("my_booking_channel") // Уникальный ID канала
+                    .setType("web_hook")
+                    .setAddress("https://localhost:8889/webhook/calendar") // URL вашего вебхука
+                    .setToken("your-secret-token"); // Опционально: токен для проверки подлинности
+
+            // Вызов метода watch
+            build
+                    .events()
+                    .watch("primary", channel) // "primary" для основного календаря
+                    .execute();*/
         } catch (GeneralSecurityException | IOException e) {
             e.printStackTrace();
         }
         return build;
     }
 
-    public static Credential getCredential() throws IOException, GeneralSecurityException {
-        GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new FileReader(CREDENTIALS_FILE_PATH));
+    private Credential getCredential() throws IOException, GeneralSecurityException {
+        GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new FileReader(credentialsFilePath));
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
         GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
                 HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
-                .setDataStoreFactory(new FileDataStoreFactory(new File(TOKENS_DIRECTORY_PATH)))
+                .setDataStoreFactory(new FileDataStoreFactory(new File(tokensPath)))
                 .setAccessType(ACCESS_TYPE)
                 .build();
         LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(PORT).build();
-        return new AuthorizationCodeInstalledApp(flow, receiver).authorize(USER_ID);
+        return new AuthorizationCodeInstalledApp(flow, receiver).authorize(userId);
     }
 
 }

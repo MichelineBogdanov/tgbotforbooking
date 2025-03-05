@@ -28,17 +28,13 @@ public class ChooseCancelVisitCallback implements CallbackHandler {
     public SendMessage apply(BaseCallbackData callback, Update update) {
         ChooseCancelVisitCallbackData currentCallbackData = (ChooseCancelVisitCallbackData) callback;
         String id = currentCallbackData.getVisitId();
-
-        // Удаляем визиты
         Visit visit = service.deleteVisit(id);
         long chatId = update.getCallbackQuery().getMessage().getChatId();
 
-        // Создаем сообщение
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
         message.setText(String.format(MessagesText.SUCCESS_CANCEL_TEXT, DateTimeUtils.fromLocalDateTimeToDateTimeString(visit.getVisitDateTime())));
 
-        // Клавиатура
         InlineKeyboardMarkup keyboardMarkup = new KeyboardBuilder().addBackButton(CommandTypes.VISIT_DEALS).build();
         message.setReplyMarkup(keyboardMarkup);
         return message;
