@@ -4,19 +4,28 @@ x-timezone: &timezone
 services:
   java_app:
     image: java_app
+    build:
+      context: .
+      dockerfile: dockerfile
     container_name: java_app
+    env_file:
+      - .env
     restart: always
     environment:
+      BOT_TOKEN: ${BOT_TOKEN}
       SPRING_DATASOURCE_URL: ${DB_URL}
       SPRING_DATASOURCE_USERNAME: ${DB_USER}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
-      SPRING_JPA_HIBERNATE_DDL-AUTO: update
-      BOT_TOKEN: ${BOT_TOKEN}
+      SPRING_REDIS_HOST: redis
+      SPRING_REDIS_PORT: 6379
       <<: *timezone
     ports:
       - 8888:8888
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
 
   postgres:
     image: postgres:14
@@ -30,7 +39,26 @@ services:
     ports:
       - 5440:5432
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d tgbotforbooking -U postgres" ]
+      interval: 1s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - 6379:6379
+    volumes:
+      - redis_data:/var/lib/redis/data
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 1s
+      timeout: 5s
+      retries: 5
 
 volumes:
-  pgdata: { }
+  pg_data:
+  redis_data:

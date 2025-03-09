@@ -34,3 +34,6 @@ build/
 
 ### VS Code ###
 .vscode/
+/src/main/resources/liquibase-out/
+/src/main/resources/liquibase.properties
+/src/main/resources/application-local.properties

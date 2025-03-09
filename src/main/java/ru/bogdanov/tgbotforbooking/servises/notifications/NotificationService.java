@@ -1,4 +1,4 @@
-package ru.bogdanov.tgbotforbooking.servises.telegram.notifications;
+package ru.bogdanov.tgbotforbooking.servises.notifications;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;

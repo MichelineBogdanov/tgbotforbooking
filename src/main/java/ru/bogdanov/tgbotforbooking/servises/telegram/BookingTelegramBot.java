@@ -11,6 +11,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.bogdanov.tgbotforbooking.entities.User;
+import ru.bogdanov.tgbotforbooking.servises.bot_services.RedisService;
 import ru.bogdanov.tgbotforbooking.servises.bot_services.UserVisitBotService;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.CallbacksHandler;
 import ru.bogdanov.tgbotforbooking.servises.telegram.commands.CommandTypes;
@@ -32,12 +33,16 @@ public class BookingTelegramBot extends TelegramLongPollingBot {
 
     public final UserVisitBotService userVisitBotService;
 
+    public final RedisService redisService;
+
     public BookingTelegramBot(CommandsHandler commandsHandler
             , CallbacksHandler callbacksHandler
-            , UserVisitBotService userVisitBotService) {
+            , UserVisitBotService userVisitBotService
+            , RedisService redisService) {
         this.commandsHandler = commandsHandler;
         this.callbacksHandler = callbacksHandler;
         this.userVisitBotService = userVisitBotService;
+        this.redisService = redisService;
     }
 
     @Override
@@ -55,16 +60,7 @@ public class BookingTelegramBot extends TelegramLongPollingBot {
         if (update.hasMessage() && update.getMessage().hasText()) {
             String chatId = update.getMessage().getChatId().toString();
             if (update.getMessage().getText().startsWith("/")) {
-                org.telegram.telegrambots.meta.api.objects.User from = update.getMessage().getFrom();
-                if (!userVisitBotService.isUserExistsByTgAccount(from.getUserName())) {
-                    User user = new User();
-                    user.setTgAccount(from.getUserName());
-                    user.setFirstName(from.getFirstName());
-                    user.setLastName(from.getLastName());
-                    user.setTgUserId(from.getId());
-                    user.setChatId(update.getMessage().getChatId());
-                    userVisitBotService.createUser(user);
-                }
+                registerUserIfNotExist(update);
                 sendMessage(commandsHandler.handleCommands(update));
             } else {
                 sendMessage(new SendMessage(chatId, CommandTypes.UNKNOWN_COMMAND.getDescription()));
@@ -74,6 +70,23 @@ public class BookingTelegramBot extends TelegramLongPollingBot {
             sendMessage(callbacksHandler.handleCallbacks(update));
             deleteMessage(new DeleteMessage(message.getChatId().toString(), message.getMessageId()));
             sendAnswerCallback(new AnswerCallbackQuery(update.getCallbackQuery().getId()));
+        }
+    }
+
+    private void registerUserIfNotExist(Update update) {
+        org.telegram.telegrambots.meta.api.objects.User from = update.getMessage().getFrom();
+        String userName = from.getUserName();
+        if (!redisService.isUserCached(userName)) {
+            if (!userVisitBotService.isUserExistsByTgAccount(userName)) {
+                User user = new User();
+                user.setTgAccount(userName);
+                user.setFirstName(from.getFirstName());
+                user.setLastName(from.getLastName());
+                user.setTgUserId(from.getId());
+                user.setChatId(update.getMessage().getChatId());
+                userVisitBotService.createUser(user);
+            }
+            redisService.cacheUser(userName);
         }
     }
 

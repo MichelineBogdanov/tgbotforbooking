@@ -17,9 +17,7 @@ import ru.bogdanov.tgbotforbooking.servises.telegram.utils.DateTimeUtils;
 import ru.bogdanov.tgbotforbooking.servises.telegram.utils.KeyboardBuilder;
 import ru.bogdanov.tgbotforbooking.servises.telegram.utils.MessagesText;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneId;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -36,7 +34,9 @@ public class ChooseTimeCallback implements CallbackHandler {
     public SendMessage apply(BaseCallbackData callback, Update update) {
         ChooseTimeCallbackData currentCallback = (ChooseTimeCallbackData) callback;
         LocalDate date = currentCallback.getDate();
-        String start = date.atStartOfDay(ZoneId.systemDefault()).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+        String start = date.equals(LocalDate.now())
+                ? ZonedDateTime.now().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME)
+                : date.atStartOfDay(ZoneId.systemDefault()).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
         String end = date.plusDays(1).atStartOfDay(ZoneId.systemDefault()).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
         List<LocalTime> freeSlots = service.getFreeSlots(new DateTime(start), new DateTime(end));
 
