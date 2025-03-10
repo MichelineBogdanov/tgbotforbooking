@@ -51,6 +51,9 @@ public class ScheduleUtils {
                     collect.get(key).add(slot.minusSeconds(1));
                 }
             }
+            if (collect.get(key).size() == 0) {
+                collect.remove(key);
+            }
         }
         return collect;
     }
