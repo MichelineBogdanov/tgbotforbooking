@@ -11,6 +11,7 @@ import ru.bogdanov.tgbotforbooking.entities.Visit;
 import ru.bogdanov.tgbotforbooking.repositories.NotificationRepository;
 import ru.bogdanov.tgbotforbooking.servises.bot_services.UserVisitBotService;
 import ru.bogdanov.tgbotforbooking.servises.telegram.BookingTelegramBot;
+import ru.bogdanov.tgbotforbooking.servises.telegram.utils.DateTimeUtils;
 import ru.bogdanov.tgbotforbooking.servises.telegram.utils.MessagesText;
 
 import java.time.LocalDateTime;
@@ -45,15 +46,16 @@ public class NotificationService {
     }
 
     private void sendMessageByNotification() {
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime oneHourLater = LocalDateTime.now().plusHours(1).plusMinutes(30);
+        LocalDateTime now = LocalDateTime.now().minusMinutes(10);
+        LocalDateTime oneHourLater = LocalDateTime.now().plusDays(1).plusMinutes(10);
         Optional<Notification> notificationOptional = notificationRepository.findFirstByNotificationDateTimeBetween(now, oneHourLater);
         if (notificationOptional.isPresent()) {
             Notification notification = notificationOptional.get();
             Visit visit = notification.getVisit();
             User user = visit.getUser();
             if (user.getActive() && user.getNotificationsOn()) {
-                SendMessage message = new SendMessage(user.getChatId().toString(), MessagesText.NOTIFICATION_MESSAGE_TEXT);
+                String text = String.format(MessagesText.NOTIFICATION_MESSAGE_TEXT, DateTimeUtils.fromLocalDateTimeToDateTimeString(visit.getVisitDateTime()));
+                SendMessage message = new SendMessage(user.getChatId().toString(), text);
                 sendMessage(message);
             }
         }

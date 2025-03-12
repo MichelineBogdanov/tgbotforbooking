@@ -27,7 +27,7 @@ public class ChooseCancelVisitCallback implements CallbackHandler {
     @Override
     public SendMessage apply(BaseCallbackData callback, Update update) {
         ChooseCancelVisitCallbackData currentCallbackData = (ChooseCancelVisitCallbackData) callback;
-        String id = currentCallbackData.getVisitId();
+        Long id = currentCallbackData.getVisitId();
         Visit visit = service.deleteVisit(id);
         long chatId = update.getCallbackQuery().getMessage().getChatId();
 

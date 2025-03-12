@@ -20,7 +20,7 @@ public interface GoogleAPI {
 
     CreateVisitResult createVisit(LocalDate date, LocalTime time, String userName);
 
-    Visit deleteVisit(String id);
+    Visit deleteVisit(Long id);
 
     List<Visit> getUserVisits(String tgAccount);
 

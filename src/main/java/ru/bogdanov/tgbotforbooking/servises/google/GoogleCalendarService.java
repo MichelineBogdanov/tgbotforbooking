@@ -95,7 +95,7 @@ public class GoogleCalendarService implements GoogleAPI {
         }
     }
 
-    public Visit deleteVisit(String id) {
+    public Visit deleteVisit(Long id) {
         Visit visit = userVisitBotService.deleteVisitById(id);
         try {
             calendarService.events().delete(CALENDAR_ID, visit.getGoogleEventId()).execute();

@@ -44,7 +44,7 @@ public class CancelVisitCallback implements CallbackHandler {
         for (Visit visit : visits) {
             ChooseCancelVisitCallbackData callbackData = new ChooseCancelVisitCallbackData();
             callbackData.setType(CallbackTypes.CHOOSE_CANCEL_VISIT);
-            callbackData.setVisitId(visit.getId().toString());
+            callbackData.setVisitId(visit.getId());
             keyboardBuilder.addButton(DateTimeUtils.fromLocalDateTimeToDateTimeString(visit.getVisitDateTime()), callbackData);
             keyboardBuilder.goToNewLine();
         }

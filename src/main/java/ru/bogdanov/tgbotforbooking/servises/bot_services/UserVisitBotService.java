@@ -56,9 +56,8 @@ public class UserVisitBotService {
     }
 
     @Transactional
-    public Visit deleteVisitById(String id) {
-        long parseLong = Long.parseLong(id);
-        Visit visit = visitRepository.findById(parseLong).get();
+    public Visit deleteVisitById(Long id) {
+        Visit visit = visitRepository.findById(id).get();
         visitRepository.delete(visit);
         return visit;
     }

@@ -5,16 +5,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class ChooseCancelVisitCallbackData extends BaseCallbackData {
 
     @JsonProperty("visitId")
-    protected String visitId;
+    protected Long visitId;
 
     public ChooseCancelVisitCallbackData() {
     }
 
-    public String getVisitId() {
+    public Long getVisitId() {
         return visitId;
     }
 
-    public void setVisitId(String visitId) {
+    public void setVisitId(Long visitId) {
         this.visitId = visitId;
     }
 }
