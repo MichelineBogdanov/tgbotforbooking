@@ -13,9 +13,12 @@ import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.general_info.User
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.visit_deals.cancel_visit.CancelVisitCallback;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.visit_deals.cancel_visit.ChooseCancelVisitCallback;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.visit_deals.create_visit.ChooseDayCallBack;
+import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.visit_deals.create_visit.ChooseServiceCallBack;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.visit_deals.create_visit.ChooseTimeCallback;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.visit_deals.create_visit.CreateVisitCallback;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -31,19 +34,23 @@ public class CallbacksHandler {
             , ChooseDayCallBack chooseDayCallBack
             , ChooseTimeCallback chooseTimeCallback
             , CreateVisitCallback createVisitCallback
+            , ChooseServiceCallBack chooseServiceCallBack
             , ChooseCancelVisitCallback chooseCancelVisitCallback
             , CancelVisitCallback cancelVisitCallback
             , BackCallback backCallback) {
-        this.handler = Map.of(CallbackTypes.GET_VISITS, getVisitsCallback
-                , CallbackTypes.GET_PLACE_INFO, placeInfoCallback
-                , CallbackTypes.GET_SCHEDULE, scheduleInfoCallback
-                , CallbackTypes.NOTIFICATIONS_SWITCH, userNotificationSwitchCallback
-                , CallbackTypes.CHOOSE_DAY, chooseDayCallBack
-                , CallbackTypes.CHOOSE_TIME, chooseTimeCallback
-                , CallbackTypes.CREATE_VISIT, createVisitCallback
-                , CallbackTypes.CHOOSE_CANCEL_VISIT, chooseCancelVisitCallback
-                , CallbackTypes.CANCEL_VISIT, cancelVisitCallback
-                , CallbackTypes.BACK, backCallback);
+        this.handler = Collections.unmodifiableMap(new HashMap<>() {{
+            put(CallbackTypes.GET_VISITS, getVisitsCallback);
+            put(CallbackTypes.GET_PLACE_INFO, placeInfoCallback);
+            put(CallbackTypes.GET_SCHEDULE, scheduleInfoCallback);
+            put(CallbackTypes.NOTIFICATIONS_SWITCH, userNotificationSwitchCallback);
+            put(CallbackTypes.CHOOSE_DAY, chooseDayCallBack);
+            put(CallbackTypes.CHOOSE_TIME, chooseTimeCallback);
+            put(CallbackTypes.CHOOSE_SERVICE, chooseServiceCallBack);
+            put(CallbackTypes.CREATE_VISIT, createVisitCallback);
+            put(CallbackTypes.CHOOSE_CANCEL_VISIT, chooseCancelVisitCallback);
+            put(CallbackTypes.CANCEL_VISIT, cancelVisitCallback);
+            put(CallbackTypes.BACK, backCallback);
+        }});
     }
 
     public SendMessage handleCallbacks(Update update) {
@@ -60,6 +67,7 @@ public class CallbacksHandler {
             case GET_VISITS, GET_PLACE_INFO, GET_SCHEDULE, CHOOSE_DAY, CANCEL_VISIT, NOTIFICATIONS_SWITCH ->
                     result = JsonHandler.readToObject(callbackData, BaseCallbackData.class);
             case CHOOSE_TIME -> result = JsonHandler.readToObject(callbackData, ChooseTimeCallbackData.class);
+            case CHOOSE_SERVICE -> result = JsonHandler.readToObject(callbackData, ChooseServiceCallbackData.class);
             case CREATE_VISIT -> result = JsonHandler.readToObject(callbackData, CreateVisitCallbackData.class);
             case CHOOSE_CANCEL_VISIT ->
                     result = JsonHandler.readToObject(callbackData, ChooseCancelVisitCallbackData.class);

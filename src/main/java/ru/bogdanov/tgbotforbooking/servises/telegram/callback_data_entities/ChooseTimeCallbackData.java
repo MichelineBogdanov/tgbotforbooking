@@ -8,7 +8,7 @@ import java.time.LocalDate;
 
 public class ChooseTimeCallbackData extends BaseCallbackData {
 
-    @JsonProperty("date")
+    @JsonProperty("d")
     @JsonSerialize(as = LocalDate.class)
     @JsonDeserialize(as = LocalDate.class)
     protected LocalDate date;
