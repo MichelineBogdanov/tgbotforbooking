@@ -10,6 +10,7 @@ import ru.bogdanov.tgbotforbooking.repositories.UserRepository;
 import ru.bogdanov.tgbotforbooking.repositories.VisitRepository;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,10 +43,12 @@ public class UserVisitBotService {
     public void createVisit(Visit visit) {
         Visit savedVisit = visitRepository.save(visit);
         User user = savedVisit.getUser();
-        if (user.getNotificationsOn()) {
+        LocalDateTime notificationDate = savedVisit.getVisitDateTime().minusDays(1);
+        if (user.getNotificationsOn()
+                && notificationDate.isAfter(LocalDateTime.now(ZoneId.systemDefault()))) {
             Notification notification = new Notification();
             notification.setVisit(savedVisit);
-            notification.setNotificationDateTime(savedVisit.getVisitDateTime().minusHours(1));
+            notification.setNotificationDateTime(notificationDate);
             notificationRepository.save(notification);
         }
     }

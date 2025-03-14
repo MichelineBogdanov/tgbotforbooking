@@ -1,6 +1,5 @@
 package ru.bogdanov.tgbotforbooking.servises.notifications;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -18,7 +17,6 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
-@Slf4j
 public class NotificationService {
 
     private final NotificationRepository notificationRepository;
@@ -46,9 +44,9 @@ public class NotificationService {
     }
 
     private void sendMessageByNotification() {
-        LocalDateTime now = LocalDateTime.now().minusMinutes(10);
-        LocalDateTime oneHourLater = LocalDateTime.now().plusDays(1).plusMinutes(10);
-        Optional<Notification> notificationOptional = notificationRepository.findFirstByNotificationDateTimeBetween(now, oneHourLater);
+        LocalDateTime from = LocalDateTime.now().minusMinutes(10);
+        LocalDateTime to = LocalDateTime.now().plusMinutes(10);
+        Optional<Notification> notificationOptional = notificationRepository.findFirstByNotificationDateTimeBetween(from, to);
         if (notificationOptional.isPresent()) {
             Notification notification = notificationOptional.get();
             Visit visit = notification.getVisit();
@@ -65,8 +63,8 @@ public class NotificationService {
         try {
             telegramBot.execute(sendMessage);
         } catch (TelegramApiException e) {
-            e.printStackTrace();
-            if (e.getMessage().contains("chat not found") || e.getMessage().contains("bot was blocked by the user")) {
+            if (e.getMessage().contains("chat not found")
+                    || e.getMessage().contains("bot was blocked by the user")) {
                 userVisitBotService.deactivateUserByChatId(sendMessage.getChatId());
             }
         }
