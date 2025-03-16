@@ -64,9 +64,18 @@ public class GoogleCalendarService implements GoogleAPI {
         if (userVisitBotService.checkCountOfVisitsPresent(user.getId(), LocalDateTime.now()) > 2) {
             return new CreateVisitResult(MessagesText.MAX_COUNT_BOOKING_TEXT);
         }
+        CosmetologyService service = null;
+        if (serviceId != null) {
+            Optional<CosmetologyService> optionalCosmetologyService = userVisitBotService.getServiceById(serviceId);
+            if (optionalCosmetologyService.isPresent()) {
+                service = optionalCosmetologyService.get();
+            }
+        }
         Date start = Date.from(LocalDateTime.of(date, time).atZone(ZoneId.systemDefault()).toInstant());
         Date end = Date.from(LocalDateTime.of(date, time.plusHours(1).plusMinutes(30)).atZone(ZoneId.systemDefault()).toInstant());
-        String description = Stream.of(user.getFirstName(), user.getLastName())
+        String description = Stream.of(user.getFirstName()
+                        , user.getLastName()
+                        , service != null ? service.getName() : null)
                 .filter(Objects::nonNull)
                 .collect(Collectors.joining());
         Event event = new Event()
@@ -86,14 +95,7 @@ public class GoogleCalendarService implements GoogleAPI {
             visit.setGoogleEventId(execute.getId());
             visit.setVisitDateTime(LocalDateTime.of(date, time));
             visit.setUser(user);
-            CosmetologyService service = null;
-            if (serviceId != null) {
-                Optional<CosmetologyService> optionalCosmetologyService = userVisitBotService.getServiceById(serviceId);
-                if (optionalCosmetologyService.isPresent()) {
-                    service = optionalCosmetologyService.get();
-                    visit.setCosmetologyService(service);
-                }
-            }
+            visit.setCosmetologyService(service);
             userVisitBotService.createVisit(visit);
             String message = String.format(MessagesText.SUCCESS_BOOKING_TEXT
                     , userName
