@@ -17,6 +17,7 @@ public enum CallbackTypes {
     GET_VISITS("Ваши записи"),
     GET_SCHEDULE("Расписание"),
     GET_PLACE_INFO("Место приема"),
+    GET_SERVICES_LIST_INFO("Список услуг"),
 
     // COMMON
     BACK("Назад"),

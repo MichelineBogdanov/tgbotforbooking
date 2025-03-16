@@ -38,6 +38,8 @@ public class GeneralInfoCommand implements Command {
                 .goToNewLine()
                 .addButton(CallbackTypes.GET_SCHEDULE.getDescription(), new BaseCallbackData(CallbackTypes.GET_SCHEDULE))
                 .goToNewLine()
+                .addButton(CallbackTypes.GET_SERVICES_LIST_INFO.getDescription(), new BaseCallbackData(CallbackTypes.GET_SERVICES_LIST_INFO))
+                .goToNewLine()
                 .addButton(CallbackTypes.GET_PLACE_INFO.getDescription(), new BaseCallbackData(CallbackTypes.GET_PLACE_INFO))
                 .goToNewLine()
                 .addButton(notificationSwitchText, new BaseCallbackData(CallbackTypes.NOTIFICATIONS_SWITCH))

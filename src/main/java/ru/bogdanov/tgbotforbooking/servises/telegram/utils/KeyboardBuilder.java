@@ -14,11 +14,19 @@ import java.util.List;
 public class KeyboardBuilder {
 
     private final List<List<InlineKeyboardButton>> keyboard;
+
     private final List<InlineKeyboardButton> currentRow;
+
+    private int buttonRowCount = 3;
 
     public KeyboardBuilder() {
         this.keyboard = new ArrayList<>();
         this.currentRow = new ArrayList<>();
+    }
+
+    public KeyboardBuilder(int buttonRowCount) {
+        this();
+        this.buttonRowCount = buttonRowCount;
     }
 
     public KeyboardBuilder addButton(String text, BaseCallbackData callbackData) {
@@ -26,7 +34,7 @@ public class KeyboardBuilder {
         InlineKeyboardButton button = new InlineKeyboardButton(text);
         String toJson = JsonHandler.toJson(callbackData);
         button.setCallbackData(toJson);
-        if (currentRow.size() < 3) {
+        if (currentRow.size() < buttonRowCount) {
             currentRow.add(button);
         } else {
             keyboard.add(new ArrayList<>(currentRow));

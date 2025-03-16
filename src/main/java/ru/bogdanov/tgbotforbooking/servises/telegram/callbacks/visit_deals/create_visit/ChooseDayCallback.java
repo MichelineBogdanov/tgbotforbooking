@@ -21,11 +21,11 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
-public class ChooseDayCallBack implements CallbackHandler {
+public class ChooseDayCallback implements CallbackHandler {
 
     private final GoogleAPI service;
 
-    public ChooseDayCallBack(@Qualifier("googleCalendarService") GoogleAPI service) {
+    public ChooseDayCallback(@Qualifier("googleCalendarService") GoogleAPI service) {
         this.service = service;
     }
 

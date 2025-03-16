@@ -1,6 +1,7 @@
 package ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.visit_deals.create_visit;
 
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -23,11 +24,11 @@ import java.time.LocalTime;
 import java.util.List;
 
 @Component
-public class ChooseServiceCallBack implements CallbackHandler {
+public class ChooseServiceCallback implements CallbackHandler {
 
     private final UserVisitBotService userVisitBotService;
 
-    public ChooseServiceCallBack(UserVisitBotService userVisitBotService) {
+    public ChooseServiceCallback(UserVisitBotService userVisitBotService) {
         this.userVisitBotService = userVisitBotService;
     }
 
@@ -48,21 +49,33 @@ public class ChooseServiceCallBack implements CallbackHandler {
         long chatId = update.getCallbackQuery().getMessage().getChatId();
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
-        message.setText(String.format(MessagesText.CHOOSE_SERVICE_TEXT,
-                DateTimeUtils.fromLocalDateTimeToDateTimeString(LocalDateTime.of(date, time))));
 
-        KeyboardBuilder keyboardBuilder = new KeyboardBuilder();
-        for (CosmetologyService service : allServices) {
+        StringBuilder text = new StringBuilder();
+        KeyboardBuilder keyboardBuilder = new KeyboardBuilder(5);
+        for (int i = 0; i < allServices.size(); i++) {
+            CosmetologyService service = allServices.get(i);
             CreateVisitCallbackData callbackData = new CreateVisitCallbackData();
             callbackData.setType(CallbackTypes.CREATE_VISIT);
             callbackData.setTime(time);
             callbackData.setDate(date);
             callbackData.setServiceId(service.getId());
-            keyboardBuilder.addButton(service.getName(), callbackData);
+            keyboardBuilder.addButton(String.valueOf(i + 1), callbackData);
+            text.append("*").append(i + 1).append("*")
+                    .append(" \\- ")
+                    .append("*").append(MessagesText.escapeMarkdownV2(service.getName())).append("*")
+                    .append(" \\- *цена* : ")
+                    .append(MessagesText.escapeMarkdownV2(String.valueOf(service.getPrice())))
+                    .append("р\\. ")
+                    .append("_").append(MessagesText.escapeMarkdownV2(service.getDescription())).append("_")
+                    .append("\n");
         }
         keyboardBuilder.addBackButton(CommandTypes.VISIT_DEALS);
         InlineKeyboardMarkup keyboardMarkup = keyboardBuilder.build();
         message.setReplyMarkup(keyboardMarkup);
+        message.setText(String.format(MessagesText.escapeMarkdownV2(MessagesText.CHOOSE_SERVICE_TEXT),
+                MessagesText.escapeMarkdownV2(DateTimeUtils.fromLocalDateTimeToDateTimeString(LocalDateTime.of(date, time))),
+                text));
+        message.setParseMode(ParseMode.MARKDOWNV2);
 
         return message;
     }
