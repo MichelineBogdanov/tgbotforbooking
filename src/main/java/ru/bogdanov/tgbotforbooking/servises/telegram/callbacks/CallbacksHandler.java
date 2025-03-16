@@ -17,8 +17,6 @@ import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.visit_deals.creat
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.visit_deals.create_visit.ChooseTimeCallback;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.visit_deals.create_visit.CreateVisitCallback;
 
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -38,19 +36,17 @@ public class CallbacksHandler {
             , ChooseCancelVisitCallback chooseCancelVisitCallback
             , CancelVisitCallback cancelVisitCallback
             , BackCallback backCallback) {
-        this.handler = Collections.unmodifiableMap(new HashMap<>() {{
-            put(CallbackTypes.GET_VISITS, getVisitsCallback);
-            put(CallbackTypes.GET_PLACE_INFO, placeInfoCallback);
-            put(CallbackTypes.GET_SCHEDULE, scheduleInfoCallback);
-            put(CallbackTypes.NOTIFICATIONS_SWITCH, userNotificationSwitchCallback);
-            put(CallbackTypes.CHOOSE_DAY, chooseDayCallBack);
-            put(CallbackTypes.CHOOSE_TIME, chooseTimeCallback);
-            put(CallbackTypes.CHOOSE_SERVICE, chooseServiceCallBack);
-            put(CallbackTypes.CREATE_VISIT, createVisitCallback);
-            put(CallbackTypes.CHOOSE_CANCEL_VISIT, chooseCancelVisitCallback);
-            put(CallbackTypes.CANCEL_VISIT, cancelVisitCallback);
-            put(CallbackTypes.BACK, backCallback);
-        }});
+        this.handler = Map.ofEntries(Map.entry(CallbackTypes.GET_VISITS, getVisitsCallback)
+                , Map.entry(CallbackTypes.GET_PLACE_INFO, placeInfoCallback)
+                , Map.entry(CallbackTypes.GET_SCHEDULE, scheduleInfoCallback)
+                , Map.entry(CallbackTypes.NOTIFICATIONS_SWITCH, userNotificationSwitchCallback)
+                , Map.entry(CallbackTypes.CHOOSE_DAY, chooseDayCallBack)
+                , Map.entry(CallbackTypes.CHOOSE_TIME, chooseTimeCallback)
+                , Map.entry(CallbackTypes.CHOOSE_SERVICE, chooseServiceCallBack)
+                , Map.entry(CallbackTypes.CREATE_VISIT, createVisitCallback)
+                , Map.entry(CallbackTypes.CHOOSE_CANCEL_VISIT, chooseCancelVisitCallback)
+                , Map.entry(CallbackTypes.CANCEL_VISIT, cancelVisitCallback)
+                , Map.entry(CallbackTypes.BACK, backCallback));
     }
 
     public SendMessage handleCallbacks(Update update) {

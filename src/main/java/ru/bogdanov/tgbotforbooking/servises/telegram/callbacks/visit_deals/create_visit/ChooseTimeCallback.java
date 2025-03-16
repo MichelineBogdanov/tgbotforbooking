@@ -8,8 +8,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import ru.bogdanov.tgbotforbooking.servises.google.GoogleAPI;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities.BaseCallbackData;
+import ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities.ChooseServiceCallbackData;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities.ChooseTimeCallbackData;
-import ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities.CreateVisitCallbackData;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.CallbackHandler;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.CallbackTypes;
 import ru.bogdanov.tgbotforbooking.servises.telegram.commands.CommandTypes;
@@ -17,7 +17,10 @@ import ru.bogdanov.tgbotforbooking.servises.telegram.utils.DateTimeUtils;
 import ru.bogdanov.tgbotforbooking.servises.telegram.utils.KeyboardBuilder;
 import ru.bogdanov.tgbotforbooking.servises.telegram.utils.MessagesText;
 
-import java.time.*;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
@@ -47,8 +50,8 @@ public class ChooseTimeCallback implements CallbackHandler {
 
         KeyboardBuilder keyboardBuilder = new KeyboardBuilder();
         for (LocalTime freeSlot : freeSlots) {
-            CreateVisitCallbackData callbackData = new CreateVisitCallbackData();
-            callbackData.setType(CallbackTypes.CREATE_VISIT);
+            ChooseServiceCallbackData callbackData = new ChooseServiceCallbackData();
+            callbackData.setType(CallbackTypes.CHOOSE_SERVICE);
             callbackData.setTime(freeSlot);
             callbackData.setDate(date);
             keyboardBuilder.addButton(freeSlot.toString(), callbackData);

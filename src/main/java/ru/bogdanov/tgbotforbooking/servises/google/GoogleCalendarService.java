@@ -5,6 +5,7 @@ import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.model.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import ru.bogdanov.tgbotforbooking.entities.CosmetologyService;
 import ru.bogdanov.tgbotforbooking.entities.User;
 import ru.bogdanov.tgbotforbooking.entities.Visit;
 import ru.bogdanov.tgbotforbooking.servises.bot_services.UserVisitBotService;
@@ -54,7 +55,7 @@ public class GoogleCalendarService implements GoogleAPI {
         }
     }
 
-    public CreateVisitResult createVisit(LocalDate date, LocalTime time, String userName) {
+    public CreateVisitResult createVisit(LocalDate date, LocalTime time, String userName, Long serviceId) {
         Optional<User> userOptional = userVisitBotService.getUserByTgAccount(userName);
         User user = userOptional.get();
         if (userVisitBotService.checkVisitPresent(LocalDateTime.of(date, time))) {
@@ -85,10 +86,21 @@ public class GoogleCalendarService implements GoogleAPI {
             visit.setGoogleEventId(execute.getId());
             visit.setVisitDateTime(LocalDateTime.of(date, time));
             visit.setUser(user);
+            CosmetologyService service = null;
+            if (serviceId != null) {
+                Optional<CosmetologyService> optionalCosmetologyService = userVisitBotService.getServiceById(serviceId);
+                if (optionalCosmetologyService.isPresent()) {
+                    service = optionalCosmetologyService.get();
+                    visit.setCosmetologyService(service);
+                }
+            }
             userVisitBotService.createVisit(visit);
             String message = String.format(MessagesText.SUCCESS_BOOKING_TEXT
                     , userName
-                    , DateTimeUtils.fromLocalDateTimeToDateTimeString(LocalDateTime.of(date, time)));
+                    , DateTimeUtils.fromLocalDateTimeToDateTimeString(LocalDateTime.of(date, time))
+                    , service == null
+                            ? MessagesText.NO_SERVICE_CHOOSE_TEXT
+                            : String.join(" : ", service.getName(), service.getPrice().toString()));
             return new CreateVisitResult(message);
         } catch (IOException e) {
             throw new RuntimeException(e);

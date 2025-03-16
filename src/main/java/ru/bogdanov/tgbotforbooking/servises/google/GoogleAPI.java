@@ -18,7 +18,7 @@ public interface GoogleAPI {
 
     List<LocalTime> getFreeSlots(DateTime start, DateTime end);
 
-    CreateVisitResult createVisit(LocalDate date, LocalTime time, String userName);
+    CreateVisitResult createVisit(LocalDate date, LocalTime time, String userName, Long serviceId);
 
     Visit deleteVisit(Long id);
 

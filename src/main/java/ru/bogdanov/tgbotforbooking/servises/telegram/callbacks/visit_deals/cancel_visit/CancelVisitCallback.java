@@ -29,17 +29,16 @@ public class CancelVisitCallback implements CallbackHandler {
 
     @Override
     public SendMessage apply(BaseCallbackData callback, Update update) {
-        // Удаляем визиты
         String userName = update.getCallbackQuery().getFrom().getUserName();
         List<Visit> visits = service.getUserVisits(userName);
         long chatId = update.getCallbackQuery().getMessage().getChatId();
 
-        // Создаем сообщение
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
-        message.setText(MessagesText.YOUR_VISITS_FOR_CANCEL_TEXT);
+        message.setText(visits.isEmpty()
+                ? MessagesText.NO_VISITS_TEXT
+                : MessagesText.YOUR_VISITS_FOR_CANCEL_TEXT);
 
-        // Клавиатура
         KeyboardBuilder keyboardBuilder = new KeyboardBuilder();
         for (Visit visit : visits) {
             ChooseCancelVisitCallbackData callbackData = new ChooseCancelVisitCallbackData();

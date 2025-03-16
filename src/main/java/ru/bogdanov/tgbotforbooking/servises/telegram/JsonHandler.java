@@ -7,7 +7,6 @@ import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.CallbackTypes;
 
-
 public class JsonHandler {
 
     private final static ObjectMapper mapper = JsonMapper.builder()
@@ -33,7 +32,7 @@ public class JsonHandler {
     public static CallbackTypes getType(String json) {
         try {
             JsonNode jsonNode = mapper.readTree(json);
-            return CallbackTypes.valueOf(String.valueOf(jsonNode.get("type").asText()));
+            return CallbackTypes.fromValue(jsonNode.get("type").asInt());
         } catch (JsonProcessingException e) {
             return null;
         }

@@ -26,7 +26,7 @@ public class Visit {
 
     @OneToOne
     @JoinColumn(name = "service_id")
-    private Service service;
+    private CosmetologyService cosmetologyService;
 
     @OneToOne(mappedBy = "visit", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Notification notification;
@@ -66,12 +66,12 @@ public class Visit {
         this.googleEventId = googleEventId;
     }
 
-    public Service getService() {
-        return service;
+    public CosmetologyService getCosmetologyService() {
+        return cosmetologyService;
     }
 
-    public void setService(Service service) {
-        this.service = service;
+    public void setCosmetologyService(CosmetologyService cosmetologyService) {
+        this.cosmetologyService = cosmetologyService;
     }
 
     public Notification getNotification() {

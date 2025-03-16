@@ -2,15 +2,18 @@ package ru.bogdanov.tgbotforbooking.servises.bot_services;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.bogdanov.tgbotforbooking.entities.CosmetologyService;
 import ru.bogdanov.tgbotforbooking.entities.Notification;
 import ru.bogdanov.tgbotforbooking.entities.User;
 import ru.bogdanov.tgbotforbooking.entities.Visit;
 import ru.bogdanov.tgbotforbooking.repositories.NotificationRepository;
+import ru.bogdanov.tgbotforbooking.repositories.ServiceRepository;
 import ru.bogdanov.tgbotforbooking.repositories.UserRepository;
 import ru.bogdanov.tgbotforbooking.repositories.VisitRepository;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,13 +22,16 @@ public class UserVisitBotService {
 
     private final UserRepository userRepository;
     private final VisitRepository visitRepository;
+    private final ServiceRepository serviceRepository;
     private final NotificationRepository notificationRepository;
 
     public UserVisitBotService(UserRepository userRepository
             , VisitRepository visitRepository
+            , ServiceRepository serviceRepository
             , NotificationRepository notificationRepository) {
         this.userRepository = userRepository;
         this.visitRepository = visitRepository;
+        this.serviceRepository = serviceRepository;
         this.notificationRepository = notificationRepository;
     }
 
@@ -86,6 +92,25 @@ public class UserVisitBotService {
     }
 
     @Transactional
+    public List<User> findAllUsers() {
+        ArrayList<User> users = new ArrayList<>();
+        userRepository.findAll().forEach(users::add);
+        return users;
+    }
+
+    @Transactional
+    public List<CosmetologyService> findAllServices() {
+        ArrayList<CosmetologyService> services = new ArrayList<>();
+        serviceRepository.findAll().forEach(services::add);
+        return services;
+    }
+
+    @Transactional
+    public Optional<CosmetologyService> getServiceById(Long serviceId) {
+        return serviceRepository.findById(serviceId);
+    }
+
+    @Transactional
     public boolean switchUserNotifications(String tgAccount) {
         Optional<User> userOptional = getUserByTgAccount(tgAccount);
         boolean notificationsOn = false;
@@ -103,7 +128,6 @@ public class UserVisitBotService {
         Optional<User> userOptional = getUserByChatId(Long.parseLong(chatId));
         if (userOptional.isPresent()) {
             User user = userOptional.get();
-            user.setActive(false);
             user.setNotificationsOn(false);
             userRepository.save(user);
         }

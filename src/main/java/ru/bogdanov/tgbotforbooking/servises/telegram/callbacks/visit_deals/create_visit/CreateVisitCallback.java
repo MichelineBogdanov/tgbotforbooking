@@ -30,8 +30,9 @@ public class CreateVisitCallback implements CallbackHandler {
         CreateVisitCallbackData currentCallback = (CreateVisitCallbackData) callback;
         LocalDate date = currentCallback.getDate();
         LocalTime time = currentCallback.getTime();
+        Long serviceId = currentCallback.getServiceId();
         String userName = update.getCallbackQuery().getFrom().getUserName();
-        CreateVisitResult result = service.createVisit(date, time, userName);
+        CreateVisitResult result = service.createVisit(date, time, userName, serviceId);
 
         long chatId = update.getCallbackQuery().getMessage().getChatId();
         SendMessage message = new SendMessage();

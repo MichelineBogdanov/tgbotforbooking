@@ -29,9 +29,6 @@ public class User {
     @Column(name = "tg_user_id")
     private Long tgUserId;
 
-    @Column(name = "is_active")
-    private Boolean isActive = true;
-
     @Column(name = "notifications_on")
     private Boolean notificationsOn = true;
 
@@ -89,14 +86,6 @@ public class User {
         this.tgUserId = tgUserId;
     }
 
-    public Boolean getActive() {
-        return isActive;
-    }
-
-    public void setActive(Boolean active) {
-        isActive = active;
-    }
-
     public Boolean getNotificationsOn() {
         return notificationsOn;
     }
@@ -114,7 +103,6 @@ public class User {
                 ", tgAccount='" + tgAccount + '\'' +
                 ", chatId='" + chatId + '\'' +
                 ", tgUserId='" + tgUserId + '\'' +
-                ", isActive=" + isActive +
                 ", notificationsOn=" + notificationsOn +
                 '}';
     }

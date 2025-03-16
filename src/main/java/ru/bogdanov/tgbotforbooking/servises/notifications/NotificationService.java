@@ -51,7 +51,7 @@ public class NotificationService {
             Notification notification = notificationOptional.get();
             Visit visit = notification.getVisit();
             User user = visit.getUser();
-            if (user.getActive() && user.getNotificationsOn()) {
+            if (user.getNotificationsOn()) {
                 String text = String.format(MessagesText.NOTIFICATION_MESSAGE_TEXT, DateTimeUtils.fromLocalDateTimeToDateTimeString(visit.getVisitDateTime()));
                 SendMessage message = new SendMessage(user.getChatId().toString(), text);
                 sendMessage(message);
