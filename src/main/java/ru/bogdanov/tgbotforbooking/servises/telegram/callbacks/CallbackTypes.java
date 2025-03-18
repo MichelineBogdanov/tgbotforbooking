@@ -14,16 +14,17 @@ public enum CallbackTypes {
     CANCEL_VISIT("Отменить визит"),
 
     // GENERAL_INFO
-    GET_VISITS("Ваши записи"),
+    GET_SERVICES_LIST_INFO("Список услуг"),
     GET_SCHEDULE("Расписание"),
     GET_PLACE_INFO("Место приема"),
-    GET_SERVICES_LIST_INFO("Список услуг"),
+
+    //ACCOUNT
+    GET_FUTURE_VISITS("Ваши записи"),
+    GET_VISITS_HISTORY("История посещений"),
+    NOTIFICATIONS_SWITCH(""),
 
     // COMMON
-    BACK("Назад"),
-
-    // NOTIFICATIONS
-    NOTIFICATIONS_SWITCH("");
+    BACK("Назад");
 
     private final String description;
 

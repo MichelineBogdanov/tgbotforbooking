@@ -19,7 +19,7 @@ public class RedisService {
     }
 
     public boolean isUserCached(String username) {
-        return redisTemplate.opsForSet().isMember(USERS, username);
+        return Boolean.TRUE.equals(redisTemplate.opsForSet().isMember(USERS, username));
     }
 
     public void removeUser(String username) {

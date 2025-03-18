@@ -4,23 +4,20 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import ru.bogdanov.tgbotforbooking.entities.CosmetologyService;
 import ru.bogdanov.tgbotforbooking.servises.bot_services.UserVisitBotService;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities.BaseCallbackData;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.CallbackHandler;
-import ru.bogdanov.tgbotforbooking.servises.telegram.commands.CommandTypes;
-import ru.bogdanov.tgbotforbooking.servises.telegram.utils.KeyboardBuilder;
 import ru.bogdanov.tgbotforbooking.servises.telegram.utils.MessagesText;
 
 import java.util.List;
 
 @Component
-public class GetServicesInfoCallback implements CallbackHandler {
+public class ServicesInfoCallback implements CallbackHandler {
 
     private final UserVisitBotService userVisitBotService;
 
-    public GetServicesInfoCallback(UserVisitBotService userVisitBotService) {
+    public ServicesInfoCallback(UserVisitBotService userVisitBotService) {
         this.userVisitBotService = userVisitBotService;
     }
 

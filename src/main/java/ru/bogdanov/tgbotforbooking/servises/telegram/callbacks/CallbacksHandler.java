@@ -5,6 +5,9 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.bogdanov.tgbotforbooking.servises.telegram.JsonHandler;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities.*;
+import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.account.GetFutureVisitsCallback;
+import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.account.GetVisitsHistoryCallback;
+import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.account.UserNotificationSwitchCallback;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.common.BackCallback;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.general_info.*;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.visit_deals.cancel_visit.CancelVisitCallback;
@@ -22,10 +25,11 @@ public class CallbacksHandler {
 
     private final Map<CallbackTypes, CallbackHandler> handler;
 
-    public CallbacksHandler(GetVisitsCallback getVisitsCallback
+    public CallbacksHandler(GetFutureVisitsCallback getFutureVisitsCallback
+            , GetVisitsHistoryCallback getVisitsHistoryCallback
             , PlaceInfoCallback placeInfoCallback
             , ScheduleInfoCallback scheduleInfoCallback
-            , GetServicesInfoCallback getServicesInfoCallback
+            , ServicesInfoCallback servicesInfoCallback
             , UserNotificationSwitchCallback userNotificationSwitchCallback
             , ChooseDayCallback chooseDayCallback
             , ChooseTimeCallback chooseTimeCallback
@@ -34,10 +38,11 @@ public class CallbacksHandler {
             , ChooseCancelVisitCallback chooseCancelVisitCallback
             , CancelVisitCallback cancelVisitCallback
             , BackCallback backCallback) {
-        this.handler = Map.ofEntries(Map.entry(CallbackTypes.GET_VISITS, getVisitsCallback)
+        this.handler = Map.ofEntries(Map.entry(CallbackTypes.GET_FUTURE_VISITS, getFutureVisitsCallback)
+                , Map.entry(CallbackTypes.GET_VISITS_HISTORY, getVisitsHistoryCallback)
                 , Map.entry(CallbackTypes.GET_PLACE_INFO, placeInfoCallback)
                 , Map.entry(CallbackTypes.GET_SCHEDULE, scheduleInfoCallback)
-                , Map.entry(CallbackTypes.GET_SERVICES_LIST_INFO, getServicesInfoCallback)
+                , Map.entry(CallbackTypes.GET_SERVICES_LIST_INFO, servicesInfoCallback)
                 , Map.entry(CallbackTypes.NOTIFICATIONS_SWITCH, userNotificationSwitchCallback)
                 , Map.entry(CallbackTypes.CHOOSE_DAY, chooseDayCallback)
                 , Map.entry(CallbackTypes.CHOOSE_TIME, chooseTimeCallback)
@@ -59,13 +64,14 @@ public class CallbacksHandler {
         CallbackTypes type = JsonHandler.getType(callbackData);
         BaseCallbackData result = null;
         switch (Objects.requireNonNull(type)) {
-            case GET_VISITS
-                    , GET_PLACE_INFO
-                    , GET_SCHEDULE
-                    , GET_SERVICES_LIST_INFO
-                    , CHOOSE_DAY
-                    , CANCEL_VISIT
-                    , NOTIFICATIONS_SWITCH -> result = JsonHandler.readToObject(callbackData, BaseCallbackData.class);
+            case GET_FUTURE_VISITS
+            , GET_VISITS_HISTORY
+            , GET_PLACE_INFO
+            , GET_SCHEDULE
+            , GET_SERVICES_LIST_INFO
+            , CHOOSE_DAY
+            , CANCEL_VISIT
+            , NOTIFICATIONS_SWITCH -> result = JsonHandler.readToObject(callbackData, BaseCallbackData.class);
             case CHOOSE_TIME -> result = JsonHandler.readToObject(callbackData, ChooseTimeCallbackData.class);
             case CHOOSE_SERVICE -> result = JsonHandler.readToObject(callbackData, ChooseServiceCallbackData.class);
             case CREATE_VISIT -> result = JsonHandler.readToObject(callbackData, CreateVisitCallbackData.class);

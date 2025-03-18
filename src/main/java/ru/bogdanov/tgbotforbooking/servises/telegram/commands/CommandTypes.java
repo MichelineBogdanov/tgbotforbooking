@@ -5,6 +5,7 @@ public enum CommandTypes {
     START("/start", "Начать работу с ботом"),
     GENERAL_INFO("/generalinfo", "Получение информации и номерках/месту приема"),
     VISIT_DEALS("/visitdeals", "Запись на прием/отмена записи"),
+    ACCOUNT("/account", "Личный кабинет"),
     UNKNOWN_COMMAND("", "Неизвестная команда");
 
     private final String command;

@@ -61,7 +61,12 @@ public class UserVisitBotService {
 
     @Transactional
     public List<Visit> getFutureVisitsByUserName(String tgAccount) {
-        return visitRepository.findVisitByUserTgAccountAndVisitDateTimeGreaterThan(tgAccount, LocalDateTime.now());
+        return visitRepository.findVisitsByUserTgAccountAndVisitDateTimeGreaterThan(tgAccount, LocalDateTime.now());
+    }
+
+    @Transactional
+    public List<Visit> getVisitsHistoryByUserName(String tgAccount) {
+        return visitRepository.findVisitsByUserTgAccountAndVisitDateTimeLessThan(tgAccount, LocalDateTime.now());
     }
 
     @Transactional

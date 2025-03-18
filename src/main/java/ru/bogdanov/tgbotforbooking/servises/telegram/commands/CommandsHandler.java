@@ -14,11 +14,13 @@ public class CommandsHandler {
     public CommandsHandler(StartCommand startCommand
             , GeneralInfoCommand generalInfoCommand
             , VisitDealsCommand visitDealsCommand
+            , AccountCommand accountCommand
             , UnknownCommand unknownCommand) {
-        this.handler = Map.of(CommandTypes.START, startCommand
-                , CommandTypes.GENERAL_INFO, generalInfoCommand
-                , CommandTypes.VISIT_DEALS, visitDealsCommand
-                , CommandTypes.UNKNOWN_COMMAND, unknownCommand
+        this.handler = Map.ofEntries(Map.entry(CommandTypes.START, startCommand)
+                , Map.entry(CommandTypes.GENERAL_INFO, generalInfoCommand)
+                , Map.entry(CommandTypes.VISIT_DEALS, visitDealsCommand)
+                , Map.entry(CommandTypes.ACCOUNT, accountCommand)
+                , Map.entry(CommandTypes.UNKNOWN_COMMAND, unknownCommand)
         );
     }
 
