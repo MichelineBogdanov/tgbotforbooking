@@ -35,6 +35,7 @@ public class BotInitializer {
             ArrayList<BotCommand> commands = new ArrayList<>() {{
                 add(new BotCommand(CommandTypes.START.getCommand(), CommandTypes.START.getDescription()));
                 add(new BotCommand(CommandTypes.GENERAL_INFO.getCommand(), CommandTypes.GENERAL_INFO.getDescription()));
+                add(new BotCommand(CommandTypes.ACCOUNT.getCommand(), CommandTypes.ACCOUNT.getDescription()));
                 add(new BotCommand(CommandTypes.VISIT_DEALS.getCommand(), CommandTypes.VISIT_DEALS.getDescription()));
             }};
             ((TelegramLongPollingBot) telegramBot).execute(new SetMyCommands(commands, new BotCommandScopeDefault(), null));

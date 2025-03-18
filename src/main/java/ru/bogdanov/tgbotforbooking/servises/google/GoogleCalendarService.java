@@ -73,11 +73,11 @@ public class GoogleCalendarService implements GoogleAPI {
         }
         Date start = Date.from(LocalDateTime.of(date, time).atZone(ZoneId.systemDefault()).toInstant());
         Date end = Date.from(LocalDateTime.of(date, time.plusHours(1).plusMinutes(30)).atZone(ZoneId.systemDefault()).toInstant());
-        String description = String.format("%s\nУслуга: %s",
+        String description = String.format(MessagesText.DESCRIPTION_EVENT_TEXT,
                 Stream.of(user.getFirstName(), user.getLastName())
                         .filter(Objects::nonNull)
                         .collect(Collectors.joining(" ")),
-                service != null ? service.getName() : "Услуга не выбрана"
+                service != null ? service.getName() : MessagesText.NO_SERVICE_CHOOSE_TEXT
         );
 
         Event event = new Event()

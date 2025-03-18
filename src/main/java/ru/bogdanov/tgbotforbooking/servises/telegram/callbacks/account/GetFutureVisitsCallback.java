@@ -14,7 +14,6 @@ import ru.bogdanov.tgbotforbooking.servises.telegram.utils.KeyboardBuilder;
 import ru.bogdanov.tgbotforbooking.servises.telegram.utils.MessagesText;
 
 import java.util.List;
-import java.util.StringJoiner;
 
 @Component
 public class GetFutureVisitsCallback implements CallbackHandler {
@@ -32,13 +31,16 @@ public class GetFutureVisitsCallback implements CallbackHandler {
         List<Visit> visits = userVisitBotService.getFutureVisitsByUserName(userName);
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
-        StringJoiner sj = new StringJoiner("\n");
-        visits.forEach(visit -> sj.add(DateTimeUtils.fromLocalDateTimeToDateTimeString(visit.getVisitDateTime()))
-                .add(" - ")
-                .add(visit.getCosmetologyService().getName()));
+        StringBuilder sb = new StringBuilder();
+        visits.forEach(visit -> sb.append(DateTimeUtils.fromLocalDateTimeToDateTimeString(visit.getVisitDateTime()))
+                .append(" - ")
+                .append(visit.getCosmetologyService() == null
+                        ? MessagesText.NO_SERVICE_CHOOSE_TEXT
+                        : visit.getCosmetologyService().getName())
+                .append("\n"));
         String text = visits.isEmpty()
                 ? MessagesText.NO_VISITS_TEXT
-                : String.format(MessagesText.YOUR_FUTURE_VISITS_TEXT, sj);
+                : String.format(MessagesText.YOUR_FUTURE_VISITS_TEXT, sb);
         message.setText(text);
 
         InlineKeyboardMarkup keyboardMarkup = new KeyboardBuilder().addBackButton(CommandTypes.ACCOUNT).build();

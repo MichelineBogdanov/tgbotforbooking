@@ -8,7 +8,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import ru.bogdanov.tgbotforbooking.servises.google.GoogleServiceFactory;
 
 @Configuration
-@PropertySource("classpath:application.properties")
+@PropertySource("classpath:application.yaml")
 @EnableScheduling
 public class AppConfig {
 
