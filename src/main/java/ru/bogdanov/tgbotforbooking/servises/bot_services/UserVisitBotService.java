@@ -174,7 +174,6 @@ public class UserVisitBotService {
     public List<Long> getIncomeForMonthByDays(YearMonth month) {
         List<Visit> visits = visitRepository.findVisitsByVisitDateTimeBetween(month.atDay(1).atStartOfDay()
                 , month.atDay(month.lengthOfMonth()).atStartOfDay());
-        // Заполняем список значениями из мапы
         List<Long> dailyIncomeList = new ArrayList<>(Collections.nCopies(month.lengthOfMonth(), 0L));
         visits.stream()
                 .filter(visit -> visit.getCosmetologyService() != null)
