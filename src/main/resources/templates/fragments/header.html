@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Header</title>
+</head>
+<body>
+<!-- Шапка -->
+<header th:fragment="header">
+    <nav>
+        <ul>
+            <li><a href="#" th:href="@{/users}">Пользователи</a></li>
+            <li><a href="#" th:href="@{/visits}">История посещений</a></li>
+            <li><a href="#" th:href="@{/income}">Доход</a></li>
+            <li><a href="#" th:href="@{/notifications}">Уведомления</a></li>
+            <li><a href="#" th:href="@{/schedule}">Расписание</a></li>
+            <li><a href="#" th:href="@{/services}">Услуги</a></li>
+        </ul>
+    </nav>
+</header>
+</body>
+</html>

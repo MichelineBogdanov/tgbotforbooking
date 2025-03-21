@@ -12,10 +12,9 @@ import ru.bogdanov.tgbotforbooking.repositories.UserRepository;
 import ru.bogdanov.tgbotforbooking.repositories.VisitRepository;
 
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UserVisitBotService {
@@ -70,6 +69,13 @@ public class UserVisitBotService {
     }
 
     @Transactional
+    public List<Visit> getAllVisits() {
+        ArrayList<Visit> visits = new ArrayList<>();
+        visitRepository.findAll().forEach(visits::add);
+        return visits;
+    }
+
+    @Transactional
     public Visit deleteVisitById(Long id) {
         Visit visit = visitRepository.findById(id).get();
         visitRepository.delete(visit);
@@ -79,6 +85,11 @@ public class UserVisitBotService {
     @Transactional
     public void createUser(User user) {
         userRepository.save(user);
+    }
+
+    @Transactional
+    public Optional<User> getUserById(Long userId) {
+        return userRepository.findById(userId);
     }
 
     @Transactional
@@ -104,15 +115,36 @@ public class UserVisitBotService {
     }
 
     @Transactional
+    public User updateUser(User user) {
+        return userRepository.save(user);
+    }
+
+    @Transactional
+    public void deleteUser(Long userId) {
+        userRepository.deleteById(userId);
+    }
+
+    @Transactional
     public List<CosmetologyService> findAllServices() {
         ArrayList<CosmetologyService> services = new ArrayList<>();
         serviceRepository.findAll().forEach(services::add);
+        services.sort(Comparator.comparing(CosmetologyService::getId));
         return services;
     }
 
     @Transactional
     public Optional<CosmetologyService> getServiceById(Long serviceId) {
         return serviceRepository.findById(serviceId);
+    }
+
+    @Transactional
+    public CosmetologyService updateService(CosmetologyService service) {
+        return serviceRepository.save(service);
+    }
+
+    @Transactional
+    public void deleteService(Long serviceId) {
+        serviceRepository.deleteById(serviceId);
     }
 
     @Transactional
@@ -136,5 +168,21 @@ public class UserVisitBotService {
             user.setNotificationsOn(false);
             userRepository.save(user);
         }
+    }
+
+    @Transactional
+    public List<Long> getIncomeForMonthByDays(YearMonth month) {
+        List<Visit> visits = visitRepository.findVisitsByVisitDateTimeBetween(month.atDay(1).atStartOfDay()
+                , month.atDay(month.lengthOfMonth()).atStartOfDay());
+        // Заполняем список значениями из мапы
+        List<Long> dailyIncomeList = new ArrayList<>(Collections.nCopies(month.lengthOfMonth(), 0L));
+        visits.stream()
+                .filter(visit -> visit.getCosmetologyService() != null)
+                .forEach(visit -> {
+                    int dayOfMonth = visit.getVisitDateTime().getDayOfMonth();
+                    long price = visit.getCosmetologyService().getPrice();
+                    dailyIncomeList.set(dayOfMonth - 1, dailyIncomeList.get(dayOfMonth - 1) + price);
+                });
+        return dailyIncomeList;
     }
 }

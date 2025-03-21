@@ -1,5 +1,6 @@
 package ru.bogdanov.tgbotforbooking.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -33,6 +34,7 @@ public class User {
     private Boolean notificationsOn = true;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @JsonIgnore
     private List<Visit> visits;
 
     public User() {
@@ -44,6 +46,14 @@ public class User {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getTgAccount() {
+        return tgAccount;
+    }
+
+    public void setTgAccount(String tgAccount) {
+        this.tgAccount = tgAccount;
     }
 
     public String getFirstName() {
@@ -60,14 +70,6 @@ public class User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public String getTgAccount() {
-        return tgAccount;
-    }
-
-    public void setTgAccount(String tgAccount) {
-        this.tgAccount = tgAccount;
     }
 
     public Long getChatId() {
@@ -92,6 +94,14 @@ public class User {
 
     public void setNotificationsOn(Boolean notificationsOn) {
         this.notificationsOn = notificationsOn;
+    }
+
+    public List<Visit> getVisits() {
+        return visits;
+    }
+
+    public void setVisits(List<Visit> visits) {
+        this.visits = visits;
     }
 
     @Override

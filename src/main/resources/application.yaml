@@ -53,6 +53,8 @@ logging:
       zaxxer:
         hikari:
           HikariDataSource: INFO
+server:
+  port: 8888
 google:
   calendar:
     user_id: '${GOOGLE_USER_ID}'

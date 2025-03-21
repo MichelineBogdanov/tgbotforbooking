@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Визиты пользователя</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<!-- Вставляем шапку -->
+<div th:replace="~{fragments/header :: header}"></div>
+
+<main>
+    <!-- Кнопка "Назад" -->
+    <button class="back-btn" onclick="window.location.href='/users'">Назад</button>
+
+    <!-- Общая информация о пользователе -->
+    <div class="user-info">
+        <h2>Информация о пользователе</h2>
+        <p><strong>Имя:</strong> <span th:text="${user.firstName} + ' ' + ${user.lastName}"></span></p>
+        <p><strong>Количество визитов:</strong> <span th:text="${visits.size()}"></span></p>
+        <p><strong>Общая сумма визитов:</strong> <span th:text="${#numbers.formatDecimal(totalAmount, 1, 2)}"></span></p>
+    </div>
+
+    <!-- Таблица визитов -->
+    <h2>Визиты</h2>
+    <table id="user-visits-table">
+        <thead>
+        <tr>
+            <th>Дата визита</th>
+            <th>Название услуги</th>
+            <th>Цена услуги</th>
+            <th>Время нотификации</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="visit : ${visits}">
+            <td th:text="${#temporals.format(visit.visitDateTime, 'dd-MM-yyyy HH:mm')}"></td>
+            <td th:text="${visit.cosmetologyService} != null ? ${visit.cosmetologyService.name} : ''"></td>
+            <td th:text="${visit.cosmetologyService != null ? #numbers.formatDecimal(visit.cosmetologyService.price, 1, 2) : ''}"></td>
+            <td th:text="${visit.notification != null ? #temporals.format(visit.notification.notificationDateTime, 'dd-MM-yyyy HH:mm') : ''}"></td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>
