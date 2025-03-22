@@ -5,24 +5,24 @@ function toggleEdit(button) {
     const saveBtn = row.querySelector('.save-btn');
     inputs.forEach(input => {
         input.disabled = !input.disabled;
-        input.style.width = '100%'; // Фиксируем ширину
+        input.style.width = '100%';
     });
     editBtn.style.display = editBtn.style.display === 'none' ? 'inline-block' : 'none';
     saveBtn.style.display = saveBtn.style.display === 'none' ? 'inline-block' : 'none';
 }
 
 function saveChanges(button) {
-    const row = button.closest('tr'); // Находим строку
-    const inputs = row.querySelectorAll('input, select'); // Находим все input и select
-    const editBtn = row.querySelector('.edit-btn'); // Кнопка "Редактировать"
-    const saveBtn = row.querySelector('.save-btn'); // Кнопка "Сохранить"
+    const row = button.closest('tr');
+    const inputs = row.querySelectorAll('input, select');
+    const editBtn = row.querySelector('.edit-btn');
+    const saveBtn = row.querySelector('.save-btn');
     const deleteBtn = row.querySelector('.delete-btn');
     inputs.forEach(input => input.disabled = true);
     editBtn.style.display = 'inline-block';
     saveBtn.style.display = 'none';
     deleteBtn.style.display = 'inline-block';
     const userData = {
-        id: row.dataset.userId, // ID услуги (если есть)
+        id: row.dataset.userId,
         tgAccount: row.querySelector('input[name="tgAccount"]').value,
         firstName: row.querySelector('input[name="firstName"]').value,
         lastName: row.querySelector('input[name="lastName"]').value,
@@ -34,7 +34,6 @@ function saveChanges(button) {
 
     saveUserToDatabase(userData).then(savedUser => {
         alert('Изменения успешно сохранены!');
-        // Обновляем строку с данными из сохраненной сущности
         updateRowWithSavedUser(row, savedUser);
     })
 }
@@ -52,22 +51,22 @@ function updateRowWithSavedUser(row, savedUser) {
 
 function saveUserToDatabase(userData) {
     return fetch('/users/update', {
-        method: 'POST', // Используем POST для отправки данных
+        method: 'POST',
         headers: {
-            'Content-Type': 'application/json', // Указываем тип содержимого
+            'Content-Type': 'application/json',
         },
-        body: JSON.stringify(userData) // Преобразуем объект в JSON
+        body: JSON.stringify(userData)
     }).then(response => {
         if (!response.ok) {
             throw new Error('Ошибка сети');
         }
-        return response.json(); // Парсим ответ сервера (сохраненную сущность)
+        return response.json();
     });
 }
 
 function deleteUser(button) {
     const row = button.closest('tr');
-    const userId = row.dataset.userId; // Получаем ID пользователя
+    const userId = row.dataset.userId;
     if (confirm('Вы уверены, что хотите удалить этого пользователя?')) {
         deleteUserFromDatabase(userId)
             .then(response => {
@@ -98,6 +97,6 @@ function deleteUserFromDatabase(userId) {
 
 function viewVisits(button) {
     const row = button.closest('tr');
-    const userId = row.dataset.userId; // Получаем ID пользователя
-    window.location.href = `/users/visits?userId=${userId}`; // Перенаправляем на страницу визитов
+    const userId = row.dataset.userId;
+    window.location.href = `/users/visits?userId=${userId}`;
 }

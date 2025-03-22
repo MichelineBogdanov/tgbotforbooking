@@ -6,7 +6,7 @@ function toggleEdit(button) {
     const saveBtn = row.querySelector('.save-btn');
     inputs.forEach(input => {
         input.disabled = !input.disabled;
-        input.style.width = '100%'; // Фиксируем ширину
+        input.style.width = '100%';
     });
     editBtn.style.display = editBtn.style.display === 'none' ? 'inline-block' : 'none';
     saveBtn.style.display = saveBtn.style.display === 'none' ? 'inline-block' : 'none';
@@ -37,16 +37,16 @@ function saveChanges(button) {
 
 function saveServiceToDatabase(serviceData) {
     return fetch('/services/update', {
-        method: 'POST', // Используем POST для отправки данных
+        method: 'POST',
         headers: {
-            'Content-Type': 'application/json', // Указываем тип содержимого
+            'Content-Type': 'application/json',
         },
-        body: JSON.stringify(serviceData) // Преобразуем объект в JSON
+        body: JSON.stringify(serviceData)
     }).then(response => {
         if (!response.ok) {
             throw new Error('Ошибка сети');
         }
-        return response.json(); // Парсим ответ сервера (сохраненную сущность)
+        return response.json();
     });
 }
 
@@ -63,10 +63,10 @@ function addNewService() {
     const table = document.getElementById('services-table').getElementsByTagName('tbody')[0];
     const newRow = table.insertRow();
     const cells = [
-        newRow.insertCell(0), // Название услуги
-        newRow.insertCell(1), // Описание
-        newRow.insertCell(2), // Цена
-        newRow.insertCell(3)  // Действия
+        newRow.insertCell(0),
+        newRow.insertCell(1),
+        newRow.insertCell(2),
+        newRow.insertCell(3)
     ];
     cells[0].innerHTML = '<input type="text" name="name" placeholder="Название услуги">';
     cells[1].innerHTML = '<textarea name="description" placeholder="Описание"></textarea>';
@@ -80,12 +80,12 @@ function addNewService() {
 
 function deleteService(button) {
     const row = button.closest('tr');
-    const serviceId = row.dataset.serviceId; // Получаем ID пользователя
+    const serviceId = row.dataset.serviceId;
     if (confirm('Вы уверены, что хотите удалить эту услугу?')) {
         deleteServiceFromDatabase(serviceId)
             .then(response => {
                 console.log('Услуга удалена:', response);
-                row.remove(); // Удаляем строку из таблицы
+                row.remove();
                 alert(response);
                 location.reload();
             })

@@ -13,24 +13,24 @@ document.addEventListener('DOMContentLoaded', function () {
     const dailyIncome = JSON.parse(document.getElementById('income-chart').getAttribute('data-daily-income'));
     const labels = Array.from({ length: dailyIncome.length }, (_, i) => i + 1);
     const today = new Date();
-    const currentYear = today.getUTCFullYear(); // Год в UTC
-    const currentMonth = today.getUTCMonth() + 1; // Месяц в UTC (нумерация с 0)
-    const currentDay = today.getUTCDate(); // День в UTC
-    const selectedMonth = document.getElementById('current-month').textContent; // Формат: "2023-10"
+    const currentYear = today.getUTCFullYear();
+    const currentMonth = today.getUTCMonth() + 1;
+    const currentDay = today.getUTCDate();
+    const selectedMonth = document.getElementById('current-month').textContent;
     const [selectedYear, selectedMonthNumber] = selectedMonth.split('-').map(Number);
     const isCurrentMonth = currentYear === selectedYear && currentMonth === selectedMonthNumber;
     const annotation = isCurrentMonth ? {
         annotations: {
             line1: {
                 type: 'line',
-                xMin: currentDay - 1, // Текущий день
+                xMin: currentDay - 1,
                 xMax: currentDay - 1,
-                borderColor: 'red', // Цвет линии
-                borderWidth: 2, // Толщина линии
+                borderColor: 'red',
+                borderWidth: 2,
                 label: {
-                    content: 'Сегодня', // Текст метки
+                    content: 'Сегодня',
                     enabled: true,
-                    position: 'top' // Положение метки
+                    position: 'top'
                 }
             }
         }
