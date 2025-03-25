@@ -31,6 +31,9 @@ spring:
 bot:
   name: tgbotforbooking
   token: '${BOT_TOKEN}'
+webPanel:
+  userName: '${WP_USERNAME}'
+  pass: '${WP_PASS}'
 logging:
   level:
     org:
