@@ -58,6 +58,12 @@ logging:
           HikariDataSource: INFO
 server:
   port: 8888
+  ssl:
+    enabled: true
+    key-store-type: PKCS12
+    key-store: 'classpath:keystore.p12'
+    key-alias: tgbotforbooking
+    key-store-password: '${KS_PASS}'
 google:
   calendar:
     user_id: '${GOOGLE_USER_ID}'
