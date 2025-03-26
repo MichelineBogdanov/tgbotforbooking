@@ -10,15 +10,11 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 @Configuration
 public class RedisConfig {
 
-    @Value("${spring.data.redis.host}")
-    private String redisHost;
-
-    @Value("${spring.data.redis.port}")
-    private int redisPort;
-
     @Bean
     public LettuceConnectionFactory redisConnectionFactory() {
-        RedisStandaloneConfiguration config = new RedisStandaloneConfiguration(redisHost, redisPort);
+        RedisStandaloneConfiguration config = new RedisStandaloneConfiguration(
+                System.getenv("SPRING_REDIS_HOST"),
+                Integer.parseInt(System.getenv("SPRING_REDIS_PORT")));
         return new LettuceConnectionFactory(config);
     }
 

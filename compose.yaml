@@ -17,7 +17,7 @@ services:
       SPRING_DATASOURCE_USERNAME: ${DB_USER}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
       SPRING_REDIS_HOST: redis
-      SPRING_REDIS_PORT: 6379
+      SPRING_REDIS_PORT: 6380
       <<: *timezone
     ports:
       - 8888:8888
@@ -37,7 +37,7 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       <<: *timezone
     ports:
-      - 5440:5432
+      - "127.0.0.1:5440:5432"
     volumes:
       - pg_data:/var/lib/postgresql/data
     healthcheck:
@@ -50,7 +50,7 @@ services:
     image: redis:latest
     container_name: redis
     ports:
-      - 6379:6379
+      - "127.0.0.1:6379:6380"
     volumes:
       - redis_data:/var/lib/redis/data
     healthcheck:

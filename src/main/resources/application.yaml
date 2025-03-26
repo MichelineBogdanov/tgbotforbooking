@@ -2,10 +2,6 @@ spring:
   application:
     name: tgbotforbooking
   datasource:
-    url: '${DATABASE_URL}'
-    username: '${DATABASE_USERNAME}'
-    password: '${DATABASE_PASSWORD}'
-    driver-class-name: org.postgresql.Driver
     hikari:
       minimum-idle: 2
       maximum-pool-size: 4
@@ -18,10 +14,6 @@ spring:
         format_sql: true
     database-platform: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
-  data:
-    redis:
-      host: redis
-      port: 6379
   liquibase:
     enabled: true
     drop-first: false
@@ -30,7 +22,6 @@ spring:
     contexts: update
 bot:
   name: tgbotforbooking
-  token: '${BOT_TOKEN}'
 webPanel:
   userName: '${WP_USERNAME}'
   pass: '${WP_PASS}'
