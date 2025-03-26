@@ -34,12 +34,10 @@ public class UserVisitBotService {
         this.notificationRepository = notificationRepository;
     }
 
-    @Transactional
     public boolean checkVisitPresent(LocalDateTime visitDateTime) {
         return visitRepository.existsByVisitDateTime(visitDateTime);
     }
 
-    @Transactional
     public Integer checkCountOfVisitsPresent(Long userId, LocalDateTime visitDateTime) {
         return visitRepository.countByUserIdAndVisitDateTimeAfter(userId, visitDateTime);
     }
@@ -58,17 +56,14 @@ public class UserVisitBotService {
         }
     }
 
-    @Transactional
     public List<Visit> getFutureVisitsByUserName(String tgAccount) {
         return visitRepository.findVisitsByUserTgAccountAndVisitDateTimeGreaterThan(tgAccount, LocalDateTime.now());
     }
 
-    @Transactional
     public List<Visit> getVisitsHistoryByUserName(String tgAccount) {
         return visitRepository.findVisitsByUserTgAccountAndVisitDateTimeLessThan(tgAccount, LocalDateTime.now());
     }
 
-    @Transactional
     public List<Visit> getAllVisits() {
         ArrayList<Visit> visits = new ArrayList<>();
         visitRepository.findAll().forEach(visits::add);
@@ -76,10 +71,15 @@ public class UserVisitBotService {
     }
 
     @Transactional
-    public Visit deleteVisitById(Long id) {
-        Visit visit = visitRepository.findById(id).get();
-        visitRepository.delete(visit);
-        return visit;
+    public Optional<Visit> deleteVisitById(Long id) {
+        Optional<Visit> optionalVisit = visitRepository.findById(id);
+        if (optionalVisit.isPresent()) {
+            Visit visit = optionalVisit.get();
+            visitRepository.delete(visit);
+            Notification notification = visit.getNotification();
+            notificationRepository.delete(notification);
+        }
+        return optionalVisit;
     }
 
     @Transactional
@@ -87,27 +87,22 @@ public class UserVisitBotService {
         userRepository.save(user);
     }
 
-    @Transactional
     public Optional<User> getUserById(Long userId) {
         return userRepository.findById(userId);
     }
 
-    @Transactional
     public Optional<User> getUserByTgAccount(String tgAccount) {
         return userRepository.findByTgAccount(tgAccount);
     }
 
-    @Transactional
     public Optional<User> getUserByChatId(Long chatId) {
         return userRepository.findByChatId(chatId);
     }
 
-    @Transactional
     public boolean isUserExistsByTgAccount(String tgAccount) {
         return userRepository.existsByTgAccount(tgAccount);
     }
 
-    @Transactional
     public List<User> findAllUsers() {
         ArrayList<User> users = new ArrayList<>();
         userRepository.findAll().forEach(users::add);
@@ -119,12 +114,6 @@ public class UserVisitBotService {
         return userRepository.save(user);
     }
 
-    @Transactional
-    public void deleteUser(Long userId) {
-        userRepository.deleteById(userId);
-    }
-
-    @Transactional
     public List<CosmetologyService> findAllServices() {
         ArrayList<CosmetologyService> services = new ArrayList<>();
         serviceRepository.findAll().forEach(services::add);
@@ -132,7 +121,6 @@ public class UserVisitBotService {
         return services;
     }
 
-    @Transactional
     public Optional<CosmetologyService> getServiceById(Long serviceId) {
         return serviceRepository.findById(serviceId);
     }
@@ -172,8 +160,9 @@ public class UserVisitBotService {
 
     @Transactional
     public List<Long> getIncomeForMonthByDays(YearMonth month) {
-        List<Visit> visits = visitRepository.findVisitsByVisitDateTimeBetween(month.atDay(1).atStartOfDay()
-                , month.atDay(month.lengthOfMonth()).atStartOfDay());
+        LocalDateTime start = month.atDay(1).atStartOfDay();
+        LocalDateTime end = month.atDay(1).plusMonths(1).atStartOfDay();
+        List<Visit> visits = visitRepository.findVisitsByVisitDateTimeBetween(start, end);
         List<Long> dailyIncomeList = new ArrayList<>(Collections.nCopies(month.lengthOfMonth(), 0L));
         visits.stream()
                 .filter(visit -> visit.getCosmetologyService() != null)

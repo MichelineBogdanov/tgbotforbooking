@@ -8,6 +8,7 @@ import ru.bogdanov.tgbotforbooking.entities.Visit;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public interface GoogleAPI {
@@ -20,7 +21,7 @@ public interface GoogleAPI {
 
     CreateVisitResult createVisit(LocalDate date, LocalTime time, String userName, Long serviceId);
 
-    Visit deleteVisit(Long id);
+    Optional<Visit> deleteVisit(Long id);
 
     List<Visit> getUserVisits(String tgAccount);
 

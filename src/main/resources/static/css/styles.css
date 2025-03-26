@@ -1,4 +1,4 @@
-/* Общие стили */
+/* ===== Базовые стили ===== */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -6,7 +6,7 @@ body {
     background-color: #f4f4f4;
 }
 
-/* Шапка */
+/* ===== Шапка ===== */
 header {
     background-color: #333;
     color: white;
@@ -14,18 +14,17 @@ header {
     text-align: center;
 }
 
-/* Шапка */
 header nav ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
     display: flex;
     justify-content: center;
-    flex-wrap: wrap; /* Позволяет элементам переноситься на новую строку */
+    flex-wrap: wrap;
 }
 
 header nav ul li {
-    margin: 10px 15px; /* Увеличим отступы для мобильных устройств */
+    margin: 10px 15px;
 }
 
 header nav ul li a {
@@ -38,177 +37,58 @@ header nav ul li a:hover {
     text-decoration: underline;
 }
 
-/* Основная часть */
 main {
-    padding: 20px;
+    padding: 10px;
 }
 
-#content {
+/* ===== Общие стили для всех таблиц ===== */
+.table-container {
+    overflow-x: auto; /* Активация горизонтального скролла */
+    margin: 20px 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     background-color: white;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-/*===============================================================*/
-/* Стили для таблицы пользователей */
-#users-table {
-    width: 100%; /* Равномерное распределение ширины */
-    box-sizing: border-box; /* Учитываем padding и border в ширине */
+.table {
+    width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
-    background-color: white;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    table-layout: fixed; /* Фиксированная ширина ячеек */
+    font-size: 14px;
+    min-width: 800px; /* Минимальная ширина для скролла */
 }
 
-#users-table th, #users-table td {
-    width: 100%; /* Занимают всю ширину ячейки */
-    box-sizing: border-box; /* Учитываем padding и border */
-    padding: 12px;
+.table th, .table td {
+    padding: 12px 15px;
     text-align: left;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #e0e0e0;
     white-space: nowrap; /* Запрет на перенос текста */
-    overflow: hidden; /* Скрываем лишнее */
-    text-overflow: ellipsis; /* Добавляем многоточие, если текст не помещается */
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-#users-table th {
+.table th {
     background-color: #333;
     color: white;
+    font-weight: 600;
 }
 
-#users-table tr:hover {
-    background-color: #f5f5f5;
+.table tr:hover {
+    background-color: #f9f9f9;
 }
 
-/* Стили для input и select */
-#users-table input, #users-table select {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
+/* ===== Специфичные стили для таблиц ===== */
+/* Для users-table и services-table */
+#users-table, #services-table {
+    min-width: 1000px; /* Настройка под конкретные нужды */
+}
+
+/* Для visits-table и user-visits-table */
+#visits-table, #user-visits-table {
+    min-width: 1200px; /* Увеличиваем минимальную ширину */
 }
 
 #users-table th:nth-child(5), #services-table td:nth-child(5) {
     width: 400px; /* Фиксированная ширина для колонки "Действия" */
-}
-
-/*===============================================================*/
-/* Стили для таблицы визитов пользователей */
-#user-visits-table {
-    width: 100%; /* Равномерное распределение ширины */
-    box-sizing: border-box; /* Учитываем padding и border в ширине */
-    border-collapse: collapse;
-    margin-top: 20px;
-    background-color: white;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    table-layout: fixed; /* Фиксированная ширина ячеек */
-}
-
-#user-visits-table th, #user-visits-table td {
-    width: 100%; /* Занимают всю ширину ячейки */
-    box-sizing: border-box; /* Учитываем padding и border */
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-    white-space: nowrap; /* Запрет на перенос текста */
-    overflow: hidden; /* Скрываем лишнее */
-    text-overflow: ellipsis; /* Добавляем многоточие, если текст не помещается */
-}
-
-#user-visits-table th {
-    background-color: #333;
-    color: white;
-}
-
-#user-visits-table tr:hover {
-    background-color: #f5f5f5;
-}
-
-/* Стили для input и select */
-#user-visits-table input, #user-visits-table select {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-}
-
-/*===============================================================*/
-/* Стили для таблицы всех визитов */
-#visits-table {
-    width: 100%; /* Равномерное распределение ширины */
-    box-sizing: border-box; /* Учитываем padding и border в ширине */
-    border-collapse: collapse;
-    margin-top: 20px;
-    background-color: white;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    table-layout: fixed; /* Фиксированная ширина ячеек */
-}
-
-#visits-table th, #visits-table td {
-    width: 100%; /* Занимают всю ширину ячейки */
-    box-sizing: border-box; /* Учитываем padding и border */
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-    white-space: nowrap; /* Запрет на перенос текста */
-    overflow: hidden; /* Скрываем лишнее */
-    text-overflow: ellipsis; /* Добавляем многоточие, если текст не помещается */
-}
-
-#visits-table th {
-    background-color: #333;
-    color: white;
-}
-
-#visits-table tr:hover {
-    background-color: #f5f5f5;
-}
-
-/* Стили для input и select */
-#visits-table input, #visits-table select {
-    width: 100%;
-    box-sizing: border-box;
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-}
-
-/*===============================================================*/
-/* Стили для кнопки "Добавить новую услугу" */
-#add-service-btn {
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-bottom: 20px;
-}
-
-#add-service-btn:hover {
-    background-color: #45a049;
-}
-
-#services-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 20px;
-    background-color: white;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    table-layout: auto; /* Размеры колонок зависят от содержимого */
-}
-
-#services-table th, #services-table td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-    white-space: nowrap; /* Запрет на перенос текста */
-    overflow: hidden; /* Скрываем лишнее */
-    text-overflow: ellipsis; /* Добавляем многоточие, если текст не помещается */
 }
 
 /* Минимальная и максимальная ширина для колонок */
@@ -230,34 +110,29 @@ main {
     width: 220px; /* Фиксированная ширина для колонки "Действия" */
 }
 
-/* Стили для input, textarea и select */
-#services-table input, #services-table textarea {
+/* ===== Стили для input, select, textarea ===== */
+.table input,
+.table select,
+.table textarea {
     width: 100%;
-    box-sizing: border-box;
     padding: 5px;
     border: 1px solid #ccc;
     border-radius: 3px;
+    box-sizing: border-box;
 }
 
-#services-table textarea {
-    resize: vertical; /* Разрешаем вертикальное изменение размера */
+.table textarea {
+    resize: vertical;
 }
 
-/*===============================================================*/
-/* Стили для кнопок */
-.edit-btn, .save-btn, .delete-btn, .view-visits-btn, .back-btn {
-    padding: 5px 8px; /* Уменьшаем отступы */
+/* ===== Кнопки ===== */
+.btn {
+    padding: 5px 8px;
     border: none;
     border-radius: 3px;
     cursor: pointer;
     font-size: 14px;
-    width: auto; /* Ширина кнопок зависит от содержимого */
-    margin: 2px; /* Добавляем небольшой отступ между кнопками */
-}
-
-.back-btn {
-    background-color: GREY;
-    color: BLACK;
+    margin: 2px;
 }
 
 .edit-btn {
@@ -271,53 +146,43 @@ main {
 }
 
 .delete-btn {
-    background-color: RED;
+    background-color: #f44336;
     color: white;
 }
 
 .view-visits-btn {
-    background-color: YELLOW;
-    color: BLACK;
+    background-color: #ffeb3b;
+    color: black;
 }
 
-.edit-btn:hover, .save-btn:hover, .delete-btn:hover, .view-visits-btn:hover, .back-btn:hover {
-    opacity: 0.8;
-}
-
-/* Стили для контейнера навигации */
-.month-navigation {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px; /* Расстояние между элементами */
-    margin: 20px 0;
-}
-
-/* Стили для кнопок */
-.nav-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    color: #fff;
-    background-color: #007bff; /* Синий цвет */
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-/* Стили для кнопок при наведении */
-.nav-button:hover {
-    background-color: #0056b3; /* Темно-синий цвет */
-}
-
-/* Стили для текста текущего месяца */
-#current-month {
-    font-size: 18px;
-    font-weight: bold;
+/* ===== Стили для блоков информации ===== */
+.user-info,
+.total-income {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin: 20px 0; /* Вертикальные отступы */
 }
 
 /*===============================================================*/
-/*Стили графика*/
+/* Стили для кнопок на основной панели */
+#add-service-btn {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 20px;
+}
+
+#add-service-btn:hover {
+    background-color: #45a049;
+}
+
+/*===============================================================*/
+/* ===== Стили для блока графика дохода ===== */
 #income-chart-div {
     width: 100%;
     height: 500px;
@@ -408,24 +273,73 @@ main {
     font-size: 0.9rem;
 }
 
-/*===============================================================*/
-/* Адаптивность для мобильных устройств */
+/* Стили для контейнера навигации */
+.month-navigation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px; /* Расстояние между элементами */
+    margin: 20px 0;
+}
+
+/* Стили для кнопок */
+.nav-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #007bff; /* Синий цвет */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* Стили для кнопок при наведении */
+.nav-button:hover {
+    background-color: #0056b3; /* Темно-синий цвет */
+}
+
+/* Стили для текста текущего месяца */
+#current-month {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* ===== Адаптивность ===== */
 @media (max-width: 768px) {
+    .table th, .table td {
+        padding: 8px 10px;
+    }
+
     header nav ul {
-        flex-direction: column; /* Меню становится вертикальным */
+        flex-direction: column;
         align-items: center;
     }
 
     header nav ul li {
-        margin: 5px 0; /* Уменьшаем отступы для мобильных устройств */
+        margin: 5px 0;
     }
 
-    #users-table {
-        display: block;
-        overflow-x: auto;
+    /* Кнопки навигации по месяцам */
+    .month-navigation {
+        flex-direction: column; /* Вертикальное расположение */
+        gap: 10px; /* Уменьшаем расстояние между элементами */
     }
 
+    .nav-button {
+        padding: 8px 12px; /* Уменьшаем размер кнопок */
+        font-size: 14px; /* Меньший размер текста */
+        width: 100%; /* Занимают всю ширину контейнера */
+    }
+
+    /* Текст текущего месяца */
+    #current-month {
+        font-size: 16px; /* Уменьшаем размер текста */
+        order: -1; /* Перемещаем текст выше кнопок */
+    }
+
+    /* График */
     #income-chart-div {
-        height: 200px; /* Уменьшаем высоту на мобильных устройствах */
+        height: 300px; /* Оптимальная высота для мобилок */
     }
 }

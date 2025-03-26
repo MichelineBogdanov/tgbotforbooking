@@ -1,11 +1,12 @@
 package ru.bogdanov.tgbotforbooking.controllers;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import ru.bogdanov.tgbotforbooking.entities.Visit;
 import ru.bogdanov.tgbotforbooking.servises.bot_services.UserVisitBotService;
+import ru.bogdanov.tgbotforbooking.servises.google.GoogleCalendarService;
 
 import java.util.List;
 
@@ -13,8 +14,12 @@ import java.util.List;
 @RequestMapping("/visits")
 public class WebPanelVisitController extends AbstractWebPanelController {
 
-    public WebPanelVisitController(UserVisitBotService userVisitBotService) {
+    private final GoogleCalendarService googleCalendarService;
+
+    public WebPanelVisitController(UserVisitBotService userVisitBotService,
+                                   GoogleCalendarService googleCalendarService) {
         super(userVisitBotService);
+        this.googleCalendarService = googleCalendarService;
     }
 
     @GetMapping
@@ -22,6 +27,16 @@ public class WebPanelVisitController extends AbstractWebPanelController {
         List<Visit> visits = userVisitBotService.getAllVisits();
         model.addAttribute("visits", visits);
         return "visits/allVisits";
+    }
+
+    @DeleteMapping("/delete/{visitId}")
+    public ResponseEntity<String> deleteVisit(@PathVariable Long visitId) {
+        try {
+            googleCalendarService.deleteVisit(visitId);
+            return ResponseEntity.ok("Вы успешно удалили визит!");
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Ошибка при удалении визита: " + e.getMessage());
+        }
     }
 
 }

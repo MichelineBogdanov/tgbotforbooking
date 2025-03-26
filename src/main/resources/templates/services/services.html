@@ -18,30 +18,32 @@
     <button id="add-service-btn" onclick="addNewService()">Добавить новую услугу</button>
 
     <!-- Таблица с услугами -->
-    <table id="services-table">
-        <thead>
-        <tr>
-            <th>Название услуги</th>
-            <th>Описание</th>
-            <th>Цена</th>
-            <th>Действия</th>
-        </tr>
-        </thead>
-        <tbody>
-        <!-- Динамическое заполнение таблицы данными из базы -->
-        <tr th:each="service : ${services}"
-            th:data-service-id="${service.id}">
-            <td><input type="text" th:value="${service.name}" name="name" disabled></td>
-            <td><textarea th:text="${service.description}" name="description" disabled></textarea></td>
-            <td><input type="number" th:value="${service.price}" name="price" disabled></td>
-            <td>
-                <button class="edit-btn" onclick="toggleEdit(this)">Редактировать</button>
-                <button class="save-btn" onclick="saveChanges(this)" style="display: none;">Сохранить</button>
-                <button class="delete-btn" onclick="deleteService(this)">Удалить</button>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+    <div class="table-container">
+        <table id="services-table" class="table">
+            <thead>
+            <tr>
+                <th>Название услуги</th>
+                <th>Описание</th>
+                <th>Цена</th>
+                <th>Действия</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Динамическое заполнение таблицы данными из базы -->
+            <tr th:each="service : ${services}"
+                th:data-service-id="${service.id}">
+                <td><input type="text" th:value="${service.name}" name="name" disabled></td>
+                <td><textarea th:text="${service.description}" name="description" disabled></textarea></td>
+                <td><input type="number" th:value="${service.price}" name="price" disabled></td>
+                <td>
+                    <button class="edit-btn" onclick="toggleEdit(this)">Редактировать</button>
+                    <button class="save-btn" onclick="saveChanges(this)" style="display: none;">Сохранить</button>
+                    <button class="delete-btn" onclick="deleteService(this)">Удалить</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </main>
 
 <!-- Подключение JavaScript -->

@@ -13,40 +13,41 @@
 <!-- Основная часть страницы -->
 <main>
     <h1>Пользователи</h1>
-    <table id="users-table">
-        <thead>
-        <tr>
-            <th>Telegram Аккаунт</th>
-            <th>Имя</th>
-            <th>Фамилия</th>
-            <th>Уведомления</th>
-            <th>Действия</th>
-        </tr>
-        </thead>
-        <tbody>
-        <!-- Динамическое заполнение таблицы данными из базы -->
-        <tr th:each="user : ${users}"
-            th:data-user-id="${user.id}"
-            th:data-user-tg-user-id="${user.tgUserId}"
-            th:data-user-chat-id="${user.chatId}">
-            <td><input type="text" th:value="${user.tgAccount}" name="tgAccount" readonly></td>
-            <td><input type="text" th:value="${user.firstName}" name="firstName" disabled></td>
-            <td><input type="text" th:value="${user.lastName}" name="lastName" disabled></td>
-            <td>
-                <select name="notificationsOn" disabled>
-                    <option value="true" th:selected="${user.notificationsOn == true}">Включены</option>
-                    <option value="false" th:selected="${user.notificationsOn == false}">Выключены</option>
-                </select>
-            </td>
-            <td>
-                <button class="edit-btn" onclick="toggleEdit(this)">Редактировать</button>
-                <button class="save-btn" onclick="saveChanges(this)" style="display: none;">Сохранить</button>
-                <button class="delete-btn" onclick="deleteUser(this)">Удалить</button>
-                <button class="view-visits-btn" onclick="viewVisits(this)">Просмотреть визиты</button>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+    <div class="table-container">
+        <table id="users-table" class="table">
+            <thead>
+            <tr>
+                <th>Telegram Аккаунт</th>
+                <th>Имя</th>
+                <th>Фамилия</th>
+                <th>Уведомления</th>
+                <th>Действия</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Динамическое заполнение таблицы данными из базы -->
+            <tr th:each="user : ${users}"
+                th:data-user-id="${user.id}"
+                th:data-user-tg-user-id="${user.tgUserId}"
+                th:data-user-chat-id="${user.chatId}">
+                <td><input type="text" th:value="${user.tgAccount}" name="tgAccount" readonly></td>
+                <td><input type="text" th:value="${user.firstName}" name="firstName" disabled></td>
+                <td><input type="text" th:value="${user.lastName}" name="lastName" disabled></td>
+                <td>
+                    <select name="notificationsOn" disabled>
+                        <option value="true" th:selected="${user.notificationsOn == true}">Включены</option>
+                        <option value="false" th:selected="${user.notificationsOn == false}">Выключены</option>
+                    </select>
+                </td>
+                <td>
+                    <button class="edit-btn" onclick="toggleEdit(this)">Редактировать</button>
+                    <button class="save-btn" onclick="saveChanges(this)" style="display: none;">Сохранить</button>
+                    <button class="view-visits-btn" onclick="viewVisits(this)">Просмотреть визиты</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </main>
 
 <!-- Подключение JavaScript -->

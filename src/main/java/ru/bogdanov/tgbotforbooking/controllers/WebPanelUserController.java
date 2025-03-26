@@ -22,7 +22,7 @@ public class WebPanelUserController extends AbstractWebPanelController {
     @GetMapping
     public String getUsers(Model model) {
         model.addAttribute("users", userVisitBotService.findAllUsers());
-        return "users/users"; // Возвращает имя шаблона Thymeleaf (users.html)
+        return "users/users";
     }
 
     @PostMapping("/update")
@@ -32,16 +32,6 @@ public class WebPanelUserController extends AbstractWebPanelController {
             return ResponseEntity.ok(savedUser);
         } catch (Exception e) {
             return ResponseEntity.status(500).body(null);
-        }
-    }
-
-    @DeleteMapping("/delete/{userId}")
-    public ResponseEntity<String> deleteUser(@PathVariable Long userId) {
-        try {
-            userVisitBotService.deleteUser(userId);
-            return ResponseEntity.ok("Вы успешно удалили пользователя!");
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("Ошибка при удалении пользователя: " + e.getMessage());
         }
     }
 

@@ -15,6 +15,8 @@ import ru.bogdanov.tgbotforbooking.servises.telegram.utils.DateTimeUtils;
 import ru.bogdanov.tgbotforbooking.servises.telegram.utils.KeyboardBuilder;
 import ru.bogdanov.tgbotforbooking.servises.telegram.utils.MessagesText;
 
+import java.util.Optional;
+
 @Component
 public class ChooseCancelVisitCallback implements CallbackHandler {
 
@@ -28,12 +30,15 @@ public class ChooseCancelVisitCallback implements CallbackHandler {
     public SendMessage apply(BaseCallbackData callback, Update update) {
         ChooseCancelVisitCallbackData currentCallbackData = (ChooseCancelVisitCallbackData) callback;
         Long id = currentCallbackData.getVisitId();
-        Visit visit = service.deleteVisit(id);
+        Optional<Visit> optionalVisit = service.deleteVisit(id);
         long chatId = update.getCallbackQuery().getMessage().getChatId();
 
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
-        message.setText(String.format(MessagesText.SUCCESS_CANCEL_TEXT, DateTimeUtils.fromLocalDateTimeToDateTimeString(visit.getVisitDateTime())));
+        message.setText(optionalVisit.isPresent()
+                ? String.format(MessagesText.SUCCESS_CANCEL_TEXT
+                , DateTimeUtils.fromLocalDateTimeToDateTimeString(optionalVisit.get().getVisitDateTime()))
+                : MessagesText.NOT_SUCCESS_CANCEL_TEXT);
 
         InlineKeyboardMarkup keyboardMarkup = new KeyboardBuilder().addBackButton(CommandTypes.VISIT_DEALS).build();
         message.setReplyMarkup(keyboardMarkup);

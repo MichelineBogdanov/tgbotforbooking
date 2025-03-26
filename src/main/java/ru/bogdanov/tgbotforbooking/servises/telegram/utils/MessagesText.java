@@ -99,6 +99,8 @@ public interface MessagesText {
 
     String SUCCESS_CANCEL_TEXT = "Ваш визит %s удален! Жду Вас в другой раз!💋";
 
+    String NOT_SUCCESS_CANCEL_TEXT = "Что-то пошло не так,😟 попробуйте еще раз";
+
     String BACK_TEXT = "Назад";
 
     String NOTIFICATIONS_ON_TEXT = "Включить уведомления";

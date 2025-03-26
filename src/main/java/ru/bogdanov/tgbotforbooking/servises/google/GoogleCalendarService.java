@@ -111,14 +111,16 @@ public class GoogleCalendarService implements GoogleAPI {
         }
     }
 
-    public Visit deleteVisit(Long id) {
-        Visit visit = userVisitBotService.deleteVisitById(id);
+    public Optional<Visit> deleteVisit(Long id) {
+        Optional<Visit> optionalVisit = userVisitBotService.deleteVisitById(id);
         try {
-            calendarService.events().delete(CALENDAR_ID, visit.getGoogleEventId()).execute();
+            if (optionalVisit.isPresent()) {
+                calendarService.events().delete(CALENDAR_ID, optionalVisit.get().getGoogleEventId()).execute();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return visit;
+        return optionalVisit;
     }
 
     public List<Visit> getUserVisits(String tgAccount) {

@@ -64,37 +64,6 @@ function saveUserToDatabase(userData) {
     });
 }
 
-function deleteUser(button) {
-    const row = button.closest('tr');
-    const userId = row.dataset.userId;
-    if (confirm('Вы уверены, что хотите удалить этого пользователя?')) {
-        deleteUserFromDatabase(userId)
-            .then(response => {
-                console.log('Пользователь удален:', response);
-                row.remove(); // Удаляем строку из таблицы
-                alert('Пользователь успешно удален!');
-                location.reload();
-            })
-            .catch(error => {
-                console.error('Ошибка при удалении:', error);
-                alert('Произошла ошибка при удалении пользователя.');
-            });
-    }
-}
-
-// Функция для отправки запроса на удаление
-function deleteUserFromDatabase(userId) {
-    return fetch(`/users/delete/${userId}`, {
-        method: 'DELETE',
-    })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Ошибка сети');
-            }
-            return response.text();
-        });
-}
-
 function viewVisits(button) {
     const row = button.closest('tr');
     const userId = row.dataset.userId;
