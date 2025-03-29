@@ -30,7 +30,7 @@
                 th:data-user-id="${user.id}"
                 th:data-user-tg-user-id="${user.tgUserId}"
                 th:data-user-chat-id="${user.chatId}">
-                <td><input type="text" th:value="${user.tgAccount}" name="tgAccount" readonly></td>
+                <td><input type="text" th:value="${user.tgAccount}" name="tgAccount" disabled></td>
                 <td><input type="text" th:value="${user.firstName}" name="firstName" disabled></td>
                 <td><input type="text" th:value="${user.lastName}" name="lastName" disabled></td>
                 <td>

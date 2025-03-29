@@ -4,8 +4,10 @@ function toggleEdit(button) {
     const editBtn = row.querySelector('.edit-btn');
     const saveBtn = row.querySelector('.save-btn');
     inputs.forEach(input => {
-        input.disabled = !input.disabled;
-        input.style.width = '100%';
+        if (input.name !== 'tgAccount') {
+            input.disabled = !input.disabled;
+            input.style.width = '100%';
+        }
     });
     editBtn.style.display = editBtn.style.display === 'none' ? 'inline-block' : 'none';
     saveBtn.style.display = saveBtn.style.display === 'none' ? 'inline-block' : 'none';
