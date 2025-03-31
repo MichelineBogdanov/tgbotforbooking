@@ -38,7 +38,7 @@ public class ChooseDayCallback implements CallbackHandler {
         long chatId = update.getCallbackQuery().getMessage().getChatId();
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
-        message.setText(freeDays.isEmpty() ? MessagesText.NO_FREE_DATE_TEXT : MessagesText.CHOOSE_DATE_TEXT);
+        message.setText(freeDays.isEmpty() ? MessagesText.NO_FREE_SLOTS_TEXT : MessagesText.CHOOSE_DATE_TEXT);
 
         KeyboardBuilder keyboardBuilder = new KeyboardBuilder();
         for (LocalDate freeDay : freeDays) {

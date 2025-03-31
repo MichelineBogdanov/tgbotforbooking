@@ -13,6 +13,7 @@ import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.CallbackHandler;
 import ru.bogdanov.tgbotforbooking.servises.telegram.commands.CommandTypes;
 import ru.bogdanov.tgbotforbooking.servises.telegram.utils.DateTimeUtils;
 import ru.bogdanov.tgbotforbooking.servises.telegram.utils.KeyboardBuilder;
+import ru.bogdanov.tgbotforbooking.servises.telegram.utils.MessagesText;
 import ru.bogdanov.tgbotforbooking.servises.telegram.utils.ScheduleUtils;
 
 import java.time.LocalDate;
@@ -48,6 +49,9 @@ public class ScheduleInfoCallback implements CallbackHandler {
     }
 
     private String getStringForMessage(Map<LocalDate, List<LocalTime>> freeSlots) {
+        if (freeSlots.isEmpty()) {
+            return MessagesText.NO_FREE_SLOTS_TEXT;
+        }
         StringBuilder result = new StringBuilder();
         final int[] index = {1};
         TreeMap<LocalDate, List<LocalTime>> freeSlotsTreeMap = new TreeMap<>(freeSlots);
