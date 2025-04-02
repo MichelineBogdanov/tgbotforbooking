@@ -4,6 +4,7 @@ import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.model.TimePeriod;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -43,30 +44,36 @@ public class ScheduleInfoCallback implements CallbackHandler {
         message.setChatId(chatId);
         String text = getStringForMessage(freeSlots);
         message.setText(text);
+        message.setParseMode(ParseMode.MARKDOWNV2);
         InlineKeyboardMarkup keyboardMarkup = new KeyboardBuilder().addBackButton(CommandTypes.GENERAL_INFO).build();
         message.setReplyMarkup(keyboardMarkup);
         return message;
     }
 
-    private String getStringForMessage(Map<LocalDate, List<LocalTime>> freeSlots) {
+    private static String getStringForMessage(Map<LocalDate, List<LocalTime>> freeSlots) {
         if (freeSlots.isEmpty()) {
             return MessagesText.NO_FREE_SLOTS_TEXT;
         }
         StringBuilder result = new StringBuilder();
-        final int[] index = {1};
         TreeMap<LocalDate, List<LocalTime>> freeSlotsTreeMap = new TreeMap<>(freeSlots);
         freeSlotsTreeMap.forEach((localDate, times) -> {
-            List<String> elements = times.stream()
-                    .sorted(LocalTime::compareTo)
-                    .map(LocalTime::toString)
+            List<String> elements = ScheduleUtils.getSlots().stream()
+                    .sorted()
+                    .map(time -> ScheduleUtils.isSlotPresentIn(time, times)
+                            ? MessagesText.escapeMarkdownV2(time.toString())
+                            : "~~" + MessagesText.escapeMarkdownV2(time.toString()) + "~~")
                     .toList();
-            result.append(index[0])
-                    .append(") ")
-                    .append(DateTimeUtils.fromLocalDateToDateString(localDate))
-                    .append(": ")
-                    .append(String.join(",\t", elements))
+            StringBuilder formatBuilder = new StringBuilder();
+            for (String element : elements) {
+                formatBuilder.append("%-").append(element.length() + 3).append("s ");
+            }
+            result.append(MessagesText.escapeMarkdownV2(DateTimeUtils.fromLocalDateToDayString(localDate)))
+                    .append(MessagesText.escapeMarkdownV2("("))
+                    .append(MessagesText.escapeMarkdownV2(ShortDayOfWeek.values()[localDate.getDayOfWeek().getValue() - 1].getShortName()))
+                    .append(MessagesText.escapeMarkdownV2("): "))
+                    .append(String.format(formatBuilder.toString(), elements.toArray()))
+                    .append("\n")
                     .append("\n");
-            index[0]++;
         });
         return result.toString();
     }

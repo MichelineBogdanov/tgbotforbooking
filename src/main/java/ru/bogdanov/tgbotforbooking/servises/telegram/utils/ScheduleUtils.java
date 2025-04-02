@@ -51,11 +51,21 @@ public class ScheduleUtils {
                     collect.get(key).add(slot.minusSeconds(1));
                 }
             }
-            if (collect.get(key).size() == 0) {
+            if (collect.get(key).isEmpty()) {
                 collect.remove(key);
             }
         }
         return collect;
+    }
+
+    public static boolean isSlotPresentIn(LocalTime slot, List<LocalTime> times) {
+        return times.stream().anyMatch(currentSlot -> currentSlot.equals(slot));
+    }
+
+    public static List<LocalTime> getSlots() {
+        return slots.stream()
+                .map(time -> time.minusSeconds(1))
+                .toList();
     }
 
     private static List<LocalDateTimePeriod> divideByDays(LocalDateTimePeriod period) {
