@@ -38,17 +38,20 @@ public class ServicesInfoCallback implements CallbackHandler {
             StringBuilder text = new StringBuilder();
             for (int i = 0; i < allServices.size(); i++) {
                 CosmetologyService service = allServices.get(i);
-                text.append("*").append(i + 1).append("*")
-                        .append(" \\- ")
-                        .append("*").append(MessagesText.escapeMarkdownV2(service.getName())).append("*")
-                        .append(" \\- *цена* : ")
-                        .append(MessagesText.escapeMarkdownV2(String.valueOf(service.getPrice())))
-                        .append("р\\. ")
-                        .append("_").append(MessagesText.escapeMarkdownV2(service.getDescription())).append("_")
+                text.append("<b>")
+                        .append(i + 1)
+                        .append(" - ")
+                        .append(service.getName())
+                        .append(" - цена : ")
+                        .append(service.getPrice())
+                        .append("р.</b> ")
+                        .append("<i>")
+                        .append(service.getDescription())
+                        .append("</i>")
                         .append("\n");
             }
-            messageText = String.format(MessagesText.escapeMarkdownV2(MessagesText.GET_SERVICES_INFO_TEXT), text);
-            message.setParseMode(ParseMode.MARKDOWNV2);
+            messageText = String.format(MessagesText.GET_SERVICES_INFO_TEXT, text);
+            message.setParseMode(ParseMode.HTML);
         }
         message.setText(messageText);
         InlineKeyboardMarkup keyboardMarkup = new KeyboardBuilder().addBackButton(CommandTypes.GENERAL_INFO).build();

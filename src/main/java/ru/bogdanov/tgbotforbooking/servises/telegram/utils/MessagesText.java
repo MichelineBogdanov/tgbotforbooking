@@ -121,25 +121,4 @@ public interface MessagesText {
 
     String NOTIFICATION_MESSAGE_TEXT = "Напоминание: завтра в %s у вас запланирован визит к косметологу!📝";
 
-    static String escapeMarkdownV2(String text) {
-        return text.replace("*", "\\*")
-                .replace("_", "\\_")
-                .replace("`", "\\`")
-                .replace("[", "\\[")
-                .replace("]", "\\]")
-                .replace("(", "\\(")
-                .replace(")", "\\)")
-                .replace("~", "\\~")
-                .replace(">", "\\>")
-                .replace("#", "\\#")
-                .replace("+", "\\+")
-                .replace("-", "\\-")
-                .replace("=", "\\=")
-                .replace("|", "\\|")
-                .replace("{", "\\{")
-                .replace("}", "\\}")
-                .replace(".", "\\.")
-                .replace("!", "\\!");
-    }
-
 }

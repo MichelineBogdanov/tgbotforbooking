@@ -23,6 +23,7 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 @Component
 public class ScheduleInfoCallback implements CallbackHandler {
@@ -43,37 +44,32 @@ public class ScheduleInfoCallback implements CallbackHandler {
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
         String text = getStringForMessage(freeSlots);
+        message.setParseMode(ParseMode.HTML);
         message.setText(text);
-        message.setParseMode(ParseMode.MARKDOWNV2);
         InlineKeyboardMarkup keyboardMarkup = new KeyboardBuilder().addBackButton(CommandTypes.GENERAL_INFO).build();
         message.setReplyMarkup(keyboardMarkup);
         return message;
     }
 
-    private static String getStringForMessage(Map<LocalDate, List<LocalTime>> freeSlots) {
+    private String getStringForMessage(Map<LocalDate, List<LocalTime>> freeSlots) {
         if (freeSlots.isEmpty()) {
             return MessagesText.NO_FREE_SLOTS_TEXT;
         }
         StringBuilder result = new StringBuilder();
         TreeMap<LocalDate, List<LocalTime>> freeSlotsTreeMap = new TreeMap<>(freeSlots);
         freeSlotsTreeMap.forEach((localDate, times) -> {
-            List<String> elements = ScheduleUtils.getSlots().stream()
+            String elements = ScheduleUtils.getSlots().stream()
                     .sorted()
                     .map(time -> ScheduleUtils.isSlotPresentIn(time, times)
-                            ? MessagesText.escapeMarkdownV2(time.toString())
-                            : "~~" + MessagesText.escapeMarkdownV2(time.toString()) + "~~")
-                    .toList();
-            StringBuilder formatBuilder = new StringBuilder();
-            for (String element : elements) {
-                formatBuilder.append("%-").append(element.length() + 3).append("s ");
-            }
-            result.append(MessagesText.escapeMarkdownV2(DateTimeUtils.fromLocalDateToDayString(localDate)))
-                    .append(MessagesText.escapeMarkdownV2("("))
-                    .append(MessagesText.escapeMarkdownV2(ShortDayOfWeek.values()[localDate.getDayOfWeek().getValue() - 1].getShortName()))
-                    .append(MessagesText.escapeMarkdownV2("): "))
-                    .append(String.format(formatBuilder.toString(), elements.toArray()))
-                    .append("\n")
-                    .append("\n");
+                            ? time.toString()
+                            : "<s>" + time.toString() + "</s>")
+                    .collect(Collectors.joining("  "));
+            result.append(DateTimeUtils.fromLocalDateToDayString(localDate))
+                    .append("(")
+                    .append(ShortDayOfWeek.values()[localDate.getDayOfWeek().getValue() - 1].getShortName())
+                    .append("): ")
+                    .append(elements)
+                    .append("\n\n");
         });
         return result.toString();
     }

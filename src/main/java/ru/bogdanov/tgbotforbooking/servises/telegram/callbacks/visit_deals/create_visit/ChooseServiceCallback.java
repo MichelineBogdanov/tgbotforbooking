@@ -60,22 +60,25 @@ public class ChooseServiceCallback implements CallbackHandler {
             callbackData.setDate(date);
             callbackData.setServiceId(service.getId());
             keyboardBuilder.addButton(String.valueOf(i + 1), callbackData);
-            text.append("*").append(i + 1).append("*")
-                    .append(" \\- ")
-                    .append("*").append(MessagesText.escapeMarkdownV2(service.getName())).append("*")
-                    .append(" \\- *цена* : ")
-                    .append(MessagesText.escapeMarkdownV2(String.valueOf(service.getPrice())))
-                    .append("р\\. ")
-                    .append("_").append(MessagesText.escapeMarkdownV2(service.getDescription())).append("_")
+            text.append("<b>")
+                    .append(i + 1)
+                    .append(" - ")
+                    .append(service.getName())
+                    .append(" - цена : ")
+                    .append(service.getPrice())
+                    .append("р.</b> ")
+                    .append("<i>")
+                    .append(service.getDescription())
+                    .append("</i>")
                     .append("\n");
         }
         keyboardBuilder.addBackButton(CommandTypes.VISIT_DEALS);
         InlineKeyboardMarkup keyboardMarkup = keyboardBuilder.build();
         message.setReplyMarkup(keyboardMarkup);
-        message.setText(String.format(MessagesText.escapeMarkdownV2(MessagesText.CHOOSE_SERVICE_TEXT),
-                MessagesText.escapeMarkdownV2(DateTimeUtils.fromLocalDateTimeToDateTimeString(LocalDateTime.of(date, time))),
+        message.setText(String.format(MessagesText.CHOOSE_SERVICE_TEXT,
+                DateTimeUtils.fromLocalDateTimeToDateTimeString(LocalDateTime.of(date, time)),
                 text));
-        message.setParseMode(ParseMode.MARKDOWNV2);
+        message.setParseMode(ParseMode.HTML);
 
         return message;
     }
