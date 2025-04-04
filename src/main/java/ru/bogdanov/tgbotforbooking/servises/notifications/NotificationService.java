@@ -33,13 +33,8 @@ public class NotificationService {
         this.userVisitBotService = userVisitBotService;
     }
 
-    @Scheduled(cron = "0 0 13,17,19 * * ?")
+    @Scheduled(cron = "0 0 12,13,14,15,16,17,18,19 * * ?")
     public void taskAtFullHour() {
-        sendMessageByNotification();
-    }
-
-    @Scheduled(cron = "0 30 14,17 * * ?")
-    public void taskAtHalfHour() {
         sendMessageByNotification();
     }
 

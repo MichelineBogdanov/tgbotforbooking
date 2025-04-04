@@ -17,10 +17,13 @@ public class ScheduleUtils {
     private static final LocalTime endOfDay = LocalTime.of(20, 29);
 
     private static final List<LocalTime> slots = List.of(
-            LocalTime.of(13, 0, 1)
-            , LocalTime.of(14, 30, 1)
+            LocalTime.of(12, 0, 1)
+            , LocalTime.of(13, 0, 1)
+            , LocalTime.of(14, 0, 1)
+            , LocalTime.of(15, 0, 1)
             , LocalTime.of(16, 0, 1)
-            , LocalTime.of(17, 30, 1)
+            , LocalTime.of(17, 0, 1)
+            , LocalTime.of(18, 0, 1)
             , LocalTime.of(19, 0, 1));
 
     public ScheduleUtils() {
