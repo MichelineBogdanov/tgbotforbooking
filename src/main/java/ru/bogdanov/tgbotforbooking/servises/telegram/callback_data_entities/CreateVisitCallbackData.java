@@ -1,20 +1,26 @@
 package ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
-public class CreateVisitCallbackData extends ChooseServiceCallbackData {
+import java.time.LocalTime;
 
-    @JsonProperty("s_id")
-    protected Long serviceId;
+public class CreateVisitCallbackData extends ChooseTimeCallbackData {
+
+    @JsonProperty("t")
+    @JsonSerialize(as = LocalTime.class)
+    @JsonDeserialize(as = LocalTime.class)
+    protected LocalTime time;
 
     public CreateVisitCallbackData() {
     }
 
-    public Long getServiceId() {
-        return serviceId;
+    public LocalTime getTime() {
+        return time;
     }
 
-    public void setServiceId(Long serviceId) {
-        this.serviceId = serviceId;
+    public void setTime(LocalTime time) {
+        this.time = time;
     }
 }

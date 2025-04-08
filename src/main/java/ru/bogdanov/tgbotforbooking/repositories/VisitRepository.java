@@ -14,11 +14,9 @@ public interface VisitRepository extends CrudRepository<Visit, Long> {
 
     List<Visit> findVisitsByUserTgAccountAndVisitDateTimeLessThan(String tgAccount, LocalDateTime visitDateTime);
 
-    List<Visit> findVisitsByUserId(Long userId);
-
     List<Visit> findVisitsByVisitDateTimeBetween(LocalDateTime start, LocalDateTime end);
 
-    boolean existsByVisitDateTime(LocalDateTime visitDateTime);
+    boolean existsByVisitDateTimeBetween(LocalDateTime start, LocalDateTime end);
 
     Integer countByUserIdAndVisitDateTimeAfter(Long userId, LocalDateTime visitDateTime);
 

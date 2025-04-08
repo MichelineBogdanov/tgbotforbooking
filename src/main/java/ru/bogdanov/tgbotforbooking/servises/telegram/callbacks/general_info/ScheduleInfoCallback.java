@@ -39,7 +39,7 @@ public class ScheduleInfoCallback implements CallbackHandler {
         List<TimePeriod> freePeriods = service.getFreePeriods(
                 new DateTime(DateTimeUtils.fromLocalDateTimeToDate(LocalDateTime.now())),
                 new DateTime(DateTimeUtils.fromLocalDateTimeToDate(LocalDate.now().plusMonths(1).withDayOfMonth(1).atStartOfDay())));
-        Map<LocalDate, List<LocalTime>> freeSlots = ScheduleUtils.getFreeSlots(freePeriods);
+        Map<LocalDate, List<LocalTime>> freeSlots = ScheduleUtils.getFreeSlots(freePeriods, 30);
         long chatId = update.getCallbackQuery().getMessage().getChatId();
         SendMessage message = new SendMessage();
         message.setChatId(chatId);

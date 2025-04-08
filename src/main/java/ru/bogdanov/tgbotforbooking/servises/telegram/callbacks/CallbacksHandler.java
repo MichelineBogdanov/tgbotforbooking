@@ -9,7 +9,9 @@ import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.account.GetFuture
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.account.GetVisitsHistoryCallback;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.account.UserNotificationSwitchCallback;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.common.BackCallback;
-import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.general_info.*;
+import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.general_info.PlaceInfoCallback;
+import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.general_info.ScheduleInfoCallback;
+import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.general_info.ServicesInfoCallback;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.visit_deals.cancel_visit.CancelVisitCallback;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.visit_deals.cancel_visit.ChooseCancelVisitCallback;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.visit_deals.create_visit.ChooseDayCallback;
@@ -65,19 +67,19 @@ public class CallbacksHandler {
         BaseCallbackData result = null;
         switch (Objects.requireNonNull(type)) {
             case GET_FUTURE_VISITS
-            , GET_VISITS_HISTORY
-            , GET_PLACE_INFO
-            , GET_SCHEDULE
-            , GET_SERVICES_LIST_INFO
-            , CHOOSE_DAY
-            , CANCEL_VISIT
-            , NOTIFICATIONS_SWITCH -> result = JsonHandler.readToObject(callbackData, BaseCallbackData.class);
+                    , GET_VISITS_HISTORY
+                    , GET_PLACE_INFO
+                    , GET_SCHEDULE
+                    , GET_SERVICES_LIST_INFO
+                    , CHOOSE_SERVICE
+                    , CANCEL_VISIT
+                    , NOTIFICATIONS_SWITCH -> result = JsonHandler.readToObject(callbackData, BaseCallbackData.class);
             case CHOOSE_TIME -> result = JsonHandler.readToObject(callbackData, ChooseTimeCallbackData.class);
-            case CHOOSE_SERVICE -> result = JsonHandler.readToObject(callbackData, ChooseServiceCallbackData.class);
+            case CHOOSE_DAY -> result = JsonHandler.readToObject(callbackData, ChooseDayCallbackData.class);
             case CREATE_VISIT -> result = JsonHandler.readToObject(callbackData, CreateVisitCallbackData.class);
             case CHOOSE_CANCEL_VISIT ->
                     result = JsonHandler.readToObject(callbackData, ChooseCancelVisitCallbackData.class);
-            case BACK -> result = JsonHandler.readToObject(callbackData, BackCallBackData.class);
+            case BACK -> result = JsonHandler.readToObject(callbackData, BackCallbackData.class);
         }
         return result;
     }

@@ -3,12 +3,12 @@ package ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import ru.bogdanov.tgbotforbooking.servises.telegram.commands.CommandTypes;
 
-public class BackCallBackData extends BaseCallbackData {
+public class BackCallbackData extends BaseCallbackData {
 
     @JsonProperty("command")
     protected CommandTypes command;
 
-    public BackCallBackData() {
+    public BackCallbackData() {
     }
 
     public CommandTypes getCommand() {

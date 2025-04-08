@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.time.LocalDate;
 
-public class ChooseTimeCallbackData extends BaseCallbackData {
+public class ChooseTimeCallbackData extends ChooseDayCallbackData {
 
     @JsonProperty("d")
     @JsonSerialize(as = LocalDate.class)

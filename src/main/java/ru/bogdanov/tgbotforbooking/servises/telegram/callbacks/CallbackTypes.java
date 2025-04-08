@@ -7,9 +7,9 @@ public enum CallbackTypes {
 
     // VISIT_DEALS
     CREATE_VISIT("Взять номерок"),
-    CHOOSE_DAY("Выбрать дату для записи"),
+    CHOOSE_DAY("Выбрать дату"),
     CHOOSE_TIME("Выбрать время"),
-    CHOOSE_SERVICE("Выбрать услугу"),
+    CHOOSE_SERVICE("Записаться"),
     CHOOSE_CANCEL_VISIT("Отменить визит"),
     CANCEL_VISIT("Отменить визит"),
 

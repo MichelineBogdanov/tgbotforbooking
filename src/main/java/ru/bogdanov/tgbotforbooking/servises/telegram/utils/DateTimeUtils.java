@@ -2,6 +2,7 @@ package ru.bogdanov.tgbotforbooking.servises.telegram.utils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
@@ -26,6 +27,11 @@ public class DateTimeUtils {
 
     public static String fromLocalDateToDayString(LocalDate localDate) {
         return localDate.format(DateTimeFormatter.ofPattern(DateTimeUtils.DAY_PATTERN));
+    }
+
+    public static LocalDateTime parseDateTimeFromRFC3339(String rfc3339DateStr) {
+        OffsetDateTime offsetDateTime = OffsetDateTime.parse(rfc3339DateStr);
+        return offsetDateTime.toLocalDateTime();
     }
 
 }

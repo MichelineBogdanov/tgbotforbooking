@@ -58,21 +58,23 @@ public class GoogleCalendarService implements GoogleAPI {
     public CreateVisitResult createVisit(LocalDate date, LocalTime time, String userName, Long serviceId) {
         Optional<User> userOptional = userVisitBotService.getUserByTgAccount(userName);
         User user = userOptional.get();
-        if (userVisitBotService.checkVisitPresent(LocalDateTime.of(date, time))) {
+        CosmetologyService service = null;
+        Integer duration = 60;
+        if (serviceId != null) {
+            Optional<CosmetologyService> optionalCosmetologyService = userVisitBotService.getServiceById(serviceId);
+            if (optionalCosmetologyService.isPresent()) {
+                service = optionalCosmetologyService.get();
+                duration = service.getDuration();
+            }
+        }
+        if (userVisitBotService.checkVisitPresent(LocalDateTime.of(date, time), LocalDateTime.of(date, time).plusMinutes(duration))) {
             return new CreateVisitResult(MessagesText.FAULT_BOOKING_TEXT);
         }
         if (userVisitBotService.checkCountOfVisitsPresent(user.getId(), LocalDateTime.now()) > 2) {
             return new CreateVisitResult(MessagesText.MAX_COUNT_BOOKING_TEXT);
         }
-        CosmetologyService service = null;
-        if (serviceId != null) {
-            Optional<CosmetologyService> optionalCosmetologyService = userVisitBotService.getServiceById(serviceId);
-            if (optionalCosmetologyService.isPresent()) {
-                service = optionalCosmetologyService.get();
-            }
-        }
         Date start = Date.from(LocalDateTime.of(date, time).atZone(ZoneId.systemDefault()).toInstant());
-        Date end = Date.from(LocalDateTime.of(date, time.plusHours(1).plusMinutes(30)).atZone(ZoneId.systemDefault()).toInstant());
+        Date end = Date.from(LocalDateTime.of(date, time.plusMinutes(duration)).atZone(ZoneId.systemDefault()).toInstant());
         String description = String.format(MessagesText.DESCRIPTION_EVENT_TEXT,
                 Stream.of(user.getFirstName(), user.getLastName())
                         .filter(Objects::nonNull)
@@ -118,7 +120,7 @@ public class GoogleCalendarService implements GoogleAPI {
                 calendarService.events().delete(CALENDAR_ID, optionalVisit.get().getGoogleEventId()).execute();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
         return optionalVisit;
     }
@@ -128,16 +130,16 @@ public class GoogleCalendarService implements GoogleAPI {
     }
 
     @Override
-    public List<LocalDate> getFreeDays(DateTime start, DateTime end) {
+    public List<LocalDate> getFreeDays(DateTime start, DateTime end, Integer duration) {
         List<TimePeriod> freePeriods = getFreePeriods(start, end);
-        Map<LocalDate, List<LocalTime>> freeSlots = ScheduleUtils.getFreeSlots(freePeriods);
+        Map<LocalDate, List<LocalTime>> freeSlots = ScheduleUtils.getFreeSlots(freePeriods, duration);
         return freeSlots.keySet().stream().sorted(LocalDate::compareTo).toList();
     }
 
     @Override
-    public List<LocalTime> getFreeSlots(DateTime start, DateTime end) {
+    public List<LocalTime> getFreeSlots(DateTime start, DateTime end, Integer duration) {
         List<TimePeriod> freePeriods = getFreePeriods(start, end);
-        Map<LocalDate, List<LocalTime>> freeSlots = ScheduleUtils.getFreeSlots(freePeriods);
+        Map<LocalDate, List<LocalTime>> freeSlots = ScheduleUtils.getFreeSlots(freePeriods, duration);
         for (LocalDate localDate : freeSlots.keySet()) {
             return freeSlots.get(localDate);
         }

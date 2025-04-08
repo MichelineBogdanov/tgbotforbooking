@@ -3,7 +3,7 @@ package ru.bogdanov.tgbotforbooking.servises.telegram.utils;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import ru.bogdanov.tgbotforbooking.servises.telegram.JsonHandler;
-import ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities.BackCallBackData;
+import ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities.BackCallbackData;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities.BaseCallbackData;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.CallbackTypes;
 import ru.bogdanov.tgbotforbooking.servises.telegram.commands.CommandTypes;
@@ -53,7 +53,7 @@ public class KeyboardBuilder {
         // Добавляем кнопку "Назад" отдельной строкой
         InlineKeyboardButton backButton = new InlineKeyboardButton(MessagesText.BACK_TEXT);
 
-        BackCallBackData callbackData = new BackCallBackData();
+        BackCallbackData callbackData = new BackCallbackData();
         callbackData.setType(CallbackTypes.BACK);
         callbackData.setCommand(toCommand);
         String json = JsonHandler.toJson(callbackData);

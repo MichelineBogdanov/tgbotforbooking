@@ -21,6 +21,9 @@ public class CosmetologyService {
     @Column(name = "price")
     private Long price;
 
+    @Column(name = "duration_minutes")
+    private Integer duration;
+
     public CosmetologyService() {
     }
 
@@ -56,12 +59,21 @@ public class CosmetologyService {
         this.price = price;
     }
 
+    public Integer getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Integer duration) {
+        this.duration = duration;
+    }
+
     @Override
     public String toString() {
-        return "Services{" +
+        return "CosmetologyService{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", name='" + name +
                 ", price=" + price +
+                ", duration=" + duration +
                 '}';
     }
 }

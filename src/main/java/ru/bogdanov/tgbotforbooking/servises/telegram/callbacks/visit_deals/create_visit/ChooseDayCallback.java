@@ -6,8 +6,11 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import ru.bogdanov.tgbotforbooking.entities.CosmetologyService;
+import ru.bogdanov.tgbotforbooking.servises.bot_services.UserVisitBotService;
 import ru.bogdanov.tgbotforbooking.servises.google.GoogleAPI;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities.BaseCallbackData;
+import ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities.ChooseDayCallbackData;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities.ChooseTimeCallbackData;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.CallbackHandler;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.CallbackTypes;
@@ -24,26 +27,43 @@ import java.util.List;
 public class ChooseDayCallback implements CallbackHandler {
 
     private final GoogleAPI service;
+    private final UserVisitBotService userVisitBotService;
 
-    public ChooseDayCallback(@Qualifier("googleCalendarService") GoogleAPI service) {
+    public ChooseDayCallback(@Qualifier("googleCalendarService") GoogleAPI service
+            , UserVisitBotService userVisitBotService) {
         this.service = service;
+        this.userVisitBotService = userVisitBotService;
     }
 
     @Override
     public SendMessage apply(BaseCallbackData callback, Update update) {
+        ChooseDayCallbackData currentCallback = (ChooseDayCallbackData) callback;
+        Long serviceId = currentCallback.getServiceId();
+        CosmetologyService cosmetologyService = null;
+        if (serviceId != null) {
+            cosmetologyService = userVisitBotService.getServiceById(serviceId).get();
+        }
+
         List<LocalDate> freeDays = service.getFreeDays(
                 new DateTime(DateTimeUtils.fromLocalDateTimeToDate(LocalDateTime.now())),
-                new DateTime(DateTimeUtils.fromLocalDateTimeToDate(LocalDate.now().plusMonths(1).withDayOfMonth(1).atStartOfDay())));
+                new DateTime(DateTimeUtils.fromLocalDateTimeToDate(LocalDate.now().plusMonths(1).withDayOfMonth(1).atStartOfDay())),
+                cosmetologyService == null ? 30 : cosmetologyService.getDuration());
 
         long chatId = update.getCallbackQuery().getMessage().getChatId();
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
-        message.setText(freeDays.isEmpty() ? MessagesText.NO_FREE_SLOTS_TEXT : MessagesText.CHOOSE_DATE_TEXT);
+        message.setText(freeDays.isEmpty()
+                ? MessagesText.NO_FREE_SLOTS_TEXT
+                : String.format(MessagesText.CHOOSE_DATE_TEXT,
+                cosmetologyService != null
+                        ? String.join(" : ", cosmetologyService.getName(), cosmetologyService.getPrice().toString())
+                        : MessagesText.NO_SERVICE_CHOOSE_TEXT));
 
         KeyboardBuilder keyboardBuilder = new KeyboardBuilder();
         for (LocalDate freeDay : freeDays) {
             ChooseTimeCallbackData callbackData = new ChooseTimeCallbackData();
             callbackData.setType(CallbackTypes.CHOOSE_TIME);
+            callbackData.setServiceId(serviceId);
             callbackData.setDate(freeDay);
             String text = DateTimeUtils.fromLocalDateToDateString(freeDay);
             keyboardBuilder.addButton(text, callbackData);

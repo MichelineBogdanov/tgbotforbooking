@@ -15,9 +15,9 @@ public interface GoogleAPI {
 
     List<TimePeriod> getFreePeriods(DateTime start, DateTime end);
 
-    List<LocalDate> getFreeDays(DateTime start, DateTime end);
+    List<LocalDate> getFreeDays(DateTime start, DateTime end, Integer duration);
 
-    List<LocalTime> getFreeSlots(DateTime start, DateTime end);
+    List<LocalTime> getFreeSlots(DateTime start, DateTime end, Integer duration);
 
     CreateVisitResult createVisit(LocalDate date, LocalTime time, String userName, Long serviceId);
 
