@@ -18,6 +18,8 @@ public interface VisitRepository extends CrudRepository<Visit, Long> {
 
     boolean existsByVisitDateTimeBetween(LocalDateTime start, LocalDateTime end);
 
+    boolean existsByEndVisitDateTimeBetween(LocalDateTime start, LocalDateTime end);
+
     Integer countByUserIdAndVisitDateTimeAfter(Long userId, LocalDateTime visitDateTime);
 
 }

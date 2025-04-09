@@ -76,7 +76,7 @@ public class ScheduleUtils {
         List<LocalDateTimePeriod> intervals = new ArrayList<>();
         LocalDateTime currentStart = period.start();
         while (!currentStart.toLocalDate().isAfter(period.end().toLocalDate())) {
-            LocalDateTime currentEnd = currentStart.toLocalDate().atTime(23, 59, 59);
+            LocalDateTime currentEnd = currentStart.toLocalDate().atTime(endOfDay.plusMinutes(2));
             if (currentEnd.isAfter(period.end())) {
                 currentEnd = period.end();
             }

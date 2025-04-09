@@ -17,6 +17,9 @@ public class Visit {
     @Column(name = "visit_datetime")
     private LocalDateTime visitDateTime;
 
+    @Column(name = "end_visit_datetime")
+    private LocalDateTime endVisitDateTime;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -48,6 +51,14 @@ public class Visit {
 
     public void setVisitDateTime(LocalDateTime visitDateTime) {
         this.visitDateTime = visitDateTime;
+    }
+
+    public LocalDateTime getEndVisitDateTime() {
+        return endVisitDateTime;
+    }
+
+    public void setEndVisitDateTime(LocalDateTime endVisitDateTime) {
+        this.endVisitDateTime = endVisitDateTime;
     }
 
     public User getUser() {

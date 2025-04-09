@@ -107,6 +107,10 @@ main {
 }
 
 #services-table th:nth-child(4), #services-table td:nth-child(4) {
+    width: 100px; /* Фиксированная ширина для колонки "Длительность (мин.)" */
+}
+
+#services-table th:nth-child(5), #services-table td:nth-child(5) {
     width: 220px; /* Фиксированная ширина для колонки "Действия" */
 }
 

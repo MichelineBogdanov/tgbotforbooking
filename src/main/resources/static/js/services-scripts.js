@@ -27,7 +27,8 @@ function saveChanges(button) {
         id: row.dataset.serviceId,
         name: row.querySelector('input[name="name"]').value,
         description: row.querySelector('textarea[name="description"]').value,
-        price: parseFloat(row.querySelector('input[name="price"]').value)
+        price: parseFloat(row.querySelector('input[name="price"]').value),
+        duration: parseInt(row.querySelector('input[name="duration"]').value)
     };
     saveServiceToDatabase(serviceData).then(savedService => {
         alert('Изменения успешно сохранены!');
@@ -56,6 +57,7 @@ function updateRowWithSavedService(row, savedService) {
     row.querySelector('input[name="name"]').value = savedService.name;
     row.querySelector('textarea[name="description"]').value = savedService.description;
     row.querySelector('input[name="price"]').value = savedService.price;
+    row.querySelector('input[name="duration"]').value = savedService.duration;
 }
 
 // Функция для добавления новой услуги
@@ -66,12 +68,14 @@ function addNewService() {
         newRow.insertCell(0),
         newRow.insertCell(1),
         newRow.insertCell(2),
-        newRow.insertCell(3)
+        newRow.insertCell(3),
+        newRow.insertCell(4)
     ];
     cells[0].innerHTML = '<input type="text" name="name" placeholder="Название услуги">';
     cells[1].innerHTML = '<textarea name="description" placeholder="Описание"></textarea>';
     cells[2].innerHTML = '<input type="number" name="price" placeholder="Цена">';
-    cells[3].innerHTML = `
+    cells[3].innerHTML = '<input type="number" name="duration" placeholder="Длительность (мин.)">';
+    cells[4].innerHTML = `
         <button class="edit-btn" onclick="toggleEdit(this)" style="display: none;">Редактировать</button>
         <button class="save-btn" onclick="saveChanges(this)">Сохранить</button>
         <button class="delete-btn" onclick="deleteService(this)" style="display: none;">Удалить</button>

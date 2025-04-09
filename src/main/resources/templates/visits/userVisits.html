@@ -28,6 +28,7 @@
             <tr>
                 <th>Дата визита</th>
                 <th>Название услуги</th>
+                <th>Длительность услуги</th>
                 <th>Цена услуги</th>
                 <th>Время нотификации</th>
                 <th>Действия</th>
@@ -38,6 +39,7 @@
                 th:data-visit-id="${visit.id}">
                 <td th:text="${#temporals.format(visit.visitDateTime, 'dd-MM-yyyy HH:mm')}"></td>
                 <td th:text="${visit.cosmetologyService} != null ? ${visit.cosmetologyService.name} : '-'"></td>
+                <td th:text="${visit.cosmetologyService} != null ? ${visit.cosmetologyService.duration} : '-'"></td>
                 <td th:text="${visit.cosmetologyService != null ? #numbers.formatDecimal(visit.cosmetologyService.price, 1, 2) : '-'}"></td>
                 <td th:text="${visit.notification != null ? #temporals.format(visit.notification.notificationDateTime, 'dd-MM-yyyy HH:mm') : '-'}"></td>
                 <td>

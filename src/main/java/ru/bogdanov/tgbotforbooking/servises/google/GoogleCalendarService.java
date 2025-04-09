@@ -98,6 +98,7 @@ public class GoogleCalendarService implements GoogleAPI {
             Visit visit = new Visit();
             visit.setGoogleEventId(execute.getId());
             visit.setVisitDateTime(LocalDateTime.of(date, time));
+            visit.setEndVisitDateTime(LocalDateTime.of(date, time).plusMinutes(duration));
             visit.setUser(user);
             visit.setCosmetologyService(service);
             userVisitBotService.createVisit(visit);
@@ -109,7 +110,8 @@ public class GoogleCalendarService implements GoogleAPI {
                             : String.join(" : ", service.getName(), service.getPrice().toString()));
             return new CreateVisitResult(message);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            log.error(e.getMessage());
+            return new CreateVisitResult(MessagesText.ERROR_BOOKING_TEXT);
         }
     }
 

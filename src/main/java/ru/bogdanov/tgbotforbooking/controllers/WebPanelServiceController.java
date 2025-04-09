@@ -18,7 +18,7 @@ public class WebPanelServiceController extends AbstractWebPanelController {
     @GetMapping
     public String getServices(Model model) {
         model.addAttribute("services", userVisitBotService.findAllServices());
-        return "services/services"; // Возвращает имя шаблона Thymeleaf (users.html)
+        return "services/services";
     }
 
     @PostMapping("/update")

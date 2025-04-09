@@ -6,5 +6,7 @@
 
     <include file="v.1.0.0/init-db.xml" relativeToChangelogFile="true"/>
     <include file="v.1.0.0/add-duration-service-column.xml" relativeToChangelogFile="true"/>
+    <include file="v.1.0.0/add-end-visit-datetime-column.xml" relativeToChangelogFile="true"/>
+    <include file="v.1.0.0/add-indexes.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>

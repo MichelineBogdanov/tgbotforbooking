@@ -34,8 +34,10 @@ public class UserVisitBotService {
         this.notificationRepository = notificationRepository;
     }
 
-    public boolean checkVisitPresent(LocalDateTime visitDateTime, LocalDateTime serviceDuration) {
-        return visitRepository.existsByVisitDateTimeBetween(visitDateTime, serviceDuration);
+    @Transactional
+    public boolean checkVisitPresent(LocalDateTime visitDateTime, LocalDateTime endVisitDateTime) {
+        return visitRepository.existsByVisitDateTimeBetween(visitDateTime, endVisitDateTime)
+                && visitRepository.existsByEndVisitDateTimeBetween(visitDateTime, endVisitDateTime);
     }
 
     public Integer checkCountOfVisitsPresent(Long userId, LocalDateTime visitDateTime) {

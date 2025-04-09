@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet author="qqMik" id="create-indexes-for-visits">
+        <createIndex tableName="visits" indexName="idx_visits_visit_datetime">
+            <column name="visit_datetime"/>
+        </createIndex>
+
+        <createIndex tableName="visits" indexName="idx_visits_end_visit_datetime">
+            <column name="end_visit_datetime"/>
+        </createIndex>
+
+        <createIndex tableName="users" indexName="idx_users_user_tg_account">
+            <column name="tg_account"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>
