@@ -3,11 +3,13 @@ package ru.bogdanov.tgbotforbooking.servises.google;
 import com.google.api.client.util.DateTime;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.model.*;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.bogdanov.tgbotforbooking.entities.CosmetologyService;
 import ru.bogdanov.tgbotforbooking.entities.User;
 import ru.bogdanov.tgbotforbooking.entities.Visit;
+import ru.bogdanov.tgbotforbooking.exceptions.CreateVisitException;
 import ru.bogdanov.tgbotforbooking.servises.bot_services.UserVisitBotService;
 import ru.bogdanov.tgbotforbooking.servises.telegram.utils.DateTimeUtils;
 import ru.bogdanov.tgbotforbooking.servises.telegram.utils.MessagesText;
@@ -23,8 +25,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
-@Slf4j
 public class GoogleCalendarService implements GoogleAPI {
+
+    private static final Logger log = LoggerFactory.getLogger(GoogleCalendarService.class);
 
     private final UserVisitBotService userVisitBotService;
 
@@ -55,8 +58,8 @@ public class GoogleCalendarService implements GoogleAPI {
         }
     }
 
-    public CreateVisitResult createVisit(LocalDate date, LocalTime time, String userName, Long serviceId) {
-        Optional<User> userOptional = userVisitBotService.getUserByTgAccount(userName);
+    public CreateVisitResult createVisit(LocalDate date, LocalTime time, Long tgUserId, Long serviceId) {
+        Optional<User> userOptional = userVisitBotService.getUserByTgUserId(tgUserId);
         User user = userOptional.get();
         CosmetologyService service = null;
         Integer duration = 60;
@@ -68,10 +71,10 @@ public class GoogleCalendarService implements GoogleAPI {
             }
         }
         if (userVisitBotService.checkVisitPresent(LocalDateTime.of(date, time), LocalDateTime.of(date, time).plusMinutes(duration))) {
-            return new CreateVisitResult(MessagesText.FAULT_BOOKING_TEXT);
+            throw new CreateVisitException(MessagesText.FAULT_BOOKING_TEXT);
         }
         if (userVisitBotService.checkCountOfVisitsPresent(user.getId(), LocalDateTime.now()) > 2) {
-            return new CreateVisitResult(MessagesText.MAX_COUNT_BOOKING_TEXT);
+            throw new CreateVisitException(MessagesText.MAX_COUNT_BOOKING_TEXT);
         }
         Date start = Date.from(LocalDateTime.of(date, time).atZone(ZoneId.systemDefault()).toInstant());
         Date end = Date.from(LocalDateTime.of(date, time.plusMinutes(duration)).atZone(ZoneId.systemDefault()).toInstant());
@@ -83,7 +86,7 @@ public class GoogleCalendarService implements GoogleAPI {
         );
 
         Event event = new Event()
-                .setSummary(userName)
+                .setSummary(user.getTgAccount())
                 .setDescription(description);
         EventDateTime startEvent = new EventDateTime()
                 .setDateTime(new DateTime(start))
@@ -103,7 +106,7 @@ public class GoogleCalendarService implements GoogleAPI {
             visit.setCosmetologyService(service);
             userVisitBotService.createVisit(visit);
             String message = String.format(MessagesText.SUCCESS_BOOKING_TEXT
-                    , userName
+                    , user.getTgAccount()
                     , DateTimeUtils.fromLocalDateTimeToDateTimeString(LocalDateTime.of(date, time))
                     , service == null
                             ? MessagesText.NO_SERVICE_CHOOSE_TEXT
@@ -111,7 +114,7 @@ public class GoogleCalendarService implements GoogleAPI {
             return new CreateVisitResult(message);
         } catch (IOException e) {
             log.error(e.getMessage());
-            return new CreateVisitResult(MessagesText.ERROR_BOOKING_TEXT);
+            throw new CreateVisitException(MessagesText.ERROR_BOOKING_TEXT);
         }
     }
 
@@ -127,8 +130,8 @@ public class GoogleCalendarService implements GoogleAPI {
         return optionalVisit;
     }
 
-    public List<Visit> getUserVisits(String tgAccount) {
-        return userVisitBotService.getFutureVisitsByUserName(tgAccount);
+    public List<Visit> getUserVisits(Long tgUserId) {
+        return userVisitBotService.getFutureVisitsByTgUserIdName(tgUserId);
     }
 
     @Override

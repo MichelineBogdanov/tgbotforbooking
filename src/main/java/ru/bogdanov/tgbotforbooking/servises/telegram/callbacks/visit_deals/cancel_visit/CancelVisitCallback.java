@@ -29,8 +29,8 @@ public class CancelVisitCallback implements CallbackHandler {
 
     @Override
     public SendMessage apply(BaseCallbackData callback, Update update) {
-        String userName = update.getCallbackQuery().getFrom().getUserName();
-        List<Visit> visits = service.getUserVisits(userName);
+        Long tgUserId = update.getCallbackQuery().getFrom().getId();
+        List<Visit> visits = service.getUserVisits(tgUserId);
         long chatId = update.getCallbackQuery().getMessage().getChatId();
 
         SendMessage message = new SendMessage();

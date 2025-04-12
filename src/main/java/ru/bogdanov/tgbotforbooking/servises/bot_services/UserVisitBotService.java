@@ -58,12 +58,12 @@ public class UserVisitBotService {
         }
     }
 
-    public List<Visit> getFutureVisitsByUserName(String tgAccount) {
-        return visitRepository.findVisitsByUserTgAccountAndVisitDateTimeGreaterThan(tgAccount, LocalDateTime.now());
+    public List<Visit> getFutureVisitsByTgUserIdName(Long tgUserId) {
+        return visitRepository.findVisitsByUserTgUserIdAndVisitDateTimeGreaterThan(tgUserId, LocalDateTime.now());
     }
 
-    public List<Visit> getVisitsHistoryByUserName(String tgAccount) {
-        return visitRepository.findVisitsByUserTgAccountAndVisitDateTimeLessThan(tgAccount, LocalDateTime.now());
+    public List<Visit> getVisitsHistoryByTgUserId(Long tgUserId) {
+        return visitRepository.findVisitsByUserTgUserIdAndVisitDateTimeLessThan(tgUserId, LocalDateTime.now());
     }
 
     public List<Visit> getAllVisits() {
@@ -93,16 +93,16 @@ public class UserVisitBotService {
         return userRepository.findById(userId);
     }
 
-    public Optional<User> getUserByTgAccount(String tgAccount) {
-        return userRepository.findByTgAccount(tgAccount);
+    public Optional<User> getUserByTgUserId(Long tgUserId) {
+        return userRepository.findByTgUserId(tgUserId);
     }
 
     public Optional<User> getUserByChatId(Long chatId) {
         return userRepository.findByChatId(chatId);
     }
 
-    public boolean isUserExistsByTgAccount(String tgAccount) {
-        return userRepository.existsByTgAccount(tgAccount);
+    public boolean isUserExistsByTgUserId(Long tgUserId) {
+        return userRepository.existsByTgUserId(tgUserId);
     }
 
     public List<User> findAllUsers() {
@@ -138,8 +138,8 @@ public class UserVisitBotService {
     }
 
     @Transactional
-    public boolean switchUserNotifications(String tgAccount) {
-        Optional<User> userOptional = getUserByTgAccount(tgAccount);
+    public boolean switchUserNotifications(Long tgUserId) {
+        Optional<User> userOptional = getUserByTgUserId(tgUserId);
         boolean notificationsOn = false;
         if (userOptional.isPresent()) {
             User user = userOptional.get();

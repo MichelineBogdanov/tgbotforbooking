@@ -19,10 +19,10 @@ public interface GoogleAPI {
 
     List<LocalTime> getFreeSlots(DateTime start, DateTime end, Integer duration);
 
-    CreateVisitResult createVisit(LocalDate date, LocalTime time, String userName, Long serviceId);
+    CreateVisitResult createVisit(LocalDate date, LocalTime time, Long tgUserId, Long serviceId);
 
     Optional<Visit> deleteVisit(Long id);
 
-    List<Visit> getUserVisits(String tgAccount);
+    List<Visit> getUserVisits(Long tgUserId);
 
 }

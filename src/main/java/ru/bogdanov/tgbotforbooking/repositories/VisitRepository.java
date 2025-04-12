@@ -10,9 +10,9 @@ import java.util.List;
 @Repository
 public interface VisitRepository extends CrudRepository<Visit, Long> {
 
-    List<Visit> findVisitsByUserTgAccountAndVisitDateTimeGreaterThan(String tgAccount, LocalDateTime visitDateTime);
+    List<Visit> findVisitsByUserTgUserIdAndVisitDateTimeGreaterThan(Long tgUserId, LocalDateTime visitDateTime);
 
-    List<Visit> findVisitsByUserTgAccountAndVisitDateTimeLessThan(String tgAccount, LocalDateTime visitDateTime);
+    List<Visit> findVisitsByUserTgUserIdAndVisitDateTimeLessThan(Long tgUserId, LocalDateTime visitDateTime);
 
     List<Visit> findVisitsByVisitDateTimeBetween(LocalDateTime start, LocalDateTime end);
 

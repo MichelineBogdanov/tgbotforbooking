@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Создание визита</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div class="modal-content">
+    <span class="close-btn">&times;</span>
+    <h2>Создание визита</h2>
+    <form id="visit-form">
+        <div class="form-group">
+            <label for="visit-date">Дата:</label>
+            <input type="date" id="visit-date" name="date" required>
+        </div>
+        <div class="form-group">
+            <label for="visit-time">Время:</label>
+            <input type="time" id="visit-time" name="time" required>
+        </div>
+        <div class="form-group">
+            <label for="visit-service">Услуга:</label>
+            <select id="visit-service" name="serviceId" required>
+                <option th:each="service : ${services}"
+                        th:value="${service.id}"
+                        th:text="${service.name}"></option>
+            </select>
+        </div>
+        <input type="hidden" id="tg-user-id" name="tgUserId" th:value="${tgUserId}">
+        <button type="submit" class="submit-btn">Создать визит</button>
+    </form>
+</div>
+<script th:src="@{/js/visit-form-scripts.js}"></script>
+</body>
+</html>

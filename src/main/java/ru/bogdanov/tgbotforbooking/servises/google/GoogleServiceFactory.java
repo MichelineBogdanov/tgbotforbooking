@@ -12,6 +12,8 @@ import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -24,6 +26,8 @@ import java.util.List;
 
 @Component
 public class GoogleServiceFactory {
+
+    private static final Logger log = LoggerFactory.getLogger(GoogleServiceFactory.class);
 
     /**
      * Application name.
@@ -77,7 +81,7 @@ public class GoogleServiceFactory {
                     .watch("primary", channel) // "primary" для основного календаря
                     .execute();*/
         } catch (GeneralSecurityException | IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
         return build;
     }

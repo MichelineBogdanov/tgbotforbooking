@@ -27,9 +27,6 @@ public class ScheduleUtils {
             , LocalTime.of(18, 30, 1)
             , LocalTime.of(19, 0, 1));
 
-    public ScheduleUtils() {
-    }
-
     public static Map<LocalDate, List<LocalTime>> getFreeSlots(List<TimePeriod> freeIntervals, Integer duration) {
         List<LocalDateTimePeriod> localDateTimePeriods = map(freeIntervals);
         List<LocalDateTimePeriod> dividedPeriods = new ArrayList<>();

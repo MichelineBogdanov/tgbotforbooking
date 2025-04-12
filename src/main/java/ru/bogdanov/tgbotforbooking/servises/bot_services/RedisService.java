@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class RedisService {
 
-    private final String USERS = "users";
+    private final String USERS = "user_ids";
 
     private final StringRedisTemplate redisTemplate;
 
@@ -14,16 +14,12 @@ public class RedisService {
         this.redisTemplate = redisTemplate;
     }
 
-    public void cacheUser(String username) {
-        redisTemplate.opsForSet().add(USERS, username);
+    public void cacheUser(Long userId) {
+        redisTemplate.opsForSet().add(USERS, userId.toString());
     }
 
-    public boolean isUserCached(String username) {
-        return Boolean.TRUE.equals(redisTemplate.opsForSet().isMember(USERS, username));
-    }
-
-    public void removeUser(String username) {
-        redisTemplate.opsForSet().remove(USERS, username);
+    public boolean isUserCached(Long userId) {
+        return Boolean.TRUE.equals(redisTemplate.opsForSet().isMember(USERS, userId.toString()));
     }
 
 }

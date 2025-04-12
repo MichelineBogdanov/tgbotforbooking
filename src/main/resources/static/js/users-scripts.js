@@ -18,11 +18,9 @@ function saveChanges(button) {
     const inputs = row.querySelectorAll('input, select');
     const editBtn = row.querySelector('.edit-btn');
     const saveBtn = row.querySelector('.save-btn');
-    const deleteBtn = row.querySelector('.delete-btn');
     inputs.forEach(input => input.disabled = true);
     editBtn.style.display = 'inline-block';
     saveBtn.style.display = 'none';
-    deleteBtn.style.display = 'inline-block';
     const userData = {
         id: row.dataset.userId,
         tgAccount: row.querySelector('input[name="tgAccount"]').value,
@@ -71,3 +69,24 @@ function viewVisits(button) {
     const userId = row.dataset.userId;
     window.location.href = `/users/visits?userId=${userId}`;
 }
+
+function createVisit(button) {
+    const row = button.closest('tr');
+    const tgUserId = row.dataset.userTgUserId;
+
+    // Открываем форму в новом окне или модальном окне
+    const width = 500, height = 600;
+    const left = (screen.width - width) / 2;
+    const top = (screen.height - height) / 2;
+
+    window.open(`/users/visit-form?tgUserId=${tgUserId}`, '_blank',
+        `width=${width},height=${height},left=${left},top=${top}`);
+}
+
+// Обработчик сообщений от дочернего окна
+window.addEventListener('message', function(event) {
+    if (event.data.visitCreated) {
+        // Можно обновить таблицу или показать уведомление
+        console.log('Визит создан');
+    }
+});

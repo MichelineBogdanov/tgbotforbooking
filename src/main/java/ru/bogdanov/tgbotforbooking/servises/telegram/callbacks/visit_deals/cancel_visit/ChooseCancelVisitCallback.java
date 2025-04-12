@@ -35,10 +35,9 @@ public class ChooseCancelVisitCallback implements CallbackHandler {
 
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
-        message.setText(optionalVisit.isPresent()
-                ? String.format(MessagesText.SUCCESS_CANCEL_TEXT
-                , DateTimeUtils.fromLocalDateTimeToDateTimeString(optionalVisit.get().getVisitDateTime()))
-                : MessagesText.NOT_SUCCESS_CANCEL_TEXT);
+        message.setText(optionalVisit
+                .map(visit -> String.format(MessagesText.SUCCESS_CANCEL_TEXT, DateTimeUtils.fromLocalDateTimeToDateTimeString(visit.getVisitDateTime())))
+                .orElse(MessagesText.NOT_SUCCESS_CANCEL_TEXT));
 
         InlineKeyboardMarkup keyboardMarkup = new KeyboardBuilder().addBackButton(CommandTypes.VISIT_DEALS).build();
         message.setReplyMarkup(keyboardMarkup);

@@ -31,7 +31,7 @@ public class Visit {
     @JoinColumn(name = "service_id")
     private CosmetologyService cosmetologyService;
 
-    @OneToOne(mappedBy = "visit", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "visit", cascade = CascadeType.ALL)
     private Notification notification;
 
     public Visit() {

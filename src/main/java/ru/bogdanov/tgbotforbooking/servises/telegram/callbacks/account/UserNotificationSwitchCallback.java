@@ -22,9 +22,9 @@ public class UserNotificationSwitchCallback implements CallbackHandler {
 
     @Override
     public SendMessage apply(BaseCallbackData callback, Update update) {
-        String userName = update.getCallbackQuery().getFrom().getUserName();
+        Long tgUserId = update.getCallbackQuery().getFrom().getId();
         Long chatId = update.getCallbackQuery().getMessage().getChatId();
-        boolean isNotificationsOn = userVisitBotService.switchUserNotifications(userName);
+        boolean isNotificationsOn = userVisitBotService.switchUserNotifications(tgUserId);
         String text = isNotificationsOn
                 ? MessagesText.NOTIFICATIONS_STATUS_ON_TEXT
                 : MessagesText.NOTIFICATIONS_STATUS_OFF_TEXT;
@@ -32,6 +32,7 @@ public class UserNotificationSwitchCallback implements CallbackHandler {
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
         message.setText(text);
+
         InlineKeyboardMarkup keyboardMarkup = new KeyboardBuilder()
                 .addBackButton(CommandTypes.ACCOUNT)
                 .build();

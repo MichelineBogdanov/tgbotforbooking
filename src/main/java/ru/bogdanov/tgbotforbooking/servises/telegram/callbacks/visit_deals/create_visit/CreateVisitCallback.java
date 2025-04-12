@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
+import ru.bogdanov.tgbotforbooking.exceptions.CreateVisitException;
 import ru.bogdanov.tgbotforbooking.servises.google.CreateVisitResult;
 import ru.bogdanov.tgbotforbooking.servises.google.GoogleAPI;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities.BaseCallbackData;
@@ -31,13 +32,20 @@ public class CreateVisitCallback implements CallbackHandler {
         LocalDate date = currentCallback.getDate();
         LocalTime time = currentCallback.getTime();
         Long serviceId = currentCallback.getServiceId();
-        String userName = update.getCallbackQuery().getFrom().getUserName();
-        CreateVisitResult result = service.createVisit(date, time, userName, serviceId);
+        Long tgUserId = update.getCallbackQuery().getFrom().getId();
+
+        String text;
+        try {
+            CreateVisitResult result = service.createVisit(date, time, tgUserId, serviceId);
+            text = result.resultMessage();
+        } catch (CreateVisitException e) {
+            text = e.getMessage();
+        }
 
         long chatId = update.getCallbackQuery().getMessage().getChatId();
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
-        message.setText(result.resultMessage());
+        message.setText(text);
 
         KeyboardBuilder keyboardBuilder = new KeyboardBuilder();
         InlineKeyboardMarkup keyboardMarkup = keyboardBuilder.addBackButton(CommandTypes.VISIT_DEALS).build();

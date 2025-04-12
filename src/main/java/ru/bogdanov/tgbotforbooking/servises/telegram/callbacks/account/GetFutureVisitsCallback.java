@@ -13,6 +13,7 @@ import ru.bogdanov.tgbotforbooking.servises.telegram.utils.DateTimeUtils;
 import ru.bogdanov.tgbotforbooking.servises.telegram.utils.KeyboardBuilder;
 import ru.bogdanov.tgbotforbooking.servises.telegram.utils.MessagesText;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Component
@@ -27,10 +28,10 @@ public class GetFutureVisitsCallback implements CallbackHandler {
     @Override
     public SendMessage apply(BaseCallbackData callback, Update update) {
         Long chatId = update.getCallbackQuery().getMessage().getChatId();
-        String userName = update.getCallbackQuery().getFrom().getUserName();
-        List<Visit> visits = userVisitBotService.getFutureVisitsByUserName(userName);
-        SendMessage message = new SendMessage();
-        message.setChatId(chatId);
+        Long tgUserId = update.getCallbackQuery().getFrom().getId();
+        List<Visit> visits = userVisitBotService.getFutureVisitsByTgUserIdName(tgUserId);
+        visits.sort(Comparator.comparing(Visit::getVisitDateTime));
+
         StringBuilder sb = new StringBuilder();
         visits.forEach(visit -> sb.append(DateTimeUtils.fromLocalDateTimeToDateTimeString(visit.getVisitDateTime()))
                 .append(" - ")
@@ -41,6 +42,9 @@ public class GetFutureVisitsCallback implements CallbackHandler {
         String text = visits.isEmpty()
                 ? MessagesText.NO_VISITS_TEXT
                 : String.format(MessagesText.YOUR_FUTURE_VISITS_TEXT, sb);
+
+        SendMessage message = new SendMessage();
+        message.setChatId(chatId);
         message.setText(text);
 
         InlineKeyboardMarkup keyboardMarkup = new KeyboardBuilder().addBackButton(CommandTypes.ACCOUNT).build();

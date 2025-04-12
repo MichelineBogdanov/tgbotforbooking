@@ -309,6 +309,53 @@ main {
     font-weight: bold;
 }
 
+/* ===== Диалог создания визита ===== */
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    width: 400px;
+    max-width: 90%;
+    margin: 0 auto;
+}
+
+.close-btn {
+    float: right;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    clear: both;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+.submit-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.submit-btn:hover {
+    background-color: #45a049;
+}
+
 /* ===== Адаптивность ===== */
 @media (max-width: 768px) {
     .table th, .table td {

@@ -1,6 +1,7 @@
 package ru.bogdanov.tgbotforbooking.servises.telegram;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -18,8 +19,9 @@ import ru.bogdanov.tgbotforbooking.servises.telegram.commands.CommandTypes;
 import ru.bogdanov.tgbotforbooking.servises.telegram.commands.CommandsHandler;
 
 @Component
-@Slf4j
 public class BookingTelegramBot extends TelegramLongPollingBot {
+
+    private static final Logger log = LoggerFactory.getLogger(BookingTelegramBot.class);
 
     @Value("${bot.name}")
     String botName;
@@ -75,18 +77,18 @@ public class BookingTelegramBot extends TelegramLongPollingBot {
 
     private void registerUserIfNotExist(Update update) {
         org.telegram.telegrambots.meta.api.objects.User from = update.getMessage().getFrom();
-        String userName = from.getUserName();
-        if (!redisService.isUserCached(userName)) {
-            if (!userVisitBotService.isUserExistsByTgAccount(userName)) {
+        Long userId = from.getId();
+        if (!redisService.isUserCached(userId)) {
+            if (!userVisitBotService.isUserExistsByTgUserId(userId)) {
                 User user = new User();
-                user.setTgAccount(userName);
+                user.setTgAccount(from.getUserName());
                 user.setFirstName(from.getFirstName());
                 user.setLastName(from.getLastName());
-                user.setTgUserId(from.getId());
+                user.setTgUserId(userId);
                 user.setChatId(update.getMessage().getChatId());
                 userVisitBotService.createUser(user);
             }
-            redisService.cacheUser(userName);
+            redisService.cacheUser(userId);
         }
     }
 
@@ -94,7 +96,7 @@ public class BookingTelegramBot extends TelegramLongPollingBot {
         try {
             execute(answerCallbackQuery);
         } catch (TelegramApiException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
     }
 
@@ -102,7 +104,7 @@ public class BookingTelegramBot extends TelegramLongPollingBot {
         try {
             execute(sendMessage);
         } catch (TelegramApiException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
     }
 
@@ -110,7 +112,7 @@ public class BookingTelegramBot extends TelegramLongPollingBot {
         try {
             execute(deleteMessage);
         } catch (TelegramApiException e) {
-            e.printStackTrace();
+            log.error(e.getMessage());
         }
     }
 }

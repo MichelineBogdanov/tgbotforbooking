@@ -1,6 +1,7 @@
 package ru.bogdanov.tgbotforbooking.controllers;
 
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,8 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/webhook/calendar")
-@Slf4j
 public class GoogleServiceController {
+
+    private static final Logger log = LoggerFactory.getLogger(GoogleServiceController.class);
 
     @PostMapping("/webhook/calendar")
     public ResponseEntity<String> handleWebhook(@RequestBody String payload,
