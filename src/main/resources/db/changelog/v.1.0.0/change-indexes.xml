@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                   https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet author="qqMik" id="change-indexes-for-users">
+        <dropIndex indexName="idx_users_user_tg_account" tableName="users" schemaName="public"/>
+
+        <createIndex tableName="users" indexName="idx_users_tg_user_id">
+            <column name="tg_user_id"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>
