@@ -61,7 +61,7 @@ public class ChooseTimeCallback implements CallbackHandler {
         message.setChatId(chatId);
         message.setText(String.format(MessagesText.CHOOSE_TIME_TEXT
                 , cosmetologyService != null
-                        ? String.join(" : ", cosmetologyService.getName(), cosmetologyService.getPrice().toString(), cosmetologyService.getDuration().toString())
+                        ? String.join(" : ", cosmetologyService.getName(), cosmetologyService.getPrice().toString() + "р.", cosmetologyService.getDuration().toString() + "мин.")
                         : MessagesText.NO_SERVICE_CHOOSE_TEXT
                 , DateTimeUtils.fromLocalDateToDateString(date)));
 

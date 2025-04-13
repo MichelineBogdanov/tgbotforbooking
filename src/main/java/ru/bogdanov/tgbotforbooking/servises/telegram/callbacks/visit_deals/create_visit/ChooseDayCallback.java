@@ -56,7 +56,7 @@ public class ChooseDayCallback implements CallbackHandler {
                 ? MessagesText.NO_FREE_SLOTS_TEXT
                 : String.format(MessagesText.CHOOSE_DATE_TEXT,
                 cosmetologyService != null
-                        ? String.join(" : ", cosmetologyService.getName(), cosmetologyService.getPrice().toString(), cosmetologyService.getDuration().toString())
+                        ? String.join(" : ", cosmetologyService.getName(), cosmetologyService.getPrice().toString() + "р.", cosmetologyService.getDuration().toString() + "мин.")
                         : MessagesText.NO_SERVICE_CHOOSE_TEXT));
 
         KeyboardBuilder keyboardBuilder = new KeyboardBuilder();
