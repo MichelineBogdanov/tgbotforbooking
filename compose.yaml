@@ -49,8 +49,6 @@ services:
   redis:
     image: redis:latest
     container_name: redis
-    sysctls:
-      - vm.overcommit_memory=1
     environment:
       - REDIS_MEMORY=2gb
     ports:
