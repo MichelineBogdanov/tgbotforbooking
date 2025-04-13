@@ -159,6 +159,11 @@ main {
     color: black;
 }
 
+.create-visit-btn {
+    background-color: #008CBA;
+    color: white;
+}
+
 /* ===== Стили для блоков информации ===== */
 .user-info,
 .total-income {
