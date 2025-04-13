@@ -41,8 +41,10 @@ function saveServiceToDatabase(serviceData) {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            [document.querySelector('meta[name="_csrf_header"]').content]: document.querySelector('meta[name="_csrf"]').content
         },
-        body: JSON.stringify(serviceData)
+        body: JSON.stringify(serviceData),
+        credentials: 'include'
     }).then(response => {
         if (!response.ok) {
             throw new Error('Ошибка сети');
@@ -104,6 +106,10 @@ function deleteService(button) {
 function deleteServiceFromDatabase(serviceId) {
     return fetch(`/services/delete/${serviceId}`, {
         method: 'DELETE',
+        headers: {
+            [document.querySelector('meta[name="_csrf_header"]').content]: document.querySelector('meta[name="_csrf"]').content
+        },
+        credentials: 'include'
     })
         .then(response => {
             if (!response.ok) {

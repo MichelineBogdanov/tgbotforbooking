@@ -17,8 +17,10 @@ document.addEventListener('DOMContentLoaded', function() {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                [document.querySelector('meta[name="_csrf_header"]').content]: document.querySelector('meta[name="_csrf"]').content
             },
-            body: JSON.stringify(visitData)
+            body: JSON.stringify(visitData),
+            credentials: 'include'
         })
             .then(async response => {
                 const data = await response.json();

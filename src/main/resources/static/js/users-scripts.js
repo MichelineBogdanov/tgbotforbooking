@@ -54,8 +54,10 @@ function saveUserToDatabase(userData) {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            [document.querySelector('meta[name="_csrf_header"]').content]: document.querySelector('meta[name="_csrf"]').content
         },
-        body: JSON.stringify(userData)
+        body: JSON.stringify(userData),
+        credentials: 'include'
     }).then(response => {
         if (!response.ok) {
             throw new Error('Ошибка сети');

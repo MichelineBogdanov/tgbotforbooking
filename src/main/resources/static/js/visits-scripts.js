@@ -20,6 +20,10 @@ function deleteVisit(button) {
 function deleteVisitFromDatabase(visitId) {
     return fetch(`/visits/delete/${visitId}`, {
         method: 'DELETE',
+        headers: {
+            [document.querySelector('meta[name="_csrf_header"]').content]: document.querySelector('meta[name="_csrf"]').content
+        },
+        credentials: 'include'
     })
         .then(response => {
             if (!response.ok) {
