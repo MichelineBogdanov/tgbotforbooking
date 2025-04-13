@@ -8,7 +8,7 @@ import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import ru.bogdanov.tgbotforbooking.servises.google.GoogleAPI;
+import ru.bogdanov.tgbotforbooking.servises.google.CalendarAPI;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities.BaseCallbackData;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.CallbackHandler;
 import ru.bogdanov.tgbotforbooking.servises.telegram.commands.CommandTypes;
@@ -28,9 +28,9 @@ import java.util.stream.Collectors;
 @Component
 public class ScheduleInfoCallback implements CallbackHandler {
 
-    private final GoogleAPI service;
+    private final CalendarAPI service;
 
-    public ScheduleInfoCallback(@Qualifier("googleCalendarService") GoogleAPI service) {
+    public ScheduleInfoCallback(@Qualifier("googleCalendarService") CalendarAPI service) {
         this.service = service;
     }
 

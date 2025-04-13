@@ -6,7 +6,7 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import ru.bogdanov.tgbotforbooking.entities.Visit;
-import ru.bogdanov.tgbotforbooking.servises.google.GoogleAPI;
+import ru.bogdanov.tgbotforbooking.servises.google.CalendarAPI;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities.BaseCallbackData;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities.ChooseCancelVisitCallbackData;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.CallbackHandler;
@@ -20,9 +20,9 @@ import java.util.Optional;
 @Component
 public class ChooseCancelVisitCallback implements CallbackHandler {
 
-    private final GoogleAPI service;
+    private final CalendarAPI service;
 
-    public ChooseCancelVisitCallback(@Qualifier("googleCalendarService") GoogleAPI service) {
+    public ChooseCancelVisitCallback(@Qualifier("googleCalendarService") CalendarAPI service) {
         this.service = service;
     }
 

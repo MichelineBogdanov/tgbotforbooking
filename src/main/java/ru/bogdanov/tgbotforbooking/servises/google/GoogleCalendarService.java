@@ -25,15 +25,15 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
-public class GoogleCalendarService implements GoogleAPI {
+public class GoogleCalendarService implements CalendarAPI {
 
     private static final Logger log = LoggerFactory.getLogger(GoogleCalendarService.class);
 
     private final UserVisitBotService userVisitBotService;
 
-    public static final String TIME_ZONE = "+03:00";
-
     private final Calendar calendarService;
+
+    public static final String TIME_ZONE = "+03:00";
 
     private final String CALENDAR_ID = "primary";
 
@@ -43,6 +43,7 @@ public class GoogleCalendarService implements GoogleAPI {
         this.calendarService = calendarService;
     }
 
+    @Override
     public List<TimePeriod> getFreePeriods(DateTime start, DateTime end) {
         try {
             FreeBusyRequest request = new FreeBusyRequest()
@@ -58,6 +59,7 @@ public class GoogleCalendarService implements GoogleAPI {
         }
     }
 
+    @Override
     public CreateVisitResult createVisit(LocalDate date, LocalTime time, Long tgUserId, Long serviceId) {
         Optional<User> userOptional = userVisitBotService.getUserByTgUserId(tgUserId);
         User user = userOptional.get();
@@ -121,6 +123,7 @@ public class GoogleCalendarService implements GoogleAPI {
         }
     }
 
+    @Override
     public Optional<Visit> deleteVisit(Long id) {
         Optional<Visit> optionalVisit = userVisitBotService.deleteVisitById(id);
         try {
@@ -133,6 +136,7 @@ public class GoogleCalendarService implements GoogleAPI {
         return optionalVisit;
     }
 
+    @Override
     public List<Visit> getUserVisits(Long tgUserId) {
         return userVisitBotService.getFutureVisitsByTgUserIdName(tgUserId);
     }

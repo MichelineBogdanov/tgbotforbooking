@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public interface GoogleAPI {
+public interface CalendarAPI {
 
     List<TimePeriod> getFreePeriods(DateTime start, DateTime end);
 

@@ -7,7 +7,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import ru.bogdanov.tgbotforbooking.exceptions.CreateVisitException;
 import ru.bogdanov.tgbotforbooking.servises.google.CreateVisitResult;
-import ru.bogdanov.tgbotforbooking.servises.google.GoogleAPI;
+import ru.bogdanov.tgbotforbooking.servises.google.CalendarAPI;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities.BaseCallbackData;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities.CreateVisitCallbackData;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.CallbackHandler;
@@ -20,9 +20,9 @@ import java.time.LocalTime;
 @Component
 public class CreateVisitCallback implements CallbackHandler {
 
-    private final GoogleAPI service;
+    private final CalendarAPI service;
 
-    public CreateVisitCallback(@Qualifier("googleCalendarService") GoogleAPI service) {
+    public CreateVisitCallback(@Qualifier("googleCalendarService") CalendarAPI service) {
         this.service = service;
     }
 

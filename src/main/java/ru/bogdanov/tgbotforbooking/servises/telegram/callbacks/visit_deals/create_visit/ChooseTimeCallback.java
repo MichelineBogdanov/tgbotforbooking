@@ -8,7 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import ru.bogdanov.tgbotforbooking.entities.CosmetologyService;
 import ru.bogdanov.tgbotforbooking.servises.bot_services.UserVisitBotService;
-import ru.bogdanov.tgbotforbooking.servises.google.GoogleAPI;
+import ru.bogdanov.tgbotforbooking.servises.google.CalendarAPI;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities.BaseCallbackData;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities.ChooseTimeCallbackData;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callback_data_entities.CreateVisitCallbackData;
@@ -29,10 +29,10 @@ import java.util.List;
 @Component
 public class ChooseTimeCallback implements CallbackHandler {
 
-    private final GoogleAPI service;
+    private final CalendarAPI service;
     private final UserVisitBotService userVisitBotService;
 
-    public ChooseTimeCallback(@Qualifier("googleCalendarService") GoogleAPI service
+    public ChooseTimeCallback(@Qualifier("googleCalendarService") CalendarAPI service
             , UserVisitBotService userVisitBotService) {
         this.service = service;
         this.userVisitBotService = userVisitBotService;
