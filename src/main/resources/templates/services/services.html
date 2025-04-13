@@ -36,7 +36,7 @@
                 <td><input type="text" th:value="${service.name}" name="name" disabled></td>
                 <td><textarea th:text="${service.description}" name="description" disabled></textarea></td>
                 <td><input type="number" th:value="${service.price}" name="price" disabled></td>
-                <td><input type="number" th:value="${service.duration}" name="price" disabled></td>
+                <td><input type="number" th:value="${service.duration}" name="duration" disabled></td>
                 <td>
                     <button class="edit-btn" onclick="toggleEdit(this)">Редактировать</button>
                     <button class="save-btn" onclick="saveChanges(this)" style="display: none;">Сохранить</button>
