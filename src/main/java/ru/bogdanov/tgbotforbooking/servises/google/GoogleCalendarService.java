@@ -97,7 +97,10 @@ public class GoogleCalendarService implements GoogleAPI {
                 .setTimeZone(TIME_ZONE);
         event.setEnd(endEvent);
         try {
-            Event execute = calendarService.events().insert(CALENDAR_ID, event).execute();
+            Event execute = calendarService.events()
+                    .insert(CALENDAR_ID, event)
+                    .setSendUpdates("all")
+                    .execute();
             Visit visit = new Visit();
             visit.setGoogleEventId(execute.getId());
             visit.setVisitDateTime(LocalDateTime.of(date, time));

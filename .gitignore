@@ -1,9 +1,11 @@
 HELP.md
 target/
-!.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
 /tokens/
+!.mvn/wrapper/maven-wrapper.jar
+/src/main/resources/liquibase-out/
+/src/main/resources/liquibase.properties
 .env
 credentials.json
 
@@ -34,5 +36,3 @@ build/
 
 ### VS Code ###
 .vscode/
-/src/main/resources/liquibase-out/
-/src/main/resources/liquibase.properties
