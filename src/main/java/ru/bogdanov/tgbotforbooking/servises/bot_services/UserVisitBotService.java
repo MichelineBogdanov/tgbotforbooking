@@ -79,7 +79,9 @@ public class UserVisitBotService {
             Visit visit = optionalVisit.get();
             visitRepository.delete(visit);
             Notification notification = visit.getNotification();
-            notificationRepository.delete(notification);
+            if (notification != null) {
+                notificationRepository.delete(notification);
+            }
         }
         return optionalVisit;
     }
