@@ -50,7 +50,8 @@ services:
     image: redis:latest
     container_name: redis
     environment:
-      - REDIS_MEMORY=2gb
+      REDIS_MEMORY: 2gb
+      <<: *timezone
     ports:
       - "127.0.0.1:6379:6379"
     volumes:
