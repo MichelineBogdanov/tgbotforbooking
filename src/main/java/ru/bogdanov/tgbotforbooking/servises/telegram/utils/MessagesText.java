@@ -37,7 +37,7 @@ public interface MessagesText {
             """;
 
     String PLACE_INFO_TEXT = """
-            📍Московский пр-т, 109к2, код домофона: 2345В, 3 этаж, офис 8/2
+            📍Московский пр-т, 109к2, код домофона: 2345В, 3 этаж, офис 8/1
             https://yandex.ru/maps/2/saint-petersburg/house/moskovskiy_prospekt_109/Z0kYdQZoTkAFQFtjfXR5eHRnYg==/?ll=30.320563%2C59.890760&z=16.64
             """;
 
