@@ -4,12 +4,16 @@ function toggleEdit(button) {
     const inputs = row.querySelectorAll('input, textarea');
     const editBtn = row.querySelector('.edit-btn');
     const saveBtn = row.querySelector('.save-btn');
+    const cancelBtn = row.querySelector('.cancel-changes-btn');
+    const deleteBtn = row.querySelector('.delete-btn');
     inputs.forEach(input => {
         input.disabled = !input.disabled;
         input.style.width = '100%';
     });
     editBtn.style.display = editBtn.style.display === 'none' ? 'inline-block' : 'none';
     saveBtn.style.display = saveBtn.style.display === 'none' ? 'inline-block' : 'none';
+    cancelBtn.style.display = cancelBtn.style.display === 'none' ? 'inline-block' : 'none';
+    deleteBtn.style.display = deleteBtn.style.display === 'none' ? 'inline-block' : 'none';
 }
 
 // Функция для сохранения изменений
@@ -36,16 +40,47 @@ function saveChanges(button) {
     })
 }
 
-function saveServiceToDatabase(serviceData) {
-    return fetch('/services/update', {
-        method: 'POST',
+function cancelChanges(button) {
+    const row = button.closest('tr');
+    const inputs = row.querySelectorAll('input, textarea');
+    const editBtn = row.querySelector('.edit-btn');
+    const saveBtn = row.querySelector('.save-btn');
+    const cancelBtn = row.querySelector('.cancel-changes-btn');
+    const deleteBtn = row.querySelector('.delete-btn');
+    const serviceId = row.dataset.serviceId;
+    fetch(`/services/${serviceId}`, {
+        method: 'GET',
         headers: {
             'Content-Type': 'application/json',
             [document.querySelector('meta[name="_csrf_header"]').content]: document.querySelector('meta[name="_csrf"]').content
         },
-        body: JSON.stringify(serviceData),
         credentials: 'include'
     }).then(response => {
+        if (!response.ok) {
+            throw new Error('Ошибка сети');
+        }
+        return response.json(); // Парсим JSON один раз
+    }).then(service => {
+        updateRowWithSavedService(row, service);
+    });
+    inputs.forEach(input => input.disabled = true);
+    editBtn.style.display = editBtn.style.display === 'none' ? 'inline-block' : 'none';
+    saveBtn.style.display = saveBtn.style.display === 'none' ? 'inline-block' : 'none';
+    cancelBtn.style.display = cancelBtn.style.display === 'none' ? 'inline-block' : 'none';
+    deleteBtn.style.display = deleteBtn.style.display === 'none' ? 'inline-block' : 'none';
+}
+
+function saveServiceToDatabase(serviceData) {
+    return fetch('/services/update',
+        {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                [document.querySelector('meta[name="_csrf_header"]').content]: document.querySelector('meta[name="_csrf"]').content
+            },
+            body: JSON.stringify(serviceData),
+            credentials: 'include'
+        }).then(response => {
         if (!response.ok) {
             throw new Error('Ошибка сети');
         }
@@ -104,13 +139,14 @@ function deleteService(button) {
 
 // Функция для отправки запроса на удаление
 function deleteServiceFromDatabase(serviceId) {
-    return fetch(`/services/delete/${serviceId}`, {
-        method: 'DELETE',
-        headers: {
-            [document.querySelector('meta[name="_csrf_header"]').content]: document.querySelector('meta[name="_csrf"]').content
-        },
-        credentials: 'include'
-    })
+    return fetch(`/services/delete/${serviceId}`,
+        {
+            method: 'DELETE',
+            headers: {
+                [document.querySelector('meta[name="_csrf_header"]').content]: document.querySelector('meta[name="_csrf"]').content
+            },
+            credentials: 'include'
+        })
         .then(response => {
             if (!response.ok) {
                 throw new Error('Ошибка сети');

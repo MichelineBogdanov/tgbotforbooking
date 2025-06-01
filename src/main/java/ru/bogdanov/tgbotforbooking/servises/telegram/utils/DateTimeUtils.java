@@ -9,9 +9,9 @@ import java.util.Date;
 
 public class DateTimeUtils {
 
-    public static final String DATE_TIME_PATTERN = "dd-MM-yyyy HH:mm";
-    public static final String DATE_PATTERN = "dd-MM-yyyy";
-    public static final String DAY_PATTERN = "dd.MM";
+    private static final String DATE_TIME_PATTERN = "dd-MM-yyyy HH:mm";
+    private static final String DATE_PATTERN = "dd-MM-yyyy";
+    private static final String DAY_PATTERN = "dd.MM";
 
     public static Date fromLocalDateTimeToDate(LocalDateTime localDateTime) {
         return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());

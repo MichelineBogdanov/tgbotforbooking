@@ -13,13 +13,6 @@ public class CreateVisitDTO {
     public CreateVisitDTO() {
     }
 
-    public CreateVisitDTO(LocalDate date, LocalTime time, Long tgUserId, Long serviceId) {
-        this.date = date;
-        this.time = time;
-        this.tgUserId = tgUserId;
-        this.serviceId = serviceId;
-    }
-
     public LocalDate getDate() {
         return date;
     }

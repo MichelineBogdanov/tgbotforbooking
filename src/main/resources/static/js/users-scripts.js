@@ -3,6 +3,9 @@ function toggleEdit(button) {
     const inputs = row.querySelectorAll('input, select');
     const editBtn = row.querySelector('.edit-btn');
     const saveBtn = row.querySelector('.save-btn');
+    const cancelBtn = row.querySelector('.cancel-changes-btn');
+    const viewVisitsBtn = row.querySelector('.view-visits-btn');
+    const createVisitBtn = row.querySelector('.create-visit-btn');
     inputs.forEach(input => {
         if (input.name !== 'tgAccount') {
             input.disabled = !input.disabled;
@@ -11,6 +14,9 @@ function toggleEdit(button) {
     });
     editBtn.style.display = editBtn.style.display === 'none' ? 'inline-block' : 'none';
     saveBtn.style.display = saveBtn.style.display === 'none' ? 'inline-block' : 'none';
+    cancelBtn.style.display = cancelBtn.style.display === 'none' ? 'inline-block' : 'none';
+    viewVisitsBtn.style.display = viewVisitsBtn.style.display === 'none' ? 'inline-block' : 'none';
+    createVisitBtn.style.display = createVisitBtn.style.display === 'none' ? 'inline-block' : 'none';
 }
 
 function saveChanges(button) {
@@ -30,12 +36,42 @@ function saveChanges(button) {
         tgUserId: row.dataset.userTgUserId,
         notificationOn: row.querySelector('select[name="notificationsOn"]').value === 'true'
     }
-    console.log(userData);
-
     saveUserToDatabase(userData).then(savedUser => {
         alert('Изменения успешно сохранены!');
         updateRowWithSavedUser(row, savedUser);
     })
+}
+
+function cancelChanges(button) {
+    const row = button.closest('tr');
+    const inputs = row.querySelectorAll('input, select');
+    const editBtn = row.querySelector('.edit-btn');
+    const saveBtn = row.querySelector('.save-btn');
+    const cancelBtn = row.querySelector('.cancel-changes-btn');
+    const viewVisitsBtn = row.querySelector('.view-visits-btn');
+    const createVisitBtn = row.querySelector('.create-visit-btn');
+    const userId = row.dataset.userId;
+    fetch(`/users/${userId}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            [document.querySelector('meta[name="_csrf_header"]').content]: document.querySelector('meta[name="_csrf"]').content
+        },
+        credentials: 'include'
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error('Ошибка сети');
+        }
+        return response.json(); // Парсим JSON один раз
+    }).then(user => {
+        updateRowWithSavedUser(row, user);
+    });
+    inputs.forEach(input => input.disabled = true);
+    editBtn.style.display = editBtn.style.display === 'none' ? 'inline-block' : 'none';
+    saveBtn.style.display = saveBtn.style.display === 'none' ? 'inline-block' : 'none';
+    cancelBtn.style.display = cancelBtn.style.display === 'none' ? 'inline-block' : 'none';
+    viewVisitsBtn.style.display = viewVisitsBtn.style.display === 'none' ? 'inline-block' : 'none';
+    createVisitBtn.style.display = createVisitBtn.style.display === 'none' ? 'inline-block' : 'none';
 }
 
 // Функция для обновления строки с данными из сохраненной сущности
@@ -75,20 +111,23 @@ function viewVisits(button) {
 function createVisit(button) {
     const row = button.closest('tr');
     const tgUserId = row.dataset.userTgUserId;
-
     // Открываем форму в новом окне или модальном окне
     const width = 500, height = 600;
     const left = (screen.width - width) / 2;
     const top = (screen.height - height) / 2;
-
-    window.open(`/users/visit-form?tgUserId=${tgUserId}`, '_blank',
+    window.open(`/users/visit-form?tgUserId=${tgUserId}`,
+        '_blank',
         `width=${width},height=${height},left=${left},top=${top}`);
 }
 
 // Обработчик сообщений от дочернего окна
-window.addEventListener('message', function(event) {
+window.addEventListener('message', function (event) {
     if (event.data.visitCreated) {
         // Можно обновить таблицу или показать уведомление
         console.log('Визит создан');
     }
 });
+
+function changePageSize() {
+    document.getElementById('searchForm').submit();
+}

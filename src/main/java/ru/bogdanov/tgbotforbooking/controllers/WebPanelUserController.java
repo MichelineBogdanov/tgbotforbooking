@@ -2,6 +2,9 @@ package ru.bogdanov.tgbotforbooking.controllers;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,9 +28,35 @@ public class WebPanelUserController extends AbstractWebPanelController {
     }
 
     @GetMapping
-    public String getUsers(Model model) {
-        model.addAttribute("users", userVisitBotService.findAllUsers());
+    public String getAll(Model model,
+                         @RequestParam(defaultValue = "1") int page,
+                         @RequestParam(defaultValue = "3") int size) {
+        try {
+            Pageable paging = PageRequest.of(page - 1, size);
+            Page<User> pageTuts = userVisitBotService.findAllUsersPaginated(paging);
+            List<User> content = pageTuts.getContent();
+            model.addAttribute("users", content);
+            model.addAttribute("currentPage", pageTuts.getNumber() + 1);
+            model.addAttribute("totalItems", pageTuts.getTotalElements());
+            model.addAttribute("totalPages", pageTuts.getTotalPages());
+            model.addAttribute("pageSize", size);
+        } catch (Exception e) {
+            model.addAttribute("message", e.getMessage());
+        }
         return "users/users";
+    }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<User> getUserById(@PathVariable Long userId) {
+        try {
+            Optional<User> optionalUser = userVisitBotService.getUserById(userId);
+            return optionalUser
+                    .map(ResponseEntity::ok)
+                    .orElseGet(() -> ResponseEntity.notFound().build());
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return ResponseEntity.status(500).body(null);
+        }
     }
 
     @PostMapping("/update")
@@ -36,6 +65,7 @@ public class WebPanelUserController extends AbstractWebPanelController {
             User savedUser = userVisitBotService.updateUser(user);
             return ResponseEntity.ok(savedUser);
         } catch (Exception e) {
+            log.error(e.getMessage());
             return ResponseEntity.status(500).body(null);
         }
     }

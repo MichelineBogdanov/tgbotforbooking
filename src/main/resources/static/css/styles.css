@@ -149,7 +149,8 @@ main {
     color: white;
 }
 
-.delete-btn {
+.delete-btn,
+.cancel-changes-btn {
     background-color: #f44336;
     color: white;
 }
@@ -170,7 +171,7 @@ main {
     background-color: white;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin: 20px 0; /* Вертикальные отступы */
 }
 
@@ -359,6 +360,130 @@ main {
 
 .submit-btn:hover {
     background-color: #45a049;
+}
+
+/* ===== Пагинация ===== */
+/* Стили для контейнера пагинации */
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    margin: 2rem 0;
+}
+
+/* Стили для списка пагинации */
+.pagination-list {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    gap: 0.5rem;
+}
+
+/* Стили для элемента пагинации */
+.pagination-item {
+    display: flex;
+    align-items: center;
+}
+
+/* Стили для активного элемента */
+.pagination-item.active .pagination-link {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+/* Стили для disabled элемента */
+.pagination-item.disabled .pagination-link {
+    color: #6c757d;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* Стили для ссылки пагинации */
+.pagination-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.5rem;
+    height: 2.5rem;
+    padding: 0 0.5rem;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    color: #007bff;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+/* Hover-эффекты */
+.pagination-link:not(.disabled):hover {
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+}
+
+/* Стили для активной ссылки */
+.pagination-link.active {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+/* Стили для точек (многоточия) */
+.pagination-dots {
+    display: inline-flex;
+    align-items: flex-end;
+    padding: 0 0.5rem;
+    color: #6c757d;
+}
+
+/* Выбор количества элементов */
+.page-size-selector {
+    margin: 20px 0;
+}
+
+.page-size-form {
+    display: flex;
+    align-items: center;
+}
+
+.page-size-label {
+    margin-right: 10px;
+    padding: 0.375rem 0.75rem;
+    background-color: #e9ecef;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem 0 0 0.25rem;
+}
+
+.page-size-select {
+    padding: 0.375rem 0.75rem;
+    border: 1px solid #ced4da;
+    border-radius: 0 0.25rem 0.25rem 0;
+    color: #495057;
+    background-color: #fff;
+    transition: border-color 0.15s;
+}
+
+.page-size-select:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Стили для отключенных ссылок */
+.pagination-item.disabled .pagination-link,
+.pagination-link.disabled-link {
+    pointer-events: none;
+    cursor: default;
+    color: #6c757d;
+    background-color: #f8f9fa;
+    border-color: #dee2e6;
+    opacity: 0.65;
+    text-decoration: none;
+}
+
+/* Убираем hover-эффекты для отключенных ссылок */
+.pagination-item.disabled .pagination-link:hover,
+.pagination-link.disabled-link:hover {
+    background-color: #f8f9fa;
 }
 
 /* ===== Адаптивность ===== */

@@ -1,5 +1,7 @@
 package ru.bogdanov.tgbotforbooking.servises.bot_services;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.bogdanov.tgbotforbooking.entities.CosmetologyService;
@@ -108,9 +110,11 @@ public class UserVisitBotService {
     }
 
     public List<User> findAllUsers() {
-        ArrayList<User> users = new ArrayList<>();
-        userRepository.findAll().forEach(users::add);
-        return users;
+        return new ArrayList<>(userRepository.findAll());
+    }
+
+    public Page<User> findAllUsersPaginated(Pageable pageable) {
+        return userRepository.findAll(pageable);
     }
 
     @Transactional
@@ -119,8 +123,7 @@ public class UserVisitBotService {
     }
 
     public List<CosmetologyService> findAllServices() {
-        ArrayList<CosmetologyService> services = new ArrayList<>();
-        serviceRepository.findAll().forEach(services::add);
+        ArrayList<CosmetologyService> services = new ArrayList<>(serviceRepository.findAll());
         services.sort(Comparator.comparing(CosmetologyService::getId));
         return services;
     }

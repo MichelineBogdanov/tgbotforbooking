@@ -1,6 +1,6 @@
 package ru.bogdanov.tgbotforbooking.repositories;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ru.bogdanov.tgbotforbooking.entities.Visit;
 
@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public interface VisitRepository extends CrudRepository<Visit, Long> {
+public interface VisitRepository extends JpaRepository<Visit, Long> {
 
     List<Visit> findVisitsByUserTgUserIdAndVisitDateTimeGreaterThan(Long tgUserId, LocalDateTime visitDateTime);
 
