@@ -404,8 +404,8 @@ main {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 2.5rem;
-    height: 2.5rem;
+    min-width: 1.5rem;
+    height: 1.5rem;
     padding: 0 0.5rem;
     border: 1px solid #dee2e6;
     border-radius: 0.25rem;

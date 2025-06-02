@@ -1,5 +1,8 @@
 package ru.bogdanov.tgbotforbooking.controllers;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -7,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.bogdanov.tgbotforbooking.entities.CosmetologyService;
 import ru.bogdanov.tgbotforbooking.servises.bot_services.UserVisitBotService;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -18,8 +22,21 @@ public class WebPanelServiceController extends AbstractWebPanelController {
     }
 
     @GetMapping
-    public String getServices(Model model) {
-        model.addAttribute("services", userVisitBotService.findAllServices());
+    public String getServices(Model model,
+                              @RequestParam(defaultValue = "1") int page,
+                              @RequestParam(defaultValue = "10") int size) {
+        try {
+            Pageable paging = PageRequest.of(page - 1, size);
+            Page<CosmetologyService> pageTuts = userVisitBotService.getAllServicesPaginated(paging);
+            List<CosmetologyService> content = pageTuts.getContent();
+            model.addAttribute("services", content);
+            model.addAttribute("currentPage", pageTuts.getNumber() + 1);
+            model.addAttribute("totalItems", pageTuts.getTotalElements());
+            model.addAttribute("totalPages", pageTuts.getTotalPages());
+            model.addAttribute("pageSize", size);
+        } catch (Exception e) {
+            model.addAttribute("message", e.getMessage());
+        }
         return "services/services";
     }
 

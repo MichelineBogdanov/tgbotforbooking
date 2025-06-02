@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<body>
+
+<!-- Выбор количества элементов на странице -->
+<div th:fragment="pageSize(baseUrl, pageSize)" class="page-size-selector">
+    <form class="page-size-form" th:action="@{${baseUrl}}" id="searchForm">
+        <div class="page-size-label">Размер страницы:</div>
+        <select class="page-size-select" name="size" onchange="changePageSize()">
+            <option th:each="element : ${ {3, 5, 10, 50} }"
+                    th:value="${element}"
+                    th:text="${element}"
+                    th:selected="${element == pageSize}"></option>
+        </select>
+    </form>
+    <!-- Подключение JavaScript -->
+    <script th:src="@{/js/common-scripts.js}" defer></script>
+</div>
+
+</body>
+</html>

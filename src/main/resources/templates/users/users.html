@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,60 +16,11 @@
 <main>
     <h1>Пользователи</h1>
 
-    <!-- Блок пагинации -->
-    <nav class="pagination-container" th:if="${totalPages > 0}">
-        <ul class="pagination-list">
-            <!-- Первая страница (<<) -->
-            <li class="pagination-item" th:classappend="${currentPage == 1} ? 'disabled'">
-                <a th:replace="fragments/paging :: paging(1, '<<', 'First Page')"
-                   th:classappend="${currentPage == 1} ? 'disabled-link'"></a>
-            </li>
+    <!-- Вставляем пагинацию -->
+    <div th:replace="~{fragments/pagingBlock :: pagination('/users?', ${totalPages}, ${currentPage}, ${pageSize})}"></div>
 
-            <!-- Предыдущая страница (Prev) -->
-            <li class="pagination-item" th:classappend="${currentPage == 1} ? 'disabled'">
-                <a th:replace="fragments/paging :: paging(${currentPage - 1}, 'Prev', 'Previous Page')"
-                   th:classappend="${currentPage == 1} ? 'disabled-link'"></a>
-            </li>
-
-            <li class="pagination-item disabled" th:if="${currentPage - 2 > 1}">
-                <span class="pagination-dots">...</span>
-            </li>
-
-            <li class="pagination-item" th:classappend="${page == currentPage} ? 'active'"
-                th:each="page : ${#numbers.sequence(currentPage > 2 ? currentPage - 2 : 1, currentPage + 2 < totalPages ? currentPage + 2 : totalPages)}">
-                <a th:replace="fragments/paging :: paging(${page}, ${page}, 'Page ' + ${page})"></a>
-            </li>
-
-            <li class="pagination-item disabled" th:if="${currentPage + 2 < totalPages}">
-                <span class="pagination-dots">...</span>
-            </li>
-
-            <!-- Следующая страница (Next) -->
-            <li class="pagination-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
-                <a th:replace="fragments/paging :: paging(${currentPage + 1}, 'Next', 'Next Page')"
-                   th:classappend="${currentPage == totalPages} ? 'disabled-link'"></a>
-            </li>
-
-            <!-- Последняя страница (>>) -->
-            <li class="pagination-item" th:classappend="${currentPage == totalPages} ? 'disabled'">
-                <a th:replace="fragments/paging :: paging(${totalPages}, '>>', 'Last Page')"
-                   th:classappend="${currentPage == totalPages} ? 'disabled-link'"></a>
-            </li>
-        </ul>
-    </nav>
-
-    <!-- Выбор количества элементов на странице -->
-    <div class="page-size-selector">
-        <form class="page-size-form" th:action="@{/users}" id="searchForm">
-            <div class="page-size-label">Размер страницы:</div>
-            <select class="page-size-select" name="size" th:value="${pageSize}" onchange="changePageSize()">
-                <option th:each="s : ${ {3, 5, 10} }"
-                        th:value="${s}"
-                        th:text="${s}"
-                        th:selected="${s == pageSize}"></option>
-            </select>
-        </form>
-    </div>
+    <!-- Вставляем выбор количества записей на странице -->
+    <div th:replace="~{fragments/pageSizeChooser :: pageSize('/users?', ${pageSize})}"></div>
 
     <div class="table-container">
         <table id="users-table" class="table">

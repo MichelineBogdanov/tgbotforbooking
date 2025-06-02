@@ -127,7 +127,3 @@ window.addEventListener('message', function (event) {
         console.log('Визит создан');
     }
 });
-
-function changePageSize() {
-    document.getElementById('searchForm').submit();
-}

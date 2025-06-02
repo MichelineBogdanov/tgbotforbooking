@@ -17,6 +17,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     boolean existsByTgUserId(Long tgUserId);
 
-    Page<User> findAll(Pageable pageable);
-
 }

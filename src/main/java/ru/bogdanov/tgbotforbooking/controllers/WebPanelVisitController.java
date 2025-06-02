@@ -1,5 +1,9 @@
 package ru.bogdanov.tgbotforbooking.controllers;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -32,10 +36,21 @@ public class WebPanelVisitController extends AbstractWebPanelController {
     }
 
     @GetMapping
-    public String getAllVisits(Model model) {
-        List<Visit> visits = userVisitBotService.getAllVisits();
-        visits.sort(Comparator.comparing(Visit::getVisitDateTime).reversed());
-        model.addAttribute("visits", visits);
+    public String getVisits(Model model,
+                            @RequestParam(defaultValue = "1") int page,
+                            @RequestParam(defaultValue = "10") int size) {
+        try {
+            Pageable paging = PageRequest.of(page - 1, size, Sort.by("visitDateTime").descending());
+            Page<Visit> pageTuts = userVisitBotService.getAllVisitsPaginated(paging);
+            List<Visit> content = pageTuts.getContent();
+            model.addAttribute("visits", content);
+            model.addAttribute("currentPage", pageTuts.getNumber() + 1);
+            model.addAttribute("totalItems", pageTuts.getTotalElements());
+            model.addAttribute("totalPages", pageTuts.getTotalPages());
+            model.addAttribute("pageSize", size);
+        } catch (Exception e) {
+            model.addAttribute("message", e.getMessage());
+        }
         return "visits/allVisits";
     }
 

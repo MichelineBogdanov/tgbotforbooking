@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,12 +29,12 @@ public class WebPanelUserController extends AbstractWebPanelController {
     }
 
     @GetMapping
-    public String getAll(Model model,
-                         @RequestParam(defaultValue = "1") int page,
-                         @RequestParam(defaultValue = "3") int size) {
+    public String getUsers(Model model,
+                           @RequestParam(defaultValue = "1") int page,
+                           @RequestParam(defaultValue = "10") int size) {
         try {
-            Pageable paging = PageRequest.of(page - 1, size);
-            Page<User> pageTuts = userVisitBotService.findAllUsersPaginated(paging);
+            Pageable paging = PageRequest.of(page - 1, size, Sort.by("id").ascending());
+            Page<User> pageTuts = userVisitBotService.getAllUsersPaginated(paging);
             List<User> content = pageTuts.getContent();
             model.addAttribute("users", content);
             model.addAttribute("currentPage", pageTuts.getNumber() + 1);

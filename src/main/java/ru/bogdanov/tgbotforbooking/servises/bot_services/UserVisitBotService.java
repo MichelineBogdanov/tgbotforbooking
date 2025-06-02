@@ -68,10 +68,8 @@ public class UserVisitBotService {
         return visitRepository.findVisitsByUserTgUserIdAndVisitDateTimeLessThan(tgUserId, LocalDateTime.now());
     }
 
-    public List<Visit> getAllVisits() {
-        ArrayList<Visit> visits = new ArrayList<>();
-        visitRepository.findAll().forEach(visits::add);
-        return visits;
+    public Page<Visit> getAllVisitsPaginated(Pageable pageable) {
+        return visitRepository.findAll(pageable);
     }
 
     @Transactional
@@ -109,11 +107,7 @@ public class UserVisitBotService {
         return userRepository.existsByTgUserId(tgUserId);
     }
 
-    public List<User> findAllUsers() {
-        return new ArrayList<>(userRepository.findAll());
-    }
-
-    public Page<User> findAllUsersPaginated(Pageable pageable) {
+    public Page<User> getAllUsersPaginated(Pageable pageable) {
         return userRepository.findAll(pageable);
     }
 
@@ -126,6 +120,10 @@ public class UserVisitBotService {
         ArrayList<CosmetologyService> services = new ArrayList<>(serviceRepository.findAll());
         services.sort(Comparator.comparing(CosmetologyService::getId));
         return services;
+    }
+
+    public Page<CosmetologyService> getAllServicesPaginated(Pageable pageable) {
+        return serviceRepository.findAll(pageable);
     }
 
     public Optional<CosmetologyService> getServiceById(Long serviceId) {

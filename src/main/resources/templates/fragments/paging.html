@@ -1,7 +1,0 @@
-<a th:fragment="paging(pageNum, label, tooltip)" class="pagination-link"
-   th:href="@{'/users?' + 'page=' + ${pageNum} + '&size=' + ${pageSize}}"
-   th:title="${tooltip}"
-   rel="tooltip"
-   onclick="return !this.classList.contains('disabled-link')">
-    [[${label}]]
-</a>

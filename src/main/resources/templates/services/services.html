@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,6 +18,12 @@
 
     <!-- Кнопка "Добавить новую услугу" -->
     <button id="add-service-btn" onclick="addNewService()">Добавить новую услугу</button>
+
+    <!-- Вставляем пагинацию -->
+    <div th:replace="~{fragments/pagingBlock :: pagination('/services?', ${totalPages}, ${currentPage}, ${pageSize})}"></div>
+
+    <!-- Вставляем выбор количества записей на странице -->
+    <div th:replace="~{fragments/pageSizeChooser :: pageSize('/services?', ${pageSize})}"></div>
 
     <!-- Таблица с услугами -->
     <div class="table-container">
