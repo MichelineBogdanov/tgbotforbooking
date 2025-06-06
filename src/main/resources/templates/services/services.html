@@ -17,7 +17,32 @@
     <h1>Услуги</h1>
 
     <!-- Кнопка "Добавить новую услугу" -->
-    <button id="add-service-btn" onclick="addNewService()">Добавить новую услугу</button>
+    <button id="add-service-btn" onclick="toggleAddServiceForm()">Добавить новую услугу</button>
+
+    <!-- Форма добавления услуги (изначально скрыта) -->
+    <div id="add-service-form" class="add-service-form" style="display: none;">
+        <h2>Добавление новой услуги</h2>
+        <div class="form-group">
+            <label for="new-service-name">Название услуги:</label>
+            <input type="text" id="new-service-name" name="name" required>
+        </div>
+        <div class="form-group">
+            <label for="new-service-description">Описание:</label>
+            <textarea id="new-service-description" name="description" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="new-service-price">Цена:</label>
+            <input type="number" id="new-service-price" name="price" required>
+        </div>
+        <div class="form-group">
+            <label for="new-service-duration">Длительность (мин.):</label>
+            <input type="number" id="new-service-duration" name="duration" required>
+        </div>
+        <div class="form-actions">
+            <button class="save-btn" onclick="saveNewService()">Сохранить</button>
+            <button class="cancel-btn" onclick="toggleAddServiceForm()">Отменить</button>
+        </div>
+    </div>
 
     <!-- Вставляем пагинацию -->
     <div th:replace="~{fragments/pagingBlock :: pagination('/services?', ${totalPages}, ${currentPage}, ${pageSize})}"></div>

@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
 document.addEventListener('DOMContentLoaded', function () {
     const ctx = document.getElementById('income-chart').getContext('2d');
     const dailyIncome = JSON.parse(document.getElementById('income-chart').getAttribute('data-daily-income'));
-    const labels = Array.from({ length: dailyIncome.length }, (_, i) => i + 1);
+    const labels = Array.from({length: dailyIncome.length}, (_, i) => i + 1);
     const today = new Date();
     const currentYear = today.getUTCFullYear();
     const currentMonth = today.getUTCMonth() + 1;

@@ -1,32 +1,36 @@
 function toggleEdit(button) {
     const row = button.closest('tr');
     const inputs = row.querySelectorAll('input, select');
-    const editBtn = row.querySelector('.edit-btn');
-    const saveBtn = row.querySelector('.save-btn');
-    const cancelBtn = row.querySelector('.cancel-changes-btn');
-    const viewVisitsBtn = row.querySelector('.view-visits-btn');
-    const createVisitBtn = row.querySelector('.create-visit-btn');
     inputs.forEach(input => {
         if (input.name !== 'tgAccount') {
             input.disabled = !input.disabled;
             input.style.width = '100%';
         }
     });
+    changeDealColumnMode(row);
+}
+
+function changeDealColumnMode(row) {
+    const editBtn = row.querySelector('.edit-btn');
     editBtn.style.display = editBtn.style.display === 'none' ? 'inline-block' : 'none';
+
+    const saveBtn = row.querySelector('.save-btn');
     saveBtn.style.display = saveBtn.style.display === 'none' ? 'inline-block' : 'none';
+
+    const cancelBtn = row.querySelector('.cancel-changes-btn');
     cancelBtn.style.display = cancelBtn.style.display === 'none' ? 'inline-block' : 'none';
+
+    const viewVisitsBtn = row.querySelector('.view-visits-btn');
     viewVisitsBtn.style.display = viewVisitsBtn.style.display === 'none' ? 'inline-block' : 'none';
+
+    const createVisitBtn = row.querySelector('.create-visit-btn');
     createVisitBtn.style.display = createVisitBtn.style.display === 'none' ? 'inline-block' : 'none';
 }
 
 function saveChanges(button) {
     const row = button.closest('tr');
     const inputs = row.querySelectorAll('input, select');
-    const editBtn = row.querySelector('.edit-btn');
-    const saveBtn = row.querySelector('.save-btn');
     inputs.forEach(input => input.disabled = true);
-    editBtn.style.display = 'inline-block';
-    saveBtn.style.display = 'none';
     const userData = {
         id: row.dataset.userId,
         tgAccount: row.querySelector('input[name="tgAccount"]').value,
@@ -39,17 +43,13 @@ function saveChanges(button) {
     saveUserToDatabase(userData).then(savedUser => {
         alert('Изменения успешно сохранены!');
         updateRowWithSavedUser(row, savedUser);
-    })
+    });
+    changeDealColumnMode(row);
 }
 
 function cancelChanges(button) {
     const row = button.closest('tr');
     const inputs = row.querySelectorAll('input, select');
-    const editBtn = row.querySelector('.edit-btn');
-    const saveBtn = row.querySelector('.save-btn');
-    const cancelBtn = row.querySelector('.cancel-changes-btn');
-    const viewVisitsBtn = row.querySelector('.view-visits-btn');
-    const createVisitBtn = row.querySelector('.create-visit-btn');
     const userId = row.dataset.userId;
     fetch(`/users/${userId}`, {
         method: 'GET',
@@ -67,11 +67,7 @@ function cancelChanges(button) {
         updateRowWithSavedUser(row, user);
     });
     inputs.forEach(input => input.disabled = true);
-    editBtn.style.display = editBtn.style.display === 'none' ? 'inline-block' : 'none';
-    saveBtn.style.display = saveBtn.style.display === 'none' ? 'inline-block' : 'none';
-    cancelBtn.style.display = cancelBtn.style.display === 'none' ? 'inline-block' : 'none';
-    viewVisitsBtn.style.display = viewVisitsBtn.style.display === 'none' ? 'inline-block' : 'none';
-    createVisitBtn.style.display = createVisitBtn.style.display === 'none' ? 'inline-block' : 'none';
+    changeDealColumnMode(row);
 }
 
 // Функция для обновления строки с данными из сохраненной сущности

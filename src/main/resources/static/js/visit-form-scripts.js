@@ -1,10 +1,10 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('visit-form');
     const closeBtn = document.querySelector('.close-btn');
-    closeBtn.addEventListener('click', function() {
+    closeBtn.addEventListener('click', function () {
         window.close(); // или другой способ закрытия модального окна
     });
-    form.addEventListener('submit', function(e) {
+    form.addEventListener('submit', function (e) {
         e.preventDefault();
         const formData = new FormData(form);
         const visitData = {
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
             })
             .then(() => {
                 alert('Визит успешно создан!');
-                window.opener.postMessage({ visitCreated: true }, '*');
+                window.opener.postMessage({visitCreated: true}, '*');
                 window.close();
             })
             .catch(error => {

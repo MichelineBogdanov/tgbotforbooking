@@ -2,31 +2,38 @@
 function toggleEdit(button) {
     const row = button.closest('tr');
     const inputs = row.querySelectorAll('input, textarea');
-    const editBtn = row.querySelector('.edit-btn');
-    const saveBtn = row.querySelector('.save-btn');
-    const cancelBtn = row.querySelector('.cancel-changes-btn');
-    const deleteBtn = row.querySelector('.delete-btn');
     inputs.forEach(input => {
         input.disabled = !input.disabled;
         input.style.width = '100%';
     });
-    editBtn.style.display = editBtn.style.display === 'none' ? 'inline-block' : 'none';
-    saveBtn.style.display = saveBtn.style.display === 'none' ? 'inline-block' : 'none';
-    cancelBtn.style.display = cancelBtn.style.display === 'none' ? 'inline-block' : 'none';
-    deleteBtn.style.display = deleteBtn.style.display === 'none' ? 'inline-block' : 'none';
+    changeDealColumnMode(row);
+}
+
+// Функция для показа/скрытия формы добавления услуги
+function toggleAddServiceForm() {
+    const form = document.getElementById('add-service-form');
+    const button = document.getElementById('add-service-btn');
+
+    if (form.style.display === 'none') {
+        form.style.display = 'block';
+        button.style.display = 'none';
+    } else {
+        form.style.display = 'none';
+        button.style.display = 'inline-block';
+    }
+
+    // Очищаем форму
+    document.getElementById('new-service-name').value = '';
+    document.getElementById('new-service-description').value = '';
+    document.getElementById('new-service-price').value = '';
+    document.getElementById('new-service-duration').value = '';
 }
 
 // Функция для сохранения изменений
 function saveChanges(button) {
     const row = button.closest('tr');
     const inputs = row.querySelectorAll('input, textarea');
-    const editBtn = row.querySelector('.edit-btn');
-    const saveBtn = row.querySelector('.save-btn');
-    const deleteBtn = row.querySelector('.delete-btn');
     inputs.forEach(input => input.disabled = true);
-    editBtn.style.display = 'inline-block';
-    saveBtn.style.display = 'none';
-    deleteBtn.style.display = 'inline-block';
     const serviceData = {
         id: row.dataset.serviceId,
         name: row.querySelector('input[name="name"]').value,
@@ -38,35 +45,20 @@ function saveChanges(button) {
         alert('Изменения успешно сохранены!');
         updateRowWithSavedService(row, savedService);
     })
+    changeDealColumnMode(row);
 }
 
-function cancelChanges(button) {
-    const row = button.closest('tr');
-    const inputs = row.querySelectorAll('input, textarea');
+function changeDealColumnMode(row) {
     const editBtn = row.querySelector('.edit-btn');
-    const saveBtn = row.querySelector('.save-btn');
-    const cancelBtn = row.querySelector('.cancel-changes-btn');
-    const deleteBtn = row.querySelector('.delete-btn');
-    const serviceId = row.dataset.serviceId;
-    fetch(`/services/${serviceId}`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            [document.querySelector('meta[name="_csrf_header"]').content]: document.querySelector('meta[name="_csrf"]').content
-        },
-        credentials: 'include'
-    }).then(response => {
-        if (!response.ok) {
-            throw new Error('Ошибка сети');
-        }
-        return response.json(); // Парсим JSON один раз
-    }).then(service => {
-        updateRowWithSavedService(row, service);
-    });
-    inputs.forEach(input => input.disabled = true);
     editBtn.style.display = editBtn.style.display === 'none' ? 'inline-block' : 'none';
+
+    const saveBtn = row.querySelector('.save-btn');
     saveBtn.style.display = saveBtn.style.display === 'none' ? 'inline-block' : 'none';
+
+    const cancelBtn = row.querySelector('.cancel-changes-btn');
     cancelBtn.style.display = cancelBtn.style.display === 'none' ? 'inline-block' : 'none';
+
+    const deleteBtn = row.querySelector('.delete-btn');
     deleteBtn.style.display = deleteBtn.style.display === 'none' ? 'inline-block' : 'none';
 }
 
@@ -88,6 +80,34 @@ function saveServiceToDatabase(serviceData) {
     });
 }
 
+// Функция для сохранения новой услуги
+function saveNewService() {
+    const serviceData = {
+        name: document.getElementById('new-service-name').value,
+        description: document.getElementById('new-service-description').value,
+        price: parseFloat(document.getElementById('new-service-price').value),
+        duration: parseInt(document.getElementById('new-service-duration').value)
+    };
+
+    // Проверка заполнения полей
+    if (!serviceData.name || !serviceData.description || isNaN(serviceData.price) || isNaN(serviceData.duration)) {
+        alert('Пожалуйста, заполните все поля корректно!');
+        return;
+    }
+
+    saveServiceToDatabase(serviceData).then(() => {
+        alert('Услуга успешно добавлена!');
+        // Скрываем форму
+        toggleAddServiceForm();
+        // Обновляем страницу, чтобы показать новую услугу
+        location.reload();
+    })
+        .catch(error => {
+            console.error('Ошибка при сохранении:', error);
+            alert('Произошла ошибка при сохранении услуги');
+        });
+}
+
 // Функция для обновления строки с данными из сохраненной сущности
 function updateRowWithSavedService(row, savedService) {
     row.dataset.serviceId = savedService.id;
@@ -97,26 +117,27 @@ function updateRowWithSavedService(row, savedService) {
     row.querySelector('input[name="duration"]').value = savedService.duration;
 }
 
-// Функция для добавления новой услуги
-function addNewService() {
-    const table = document.getElementById('services-table').getElementsByTagName('tbody')[0];
-    const newRow = table.insertRow();
-    const cells = [
-        newRow.insertCell(0),
-        newRow.insertCell(1),
-        newRow.insertCell(2),
-        newRow.insertCell(3),
-        newRow.insertCell(4)
-    ];
-    cells[0].innerHTML = '<input type="text" name="name" placeholder="Название услуги">';
-    cells[1].innerHTML = '<textarea name="description" placeholder="Описание"></textarea>';
-    cells[2].innerHTML = '<input type="number" name="price" placeholder="Цена">';
-    cells[3].innerHTML = '<input type="number" name="duration" placeholder="Длительность (мин.)">';
-    cells[4].innerHTML = `
-        <button class="edit-btn" onclick="toggleEdit(this)" style="display: none;">Редактировать</button>
-        <button class="save-btn" onclick="saveChanges(this)">Сохранить</button>
-        <button class="delete-btn" onclick="deleteService(this)" style="display: none;">Удалить</button>
-    `;
+function cancelChanges(button) {
+    const row = button.closest('tr');
+    const inputs = row.querySelectorAll('input, textarea');
+    const serviceId = row.dataset.serviceId;
+    fetch(`/services/${serviceId}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            [document.querySelector('meta[name="_csrf_header"]').content]: document.querySelector('meta[name="_csrf"]').content
+        },
+        credentials: 'include'
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error('Ошибка сети');
+        }
+        return response.json(); // Парсим JSON один раз
+    }).then(service => {
+        updateRowWithSavedService(row, service);
+    });
+    inputs.forEach(input => input.disabled = true);
+    changeDealColumnMode(row);
 }
 
 function deleteService(button) {
@@ -143,6 +164,7 @@ function deleteServiceFromDatabase(serviceId) {
         {
             method: 'DELETE',
             headers: {
+                'Content-Type': 'application/json',
                 [document.querySelector('meta[name="_csrf_header"]').content]: document.querySelector('meta[name="_csrf"]').content
             },
             credentials: 'include'
