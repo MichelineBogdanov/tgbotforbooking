@@ -20,7 +20,6 @@ import ru.bogdanov.tgbotforbooking.servises.telegram.JsonHandler;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 @Controller

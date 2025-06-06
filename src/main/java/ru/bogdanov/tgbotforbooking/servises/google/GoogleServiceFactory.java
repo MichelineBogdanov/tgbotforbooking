@@ -68,18 +68,6 @@ public class GoogleServiceFactory {
             build = new Calendar.Builder(GoogleNetHttpTransport.newTrustedTransport(), JSON_FACTORY, credential)
                     .setApplicationName(APPLICATION_NAME)
                     .build();
-            /*// Создание канала уведомлений
-            Channel channel = new Channel()
-                    .setId("my_booking_channel") // Уникальный ID канала
-                    .setType("web_hook")
-                    .setAddress("https://localhost:8889/webhook/calendar") // URL вашего вебхука
-                    .setToken("your-secret-token"); // Опционально: токен для проверки подлинности
-
-            // Вызов метода watch
-            build
-                    .events()
-                    .watch("primary", channel) // "primary" для основного календаря
-                    .execute();*/
         } catch (GeneralSecurityException | IOException e) {
             log.error(e.getMessage());
         }

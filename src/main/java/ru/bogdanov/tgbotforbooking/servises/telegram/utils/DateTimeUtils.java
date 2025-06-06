@@ -18,20 +18,19 @@ public class DateTimeUtils {
     }
 
     public static String fromLocalDateTimeToDateTimeString(LocalDateTime localDateTime) {
-        return localDateTime.format(DateTimeFormatter.ofPattern(DateTimeUtils.DATE_TIME_PATTERN));
+        return localDateTime.format(DateTimeFormatter.ofPattern(DATE_TIME_PATTERN));
     }
 
     public static String fromLocalDateToDateString(LocalDate localDate) {
-        return localDate.format(DateTimeFormatter.ofPattern(DateTimeUtils.DATE_PATTERN));
+        return localDate.format(DateTimeFormatter.ofPattern(DATE_PATTERN));
     }
 
     public static String fromLocalDateToDayString(LocalDate localDate) {
-        return localDate.format(DateTimeFormatter.ofPattern(DateTimeUtils.DAY_PATTERN));
+        return localDate.format(DateTimeFormatter.ofPattern(DAY_PATTERN));
     }
 
     public static LocalDateTime parseDateTimeFromRFC3339(String rfc3339DateStr) {
-        OffsetDateTime offsetDateTime = OffsetDateTime.parse(rfc3339DateStr);
-        return offsetDateTime.toLocalDateTime();
+        return OffsetDateTime.parse(rfc3339DateStr).toLocalDateTime();
     }
 
 }

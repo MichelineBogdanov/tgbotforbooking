@@ -33,14 +33,15 @@ public class NotificationService {
         this.userVisitBotService = userVisitBotService;
     }
 
-    @Scheduled(cron = "0 0 12,13,14,15,16,17,18,19 * * ?")
-    public void taskAtFullHour() {
+    @Scheduled(cron = "0 30/30 14-19 * * ?")
+    public void taskAtHalfHour() {
         sendMessageByNotification();
     }
 
     private void sendMessageByNotification() {
-        LocalDateTime from = LocalDateTime.now().minusMinutes(10);
-        LocalDateTime to = LocalDateTime.now().plusMinutes(10);
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime from = now.minusMinutes(10);
+        LocalDateTime to = now.plusMinutes(10);
         Optional<Notification> notificationOptional = notificationRepository.findFirstByNotificationDateTimeBetween(from, to);
         if (notificationOptional.isPresent()) {
             Notification notification = notificationOptional.get();
@@ -54,7 +55,7 @@ public class NotificationService {
         }
     }
 
-    public void sendMessage(SendMessage sendMessage) {
+    private void sendMessage(SendMessage sendMessage) {
         try {
             telegramBot.execute(sendMessage);
         } catch (TelegramApiException e) {
