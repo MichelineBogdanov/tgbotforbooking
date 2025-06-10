@@ -38,7 +38,7 @@ function saveChanges(button) {
         lastName: row.querySelector('input[name="lastName"]').value,
         chatId: row.dataset.userChatId,
         tgUserId: row.dataset.userTgUserId,
-        notificationOn: row.querySelector('select[name="notificationsOn"]').value === 'true'
+        notificationsOn: row.querySelector('select[name="notificationsOn"]').value === 'true'
     }
     saveUserToDatabase(userData).then(savedUser => {
         alert('Изменения успешно сохранены!');

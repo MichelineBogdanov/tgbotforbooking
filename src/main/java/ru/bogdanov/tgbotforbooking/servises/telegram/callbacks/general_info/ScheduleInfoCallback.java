@@ -41,9 +41,9 @@ public class ScheduleInfoCallback implements CallbackHandler {
                 new DateTime(DateTimeUtils.fromLocalDateTimeToDate(LocalDate.now().plusMonths(1).withDayOfMonth(1).atStartOfDay())));
         Map<LocalDate, List<LocalTime>> freeSlots = ScheduleUtils.getFreeSlots(freePeriods, 30);
         long chatId = update.getCallbackQuery().getMessage().getChatId();
+        String text = getStringForMessage(freeSlots);
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
-        String text = getStringForMessage(freeSlots);
         message.setParseMode(ParseMode.HTML);
         message.setText(text);
         InlineKeyboardMarkup keyboardMarkup = new KeyboardBuilder().addBackButton(CommandTypes.GENERAL_INFO).build();
