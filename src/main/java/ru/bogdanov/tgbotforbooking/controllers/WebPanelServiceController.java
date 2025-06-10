@@ -3,6 +3,7 @@ package ru.bogdanov.tgbotforbooking.controllers;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,7 +27,7 @@ public class WebPanelServiceController extends AbstractWebPanelController {
                               @RequestParam(defaultValue = "1") int page,
                               @RequestParam(defaultValue = "10") int size) {
         try {
-            Pageable paging = PageRequest.of(page - 1, size);
+            Pageable paging = PageRequest.of(page - 1, size, Sort.by("id").ascending());
             Page<CosmetologyService> pageTuts = userVisitBotService.getAllServicesPaginated(paging);
             List<CosmetologyService> content = pageTuts.getContent();
             model.addAttribute("services", content);
