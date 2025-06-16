@@ -1,5 +1,8 @@
 package ru.bogdanov.tgbotforbooking.servises.bot_services;
 
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,6 +22,7 @@ import java.time.ZoneId;
 import java.util.*;
 
 @Service
+@EnableCaching
 public class UserVisitBotService {
 
     private final UserRepository userRepository;
@@ -87,6 +91,7 @@ public class UserVisitBotService {
     }
 
     @Transactional
+    @CachePut(value = "users", key = "#user.tgUserId")
     public void createUser(User user) {
         userRepository.save(user);
     }
@@ -95,16 +100,13 @@ public class UserVisitBotService {
         return userRepository.findById(userId);
     }
 
+    @Cacheable(value = "users", key = "#tgUserId")
     public Optional<User> getUserByTgUserId(Long tgUserId) {
         return userRepository.findByTgUserId(tgUserId);
     }
 
     public Optional<User> getUserByChatId(Long chatId) {
         return userRepository.findByChatId(chatId);
-    }
-
-    public boolean isUserExistsByTgUserId(Long tgUserId) {
-        return userRepository.existsByTgUserId(tgUserId);
     }
 
     public Page<User> getAllUsersPaginated(Pageable pageable) {
