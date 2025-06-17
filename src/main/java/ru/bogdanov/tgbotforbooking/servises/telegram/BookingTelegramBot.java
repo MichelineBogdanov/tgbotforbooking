@@ -12,6 +12,7 @@ import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.bogdanov.tgbotforbooking.entities.User;
+import ru.bogdanov.tgbotforbooking.servises.bot_services.RedisService;
 import ru.bogdanov.tgbotforbooking.servises.bot_services.UserVisitBotService;
 import ru.bogdanov.tgbotforbooking.servises.telegram.callbacks.CallbacksHandler;
 import ru.bogdanov.tgbotforbooking.servises.telegram.commands.CommandTypes;
@@ -34,12 +35,16 @@ public class BookingTelegramBot extends TelegramLongPollingBot {
 
     public final UserVisitBotService userVisitBotService;
 
+    public final RedisService redisService;
+
     public BookingTelegramBot(CommandsHandler commandsHandler
             , CallbacksHandler callbacksHandler
-            , UserVisitBotService userVisitBotService) {
+            , UserVisitBotService userVisitBotService
+            , RedisService redisService) {
         this.commandsHandler = commandsHandler;
         this.callbacksHandler = callbacksHandler;
         this.userVisitBotService = userVisitBotService;
+        this.redisService = redisService;
     }
 
     @Override
@@ -73,14 +78,17 @@ public class BookingTelegramBot extends TelegramLongPollingBot {
     private void registerUserIfNotExist(Update update) {
         org.telegram.telegrambots.meta.api.objects.User from = update.getMessage().getFrom();
         Long userId = from.getId();
-        if (userVisitBotService.getUserByTgUserId(userId).isEmpty()) {
-            User user = new User();
-            user.setTgAccount(from.getUserName());
-            user.setFirstName(from.getFirstName());
-            user.setLastName(from.getLastName());
-            user.setTgUserId(userId);
-            user.setChatId(update.getMessage().getChatId());
-            userVisitBotService.createUser(user);
+        if (!redisService.isUserCached(userId)) {
+            if (!userVisitBotService.isUserExistsByTgUserId(userId)) {
+                User user = new User();
+                user.setTgAccount(from.getUserName());
+                user.setFirstName(from.getFirstName());
+                user.setLastName(from.getLastName());
+                user.setTgUserId(userId);
+                user.setChatId(update.getMessage().getChatId());
+                userVisitBotService.createUser(user);
+            }
+            redisService.cacheUser(userId);
         }
     }
 

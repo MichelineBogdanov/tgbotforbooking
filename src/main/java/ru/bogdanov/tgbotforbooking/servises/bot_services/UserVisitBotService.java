@@ -22,7 +22,6 @@ import java.time.ZoneId;
 import java.util.*;
 
 @Service
-@EnableCaching
 public class UserVisitBotService {
 
     private final UserRepository userRepository;
@@ -91,7 +90,6 @@ public class UserVisitBotService {
     }
 
     @Transactional
-    @CachePut(value = "users", key = "#user.tgUserId")
     public void createUser(User user) {
         userRepository.save(user);
     }
@@ -100,9 +98,12 @@ public class UserVisitBotService {
         return userRepository.findById(userId);
     }
 
-    @Cacheable(value = "users", key = "#tgUserId")
     public Optional<User> getUserByTgUserId(Long tgUserId) {
         return userRepository.findByTgUserId(tgUserId);
+    }
+
+    public boolean isUserExistsByTgUserId(Long tgUserId) {
+        return userRepository.existsByTgUserId(tgUserId);
     }
 
     public Optional<User> getUserByChatId(Long chatId) {

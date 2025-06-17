@@ -8,7 +8,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "users", schema = "public")
-public class User implements Serializable {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "users_seq")
