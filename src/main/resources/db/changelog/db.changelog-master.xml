@@ -9,5 +9,6 @@
     <include file="v.1.0.0/add-end-visit-datetime-column.xml" relativeToChangelogFile="true"/>
     <include file="v.1.0.0/add-indexes.xml" relativeToChangelogFile="true"/>
     <include file="v.1.0.0/change-indexes.xml" relativeToChangelogFile="true"/>
+    <include file="v.1.0.0/change-nullable-tg-account-column.xml" relativeToChangelogFile="true"/>
 
 </databaseChangeLog>
