@@ -47,8 +47,8 @@ public class ChooseDayCallback implements CallbackHandler {
 
         LocalDateTime start = LocalDateTime.now();
         LocalDateTime end = start.toLocalDate().getDayOfMonth() >= 25
-                ? start.plusMonths(1).with(TemporalAdjusters.lastDayOfMonth())
-                : start.plusMonths(1).withDayOfMonth(1);
+                ? start.toLocalDate().plusMonths(1).with(TemporalAdjusters.lastDayOfMonth()).atStartOfDay()
+                : start.toLocalDate().plusMonths(1).withDayOfMonth(1).atStartOfDay();
         List<LocalDate> freeDays = service.getFreeDays(
                 new DateTime(DateTimeUtils.fromLocalDateTimeToDate(start)),
                 new DateTime(DateTimeUtils.fromLocalDateTimeToDate(end)),
