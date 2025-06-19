@@ -21,6 +21,7 @@ import ru.bogdanov.tgbotforbooking.servises.telegram.utils.MessagesText;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 
 @Component
@@ -44,9 +45,13 @@ public class ChooseDayCallback implements CallbackHandler {
             cosmetologyService = userVisitBotService.getServiceById(serviceId).get();
         }
 
+        LocalDateTime start = LocalDateTime.now();
+        LocalDateTime end = start.toLocalDate().getDayOfMonth() >= 25
+                ? start.plusMonths(1).with(TemporalAdjusters.lastDayOfMonth())
+                : start.plusMonths(1).withDayOfMonth(1);
         List<LocalDate> freeDays = service.getFreeDays(
-                new DateTime(DateTimeUtils.fromLocalDateTimeToDate(LocalDateTime.now())),
-                new DateTime(DateTimeUtils.fromLocalDateTimeToDate(LocalDate.now().plusMonths(1).withDayOfMonth(1).atStartOfDay())),
+                new DateTime(DateTimeUtils.fromLocalDateTimeToDate(start)),
+                new DateTime(DateTimeUtils.fromLocalDateTimeToDate(end)),
                 cosmetologyService == null ? 30 : cosmetologyService.getDuration());
 
         long chatId = update.getCallbackQuery().getMessage().getChatId();

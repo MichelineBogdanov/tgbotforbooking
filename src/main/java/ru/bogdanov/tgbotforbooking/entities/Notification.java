@@ -2,12 +2,11 @@ package ru.bogdanov.tgbotforbooking.entities;
 
 import jakarta.persistence.*;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "notifications", schema = "public")
-public class Notification implements Serializable {
+public class Notification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "notifications_seq")

@@ -20,6 +20,7 @@ import ru.bogdanov.tgbotforbooking.servises.telegram.utils.ScheduleUtils;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -36,9 +37,13 @@ public class ScheduleInfoCallback implements CallbackHandler {
 
     @Override
     public SendMessage apply(BaseCallbackData callback, Update update) {
+        LocalDateTime start = LocalDateTime.now();
+        LocalDateTime end = start.toLocalDate().getDayOfMonth() >= 25
+                ? start.plusMonths(1).with(TemporalAdjusters.lastDayOfMonth())
+                : start.plusMonths(1).withDayOfMonth(1);
         List<TimePeriod> freePeriods = service.getFreePeriods(
-                new DateTime(DateTimeUtils.fromLocalDateTimeToDate(LocalDateTime.now())),
-                new DateTime(DateTimeUtils.fromLocalDateTimeToDate(LocalDate.now().plusMonths(1).withDayOfMonth(1).atStartOfDay())));
+                new DateTime(DateTimeUtils.fromLocalDateTimeToDate(start)),
+                new DateTime(DateTimeUtils.fromLocalDateTimeToDate(end)));
         Map<LocalDate, List<LocalTime>> freeSlots = ScheduleUtils.getFreeSlots(freePeriods, 30);
         long chatId = update.getCallbackQuery().getMessage().getChatId();
         String text = getStringForMessage(freeSlots);

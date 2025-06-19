@@ -2,11 +2,9 @@ package ru.bogdanov.tgbotforbooking.entities;
 
 import jakarta.persistence.*;
 
-import java.io.Serializable;
-
 @Entity
 @Table(name = "services", schema = "public")
-public class CosmetologyService implements Serializable {
+public class CosmetologyService {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "services_seq")

@@ -33,6 +33,8 @@ public class GoogleCalendarService implements CalendarAPI {
 
     private final Calendar calendarService;
 
+    public static final String PINK_COLOR_ID = "4";
+
     public static final String TIME_ZONE = "+03:00";
 
     private final String CALENDAR_ID = "primary";
@@ -89,6 +91,7 @@ public class GoogleCalendarService implements CalendarAPI {
 
         Event event = new Event()
                 .setSummary(user.getTgAccount())
+                .setColorId(PINK_COLOR_ID)//pink color
                 .setDescription(description);
         EventDateTime startEvent = new EventDateTime()
                 .setDateTime(new DateTime(start))
