@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import ru.bogdanov.tgbotforbooking.servises.google.GoogleServiceFactory;
+import ru.bogdanov.tgbotforbooking.serviсes.google.GoogleServiceFactory;
 
 @Configuration
 @PropertySource("classpath:application.yaml")

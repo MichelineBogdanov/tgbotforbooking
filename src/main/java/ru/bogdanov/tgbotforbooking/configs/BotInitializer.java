@@ -13,7 +13,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.LongPollingBot;
 import org.telegram.telegrambots.meta.generics.TelegramBot;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
-import ru.bogdanov.tgbotforbooking.servises.telegram.commands.CommandTypes;
+import ru.bogdanov.tgbotforbooking.serviсes.telegram.commands.CommandTypes;
 
 import java.util.ArrayList;
 
