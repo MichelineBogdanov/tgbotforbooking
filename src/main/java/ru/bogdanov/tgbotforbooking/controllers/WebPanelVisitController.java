@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.*;
 import ru.bogdanov.tgbotforbooking.dto.CreateVisitDTO;
 import ru.bogdanov.tgbotforbooking.entities.Visit;
 import ru.bogdanov.tgbotforbooking.exceptions.CreateVisitException;
-import ru.bogdanov.tgbotforbooking.serviсes.bot_services.UserVisitBotService;
-import ru.bogdanov.tgbotforbooking.serviсes.google.CreateVisitResult;
-import ru.bogdanov.tgbotforbooking.serviсes.google.GoogleCalendarService;
-import ru.bogdanov.tgbotforbooking.serviсes.telegram.JsonHandler;
+import ru.bogdanov.tgbotforbooking.services.bot_services.UserVisitBotService;
+import ru.bogdanov.tgbotforbooking.services.google.CreateVisitResult;
+import ru.bogdanov.tgbotforbooking.services.google.GoogleCalendarService;
+import ru.bogdanov.tgbotforbooking.services.telegram.JsonHandler;
 
 import java.time.LocalDate;
 import java.time.LocalTime;

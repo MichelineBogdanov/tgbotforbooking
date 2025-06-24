@@ -1,6 +1,6 @@
 package ru.bogdanov.tgbotforbooking.controllers;
 
-import ru.bogdanov.tgbotforbooking.serviсes.bot_services.UserVisitBotService;
+import ru.bogdanov.tgbotforbooking.services.bot_services.UserVisitBotService;
 
 public abstract class AbstractWebPanelController {
 

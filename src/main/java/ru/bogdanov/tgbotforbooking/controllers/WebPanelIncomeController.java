@@ -6,7 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.bogdanov.tgbotforbooking.serviсes.bot_services.UserVisitBotService;
+import ru.bogdanov.tgbotforbooking.services.bot_services.UserVisitBotService;
 
 import java.time.YearMonth;
 import java.util.List;

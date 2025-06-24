@@ -12,7 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.bogdanov.tgbotforbooking.entities.User;
 import ru.bogdanov.tgbotforbooking.entities.Visit;
-import ru.bogdanov.tgbotforbooking.serviсes.bot_services.UserVisitBotService;
+import ru.bogdanov.tgbotforbooking.services.bot_services.UserVisitBotService;
 
 import java.util.Comparator;
 import java.util.List;

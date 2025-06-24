@@ -9,7 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.bogdanov.tgbotforbooking.entities.CosmetologyService;
-import ru.bogdanov.tgbotforbooking.serviсes.bot_services.UserVisitBotService;
+import ru.bogdanov.tgbotforbooking.services.bot_services.UserVisitBotService;
 
 import java.util.List;
 import java.util.Optional;
