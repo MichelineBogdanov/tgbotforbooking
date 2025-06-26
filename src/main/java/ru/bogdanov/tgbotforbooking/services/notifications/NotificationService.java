@@ -1,5 +1,7 @@
 package ru.bogdanov.tgbotforbooking.services.notifications;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -7,7 +9,6 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import ru.bogdanov.tgbotforbooking.entities.Notification;
 import ru.bogdanov.tgbotforbooking.entities.User;
 import ru.bogdanov.tgbotforbooking.entities.Visit;
-import ru.bogdanov.tgbotforbooking.repositories.NotificationRepository;
 import ru.bogdanov.tgbotforbooking.services.bot_services.UserVisitBotService;
 import ru.bogdanov.tgbotforbooking.services.telegram.BookingTelegramBot;
 import ru.bogdanov.tgbotforbooking.services.telegram.utils.DateTimeUtils;
@@ -19,16 +20,14 @@ import java.util.Optional;
 @Service
 public class NotificationService {
 
-    private final NotificationRepository notificationRepository;
+    private static final Logger log = LoggerFactory.getLogger(NotificationService.class);
 
     private final BookingTelegramBot telegramBot;
 
     public final UserVisitBotService userVisitBotService;
 
-    public NotificationService(NotificationRepository visitRepository,
-                               BookingTelegramBot telegramBot,
+    public NotificationService(BookingTelegramBot telegramBot,
                                UserVisitBotService userVisitBotService) {
-        this.notificationRepository = visitRepository;
         this.telegramBot = telegramBot;
         this.userVisitBotService = userVisitBotService;
     }
@@ -42,7 +41,7 @@ public class NotificationService {
         LocalDateTime now = LocalDateTime.now();
         LocalDateTime from = now.minusMinutes(10);
         LocalDateTime to = now.plusMinutes(10);
-        Optional<Notification> notificationOptional = notificationRepository.findFirstByNotificationDateTimeBetween(from, to);
+        Optional<Notification> notificationOptional = userVisitBotService.getNotificationByDateTimeBetween(from, to);
         if (notificationOptional.isPresent()) {
             Notification notification = notificationOptional.get();
             Visit visit = notification.getVisit();
@@ -59,6 +58,7 @@ public class NotificationService {
         try {
             telegramBot.execute(sendMessage);
         } catch (TelegramApiException e) {
+            log.error("Error while sending notification", e);
             if (e.getMessage().contains("chat not found")
                     || e.getMessage().contains("bot was blocked by the user")) {
                 userVisitBotService.deactivateUserByChatId(sendMessage.getChatId());

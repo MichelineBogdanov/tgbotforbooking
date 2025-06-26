@@ -22,8 +22,11 @@ import java.util.*;
 public class UserVisitBotService {
 
     private final UserRepository userRepository;
+
     private final VisitRepository visitRepository;
+
     private final ServiceRepository serviceRepository;
+
     private final NotificationRepository notificationRepository;
 
     public UserVisitBotService(UserRepository userRepository
@@ -34,6 +37,59 @@ public class UserVisitBotService {
         this.visitRepository = visitRepository;
         this.serviceRepository = serviceRepository;
         this.notificationRepository = notificationRepository;
+    }
+
+    @Transactional
+    public void createUser(User user) {
+        userRepository.save(user);
+    }
+
+    public Optional<User> getUserById(Long userId) {
+        return userRepository.findById(userId);
+    }
+
+    public Optional<User> getUserByTgUserId(Long tgUserId) {
+        return userRepository.findByTgUserId(tgUserId);
+    }
+
+    public boolean isUserExistsByTgUserId(Long tgUserId) {
+        return userRepository.existsByTgUserId(tgUserId);
+    }
+
+    public Optional<User> getUserByChatId(Long chatId) {
+        return userRepository.findByChatId(chatId);
+    }
+
+    public Page<User> getAllUsersPaginated(Pageable pageable) {
+        return userRepository.findAll(pageable);
+    }
+
+    @Transactional
+    public User updateUser(User user) {
+        return userRepository.save(user);
+    }
+
+    @Transactional
+    public boolean switchUserNotifications(Long tgUserId) {
+        Optional<User> userOptional = getUserByTgUserId(tgUserId);
+        boolean notificationsOn = false;
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            notificationsOn = !user.getNotificationsOn();
+            user.setNotificationsOn(notificationsOn);
+            userRepository.save(user);
+        }
+        return notificationsOn;
+    }
+
+    @Transactional
+    public void deactivateUserByChatId(String chatId) {
+        Optional<User> userOptional = getUserByChatId(Long.parseLong(chatId));
+        if (userOptional.isPresent()) {
+            User user = userOptional.get();
+            user.setNotificationsOn(false);
+            userRepository.save(user);
+        }
     }
 
     @Transactional
@@ -86,36 +142,6 @@ public class UserVisitBotService {
         return optionalVisit;
     }
 
-    @Transactional
-    public void createUser(User user) {
-        userRepository.save(user);
-    }
-
-    public Optional<User> getUserById(Long userId) {
-        return userRepository.findById(userId);
-    }
-
-    public Optional<User> getUserByTgUserId(Long tgUserId) {
-        return userRepository.findByTgUserId(tgUserId);
-    }
-
-    public boolean isUserExistsByTgUserId(Long tgUserId) {
-        return userRepository.existsByTgUserId(tgUserId);
-    }
-
-    public Optional<User> getUserByChatId(Long chatId) {
-        return userRepository.findByChatId(chatId);
-    }
-
-    public Page<User> getAllUsersPaginated(Pageable pageable) {
-        return userRepository.findAll(pageable);
-    }
-
-    @Transactional
-    public User updateUser(User user) {
-        return userRepository.save(user);
-    }
-
     public List<CosmetologyService> findAllServices() {
         ArrayList<CosmetologyService> services = new ArrayList<>(serviceRepository.findAll());
         services.sort(Comparator.comparing(CosmetologyService::getId));
@@ -140,27 +166,8 @@ public class UserVisitBotService {
         serviceRepository.deleteById(serviceId);
     }
 
-    @Transactional
-    public boolean switchUserNotifications(Long tgUserId) {
-        Optional<User> userOptional = getUserByTgUserId(tgUserId);
-        boolean notificationsOn = false;
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            notificationsOn = !user.getNotificationsOn();
-            user.setNotificationsOn(notificationsOn);
-            userRepository.save(user);
-        }
-        return notificationsOn;
-    }
-
-    @Transactional
-    public void deactivateUserByChatId(String chatId) {
-        Optional<User> userOptional = getUserByChatId(Long.parseLong(chatId));
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            user.setNotificationsOn(false);
-            userRepository.save(user);
-        }
+    public Optional<Notification> getNotificationByDateTimeBetween(LocalDateTime from, LocalDateTime to) {
+        return notificationRepository.findFirstByNotificationDateTimeBetween(from, to);
     }
 
     @Transactional
