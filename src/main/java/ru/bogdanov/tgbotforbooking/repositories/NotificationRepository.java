@@ -10,6 +10,6 @@ import java.util.Optional;
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
 
-    Optional<Notification> findFirstByNotificationDateTimeBetween(LocalDateTime now, LocalDateTime oneHourLater);
+    Optional<Notification> findFirstByNotificationDateTimeBetween(LocalDateTime from, LocalDateTime to);
 
 }
