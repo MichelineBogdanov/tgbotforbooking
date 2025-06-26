@@ -94,8 +94,8 @@ public class UserVisitBotService {
 
     @Transactional
     public boolean checkVisitPresent(LocalDateTime visitDateTime, LocalDateTime endVisitDateTime) {
-        return visitRepository.existsByVisitDateTimeBetween(visitDateTime, endVisitDateTime)
-                && visitRepository.existsByEndVisitDateTimeBetween(visitDateTime, endVisitDateTime);
+        return visitRepository.existsByVisitDateTimeGreaterThanAndVisitDateTimeLessThan(visitDateTime, endVisitDateTime)
+                && visitRepository.existsByEndVisitDateTimeGreaterThanAndEndVisitDateTimeLessThan(visitDateTime, endVisitDateTime);
     }
 
     public Integer checkCountOfVisitsPresent(Long userId, LocalDateTime visitDateTime) {

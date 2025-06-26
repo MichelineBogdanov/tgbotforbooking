@@ -16,9 +16,9 @@ public interface VisitRepository extends JpaRepository<Visit, Long> {
 
     List<Visit> findVisitsByVisitDateTimeBetween(LocalDateTime start, LocalDateTime end);
 
-    boolean existsByVisitDateTimeBetween(LocalDateTime start, LocalDateTime end);
+    boolean existsByVisitDateTimeGreaterThanAndVisitDateTimeLessThan(LocalDateTime start, LocalDateTime end);
 
-    boolean existsByEndVisitDateTimeBetween(LocalDateTime start, LocalDateTime end);
+    boolean existsByEndVisitDateTimeGreaterThanAndEndVisitDateTimeLessThan(LocalDateTime start, LocalDateTime end);
 
     Integer countByUserIdAndVisitDateTimeAfter(Long userId, LocalDateTime visitDateTime);
 
