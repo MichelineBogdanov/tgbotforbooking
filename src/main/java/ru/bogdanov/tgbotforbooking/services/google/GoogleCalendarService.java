@@ -113,14 +113,14 @@ public class GoogleCalendarService implements CalendarAPI {
             visit.setCosmetologyService(service);
             Visit savedVisit = userVisitBotService.createVisit(visit);
 
-            CompletableFuture.runAsync(() -> {
+            CompletableFuture.supplyAsync(() -> {
                 try {
-                    Event execute = calendarService.events().insert(CALENDAR_ID, event).execute();
-                    userVisitBotService.updateGoogleEventIdById(execute.getId(), savedVisit.getId());
+                    return calendarService.events().insert(CALENDAR_ID, event).execute();
                 } catch (IOException e) {
                     log.error(e.getMessage());
+                    throw new CreateVisitException(MessagesText.ERROR_BOOKING_TEXT);
                 }
-            });
+            }).thenAccept(savedEvent -> userVisitBotService.updateGoogleEventIdById(savedEvent.getId(), savedVisit.getId()));
 
             String message = String.format(MessagesText.SUCCESS_BOOKING_TEXT
                     , user.getTgAccount()
