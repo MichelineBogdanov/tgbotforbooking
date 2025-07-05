@@ -103,7 +103,7 @@ public class UserVisitBotService {
     }
 
     @Transactional
-    public void createVisit(Visit visit) {
+    public Visit createVisit(Visit visit) {
         Visit savedVisit = visitRepository.save(visit);
         User user = savedVisit.getUser();
         LocalDateTime notificationDate = savedVisit.getVisitDateTime().minusDays(1);
@@ -113,6 +113,17 @@ public class UserVisitBotService {
             notification.setVisit(savedVisit);
             notification.setNotificationDateTime(notificationDate);
             notificationRepository.save(notification);
+        }
+        return savedVisit;
+    }
+
+    @Transactional
+    public void updateGoogleEventIdById(String googleEventId, Long id) {
+        Optional<Visit> optionalVisit = visitRepository.findById(id);
+        if (optionalVisit.isPresent()) {
+            Visit visit = optionalVisit.get();
+            visit.setGoogleEventId(googleEventId);
+            visitRepository.save(visit);
         }
     }
 

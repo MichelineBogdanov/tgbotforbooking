@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -64,6 +65,9 @@ public class GoogleCalendarService implements CalendarAPI {
     @Override
     public CreateVisitResult createVisit(LocalDate date, LocalTime time, Long tgUserId, Long serviceId) {
         Optional<User> userOptional = userVisitBotService.getUserByTgUserId(tgUserId);
+        if (userOptional.isEmpty()) {
+            throw new CreateVisitException(MessagesText.NO_USER_PRESENT);
+        }
         User user = userOptional.get();
         CosmetologyService service = null;
         Integer duration = 60;
@@ -102,17 +106,22 @@ public class GoogleCalendarService implements CalendarAPI {
                 .setTimeZone(TIME_ZONE);
         event.setEnd(endEvent);
         try {
-            Event execute = calendarService.events()
-                    .insert(CALENDAR_ID, event)
-                    .setSendUpdates("all")
-                    .execute();
             Visit visit = new Visit();
-            visit.setGoogleEventId(execute.getId());
             visit.setVisitDateTime(LocalDateTime.of(date, time));
             visit.setEndVisitDateTime(LocalDateTime.of(date, time).plusMinutes(duration));
             visit.setUser(user);
             visit.setCosmetologyService(service);
-            userVisitBotService.createVisit(visit);
+            Visit savedVisit = userVisitBotService.createVisit(visit);
+
+            CompletableFuture.runAsync(() -> {
+                try {
+                    Event execute = calendarService.events().insert(CALENDAR_ID, event).execute();
+                    userVisitBotService.updateGoogleEventIdById(execute.getId(), savedVisit.getId());
+                } catch (IOException e) {
+                    log.error(e.getMessage());
+                }
+            });
+
             String message = String.format(MessagesText.SUCCESS_BOOKING_TEXT
                     , user.getTgAccount()
                     , DateTimeUtils.fromLocalDateTimeToDateTimeString(LocalDateTime.of(date, time))
@@ -120,7 +129,7 @@ public class GoogleCalendarService implements CalendarAPI {
                             ? MessagesText.NO_SERVICE_CHOOSE_TEXT
                             : String.join(" : ", service.getName(), service.getPrice().toString()));
             return new CreateVisitResult(message);
-        } catch (IOException e) {
+        } catch (RuntimeException e) {
             log.error(e.getMessage());
             throw new CreateVisitException(MessagesText.ERROR_BOOKING_TEXT);
         }
@@ -129,13 +138,13 @@ public class GoogleCalendarService implements CalendarAPI {
     @Override
     public Optional<Visit> deleteVisit(Long id) {
         Optional<Visit> optionalVisit = userVisitBotService.deleteVisitById(id);
-        try {
-            if (optionalVisit.isPresent()) {
-                calendarService.events().delete(CALENDAR_ID, optionalVisit.get().getGoogleEventId()).execute();
+        optionalVisit.ifPresent(visit -> CompletableFuture.runAsync(() -> {
+            try {
+                calendarService.events().delete(CALENDAR_ID, visit.getGoogleEventId()).execute();
+            } catch (IOException e) {
+                log.error(e.getMessage());
             }
-        } catch (IOException e) {
-            log.error(e.getMessage());
-        }
+        }));
         return optionalVisit;
     }
 
