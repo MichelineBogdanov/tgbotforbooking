@@ -98,7 +98,11 @@ public class Visit {
         return "Visit{" +
                 "id=" + id +
                 ", visitDateTime=" + visitDateTime +
+                ", endVisitDateTime=" + endVisitDateTime +
+                ", user=" + user +
                 ", googleEventId='" + googleEventId + '\'' +
+                ", cosmetologyService=" + cosmetologyService +
+                ", notification=" + notification +
                 '}';
     }
 }

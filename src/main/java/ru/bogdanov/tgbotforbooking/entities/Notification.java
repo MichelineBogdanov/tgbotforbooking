@@ -47,4 +47,13 @@ public class Notification {
     public void setVisit(Visit visit) {
         this.visit = visit;
     }
+
+    @Override
+    public String toString() {
+        return "Notification{" +
+                "id=" + id +
+                ", notificationDateTime=" + notificationDateTime +
+                ", visit=" + visit +
+                '}';
+    }
 }

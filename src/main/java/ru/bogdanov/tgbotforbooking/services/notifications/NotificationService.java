@@ -32,7 +32,7 @@ public class NotificationService {
         this.userVisitBotService = userVisitBotService;
     }
 
-    @Scheduled(cron = "0 30/30 14-19 * * ?")
+    @Scheduled(cron = "0 0/30 14-20 * * ?")
     public void taskAtHalfHour() {
         sendMessageByNotification();
     }
@@ -44,6 +44,7 @@ public class NotificationService {
         Optional<Notification> notificationOptional = userVisitBotService.getNotificationByDateTimeBetween(from, to);
         if (notificationOptional.isPresent()) {
             Notification notification = notificationOptional.get();
+            log.info("Notification was found: {}", notification);
             Visit visit = notification.getVisit();
             User user = visit.getUser();
             if (user.getNotificationsOn()) {
@@ -57,6 +58,7 @@ public class NotificationService {
     private void sendMessage(SendMessage sendMessage) {
         try {
             telegramBot.execute(sendMessage);
+            log.info("Notification was send to user (chatId: {}, text: {})", sendMessage.getChatId(), sendMessage.getText());
         } catch (TelegramApiException e) {
             log.error("Error while sending notification", e);
             if (e.getMessage().contains("chat not found")
