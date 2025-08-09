@@ -77,7 +77,6 @@ public class UserVisitBotService {
             User user = userOptional.get();
             notificationsOn = !user.getNotificationsOn();
             user.setNotificationsOn(notificationsOn);
-            userRepository.save(user);
         }
         return notificationsOn;
     }
@@ -88,11 +87,9 @@ public class UserVisitBotService {
         if (userOptional.isPresent()) {
             User user = userOptional.get();
             user.setNotificationsOn(false);
-            userRepository.save(user);
         }
     }
 
-    @Transactional
     public boolean checkVisitPresent(LocalDateTime visitDateTime, LocalDateTime endVisitDateTime) {
         return visitRepository.existsByVisitDateTimeGreaterThanAndVisitDateTimeLessThan(visitDateTime, endVisitDateTime)
                 && visitRepository.existsByEndVisitDateTimeGreaterThanAndEndVisitDateTimeLessThan(visitDateTime, endVisitDateTime);
@@ -123,7 +120,6 @@ public class UserVisitBotService {
         if (optionalVisit.isPresent()) {
             Visit visit = optionalVisit.get();
             visit.setGoogleEventId(googleEventId);
-            visitRepository.save(visit);
         }
     }
 
