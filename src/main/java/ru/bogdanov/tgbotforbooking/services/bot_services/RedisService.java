@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 public class RedisService {
 
     private final String USERS = "user_ids";
-
     private final StringRedisTemplate redisTemplate;
 
     public RedisService(StringRedisTemplate redisTemplate) {

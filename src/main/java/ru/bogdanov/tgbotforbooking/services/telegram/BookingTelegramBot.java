@@ -23,24 +23,21 @@ public class BookingTelegramBot extends TelegramLongPollingBot {
 
     private static final Logger log = LoggerFactory.getLogger(BookingTelegramBot.class);
 
-    @Value("${bot.name}")
-    String botName;
+    private final String botName;
+    private final CommandsHandler commandsHandler;
+    private final CallbacksHandler callbacksHandler;
+    private final UserVisitBotService userVisitBotService;
+    private final RedisService redisService;
 
-    @Value("${bot.token}")
-    String token;
-
-    public final CommandsHandler commandsHandler;
-
-    public final CallbacksHandler callbacksHandler;
-
-    public final UserVisitBotService userVisitBotService;
-
-    public final RedisService redisService;
-
-    public BookingTelegramBot(CommandsHandler commandsHandler
-            , CallbacksHandler callbacksHandler
-            , UserVisitBotService userVisitBotService
-            , RedisService redisService) {
+    public BookingTelegramBot(
+            @Value("${bot.token}") String botToken,
+            @Value("${bot.name}") String botName,
+            CommandsHandler commandsHandler,
+            CallbacksHandler callbacksHandler,
+            UserVisitBotService userVisitBotService,
+            RedisService redisService) {
+        super(botToken);
+        this.botName = botName;
         this.commandsHandler = commandsHandler;
         this.callbacksHandler = callbacksHandler;
         this.userVisitBotService = userVisitBotService;
@@ -53,15 +50,10 @@ public class BookingTelegramBot extends TelegramLongPollingBot {
     }
 
     @Override
-    public String getBotToken() {
-        return token;
-    }
-
-    @Override
     public void onUpdateReceived(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
             String chatId = update.getMessage().getChatId().toString();
-            if (update.getMessage().getText().startsWith("/")) {
+            if (update.getMessage().hasText()) {
                 registerUserIfNotExist(update);
                 sendMessage(commandsHandler.handleCommands(update));
             } else {
@@ -115,4 +107,5 @@ public class BookingTelegramBot extends TelegramLongPollingBot {
             log.error(e.getMessage());
         }
     }
+
 }

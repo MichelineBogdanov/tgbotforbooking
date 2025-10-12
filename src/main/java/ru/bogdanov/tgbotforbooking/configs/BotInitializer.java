@@ -1,6 +1,5 @@
 package ru.bogdanov.tgbotforbooking.configs;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -22,7 +21,6 @@ public class BotInitializer {
 
     private final TelegramBot telegramBot;
 
-    @Autowired
     public BotInitializer(TelegramBot telegramBot) {
         this.telegramBot = telegramBot;
     }
@@ -34,9 +32,6 @@ public class BotInitializer {
             telegramBotsApi.registerBot((LongPollingBot) telegramBot);
             ArrayList<BotCommand> commands = new ArrayList<>() {{
                 add(new BotCommand(CommandTypes.START.getCommand(), CommandTypes.START.getDescription()));
-                add(new BotCommand(CommandTypes.GENERAL_INFO.getCommand(), CommandTypes.GENERAL_INFO.getDescription()));
-                add(new BotCommand(CommandTypes.ACCOUNT.getCommand(), CommandTypes.ACCOUNT.getDescription()));
-                add(new BotCommand(CommandTypes.VISIT_DEALS.getCommand(), CommandTypes.VISIT_DEALS.getDescription()));
             }};
             ((TelegramLongPollingBot) telegramBot).execute(new SetMyCommands(commands, new BotCommandScopeDefault(), null));
         } catch (TelegramApiException e) {

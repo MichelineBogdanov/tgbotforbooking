@@ -33,29 +33,23 @@ public class GoogleServiceFactory {
      * Application name.
      */
     private static final String APPLICATION_NAME = "TGBotForBooking";
-
     /**
      * Global instance of the JSON factory.
      */
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
-
     /**
      * Global instance of the scopes required by this quickstart.
      * If modifying these scopes, delete your previously saved tokens/ folder.
      */
     private static final List<String> SCOPES = Collections.singletonList(CalendarScopes.CALENDAR);
-
     private static final String ACCESS_TYPE = "offline";
-
     /**
      * Directory to store authorization tokens for this application.
      */
     @Value("${google.calendar.tokens_path}")
     private String tokensPath;
-
     @Value("${google.calendar.credentials_file_path}")
     private String credentialsFilePath;
-
     @Value("${google.calendar.user_id}")
     private String userId;
     private static final int PORT = 8888;

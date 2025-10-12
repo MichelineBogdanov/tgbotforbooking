@@ -22,11 +22,8 @@ import java.util.*;
 public class UserVisitBotService {
 
     private final UserRepository userRepository;
-
     private final VisitRepository visitRepository;
-
     private final ServiceRepository serviceRepository;
-
     private final NotificationRepository notificationRepository;
 
     public UserVisitBotService(UserRepository userRepository
@@ -84,10 +81,7 @@ public class UserVisitBotService {
     @Transactional
     public void deactivateUserByChatId(String chatId) {
         Optional<User> userOptional = getUserByChatId(Long.parseLong(chatId));
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-            user.setNotificationsOn(false);
-        }
+        userOptional.ifPresent(user -> user.setNotificationsOn(false));
     }
 
     public boolean checkVisitPresent(LocalDateTime visitDateTime, LocalDateTime endVisitDateTime) {
@@ -117,10 +111,7 @@ public class UserVisitBotService {
     @Transactional
     public void updateGoogleEventIdById(String googleEventId, Long id) {
         Optional<Visit> optionalVisit = visitRepository.findById(id);
-        if (optionalVisit.isPresent()) {
-            Visit visit = optionalVisit.get();
-            visit.setGoogleEventId(googleEventId);
-        }
+        optionalVisit.ifPresent(visit -> visit.setGoogleEventId(googleEventId));
     }
 
     public List<Visit> getFutureVisitsByTgUserIdName(Long tgUserId) {

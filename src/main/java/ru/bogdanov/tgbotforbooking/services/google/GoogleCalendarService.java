@@ -31,13 +31,9 @@ public class GoogleCalendarService implements CalendarAPI {
     private static final Logger log = LoggerFactory.getLogger(GoogleCalendarService.class);
 
     private final UserVisitBotService userVisitBotService;
-
     private final Calendar calendarService;
-
     public static final String PINK_COLOR_ID = "4";
-
     public static final String TIME_ZONE = "+03:00";
-
     private final String CALENDAR_ID = "primary";
 
     public GoogleCalendarService(UserVisitBotService userVisitBotService

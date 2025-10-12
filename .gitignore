@@ -4,6 +4,7 @@ target/
 !**/src/test/**/target/
 /tokens/
 !.mvn/wrapper/maven-wrapper.jar
+/src/main/resources/application-local.yaml
 /src/main/resources/liquibase-out/
 /src/main/resources/liquibase.properties
 .env

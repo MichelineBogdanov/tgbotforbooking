@@ -23,7 +23,6 @@ public class NotificationService {
     private static final Logger log = LoggerFactory.getLogger(NotificationService.class);
 
     private final BookingTelegramBot telegramBot;
-
     public final UserVisitBotService userVisitBotService;
 
     public NotificationService(BookingTelegramBot telegramBot,

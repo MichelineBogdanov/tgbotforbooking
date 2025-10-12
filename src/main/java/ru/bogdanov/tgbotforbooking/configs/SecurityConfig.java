@@ -20,7 +20,6 @@ public class SecurityConfig {
 
     @Value("${webPanel.userName}")
     private String userName;
-
     @Value("${webPanel.pass}")
     private String pass;
 
