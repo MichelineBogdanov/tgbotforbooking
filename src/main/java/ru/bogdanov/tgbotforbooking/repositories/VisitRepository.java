@@ -1,6 +1,8 @@
 package ru.bogdanov.tgbotforbooking.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ru.bogdanov.tgbotforbooking.entities.Visit;
 
@@ -16,9 +18,9 @@ public interface VisitRepository extends JpaRepository<Visit, Long> {
 
     List<Visit> findVisitsByVisitDateTimeBetween(LocalDateTime start, LocalDateTime end);
 
-    boolean existsByVisitDateTimeGreaterThanAndVisitDateTimeLessThan(LocalDateTime start, LocalDateTime end);
-
-    boolean existsByEndVisitDateTimeGreaterThanAndEndVisitDateTimeLessThan(LocalDateTime start, LocalDateTime end);
+    @Query("SELECT COUNT(v) > 0 FROM Visit v WHERE v.visitDateTime < :endTime AND v.endVisitDateTime > :startTime")
+    boolean existsOverlappingVisit(@Param("startTime") LocalDateTime startTime,
+                                   @Param("endTime") LocalDateTime endTime);
 
     Integer countByUserIdAndVisitDateTimeAfter(Long userId, LocalDateTime visitDateTime);
 

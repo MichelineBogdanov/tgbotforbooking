@@ -85,8 +85,7 @@ public class UserVisitBotService {
     }
 
     public boolean checkVisitPresent(LocalDateTime visitDateTime, LocalDateTime endVisitDateTime) {
-        return visitRepository.existsByVisitDateTimeGreaterThanAndVisitDateTimeLessThan(visitDateTime, endVisitDateTime)
-                && visitRepository.existsByEndVisitDateTimeGreaterThanAndEndVisitDateTimeLessThan(visitDateTime, endVisitDateTime);
+        return visitRepository.existsOverlappingVisit(visitDateTime, endVisitDateTime);
     }
 
     public Integer checkCountOfVisitsPresent(Long userId, LocalDateTime visitDateTime) {
