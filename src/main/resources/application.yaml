@@ -26,9 +26,9 @@ panel:
   user-name: '${WP_USERNAME}'
   pass: '${WP_PASS}'
 schedule:
-  start-day: '${SCHEDULE_START_DAY:"14:30"}'
-  end-day: '${SCHEDULE_START_DAY:"19:30"}'
-  slot-duration: '${SLOT_DURATION:"PT30M"}'
+  start-day: '${SCHEDULE_START_DAY:14:30}'
+  end-day: '${SCHEDULE_START_DAY:19:30}'
+  slot-duration: '${SLOT_DURATION:PT30M}'
 logging:
   level:
     org:
