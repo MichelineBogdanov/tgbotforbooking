@@ -28,6 +28,7 @@
                 <th>Длительность услуги</th>
                 <th>Цена услуги</th>
                 <th>Время нотификации</th>
+                <th>Дата создания</th>
                 <th>Действия</th>
             </tr>
             </thead>
@@ -39,6 +40,7 @@
                 <td th:text="${visit.cosmetologyService} != null ? ${visit.cosmetologyService.duration} : '-'"></td>
                 <td th:text="${visit.cosmetologyService != null ? #numbers.formatDecimal(visit.cosmetologyService.price, 1, 2) : '-'}"></td>
                 <td th:text="${visit.notification != null ? #temporals.format(visit.notification.notificationDateTime, 'dd-MM-yyyy HH:mm') : '-'}"></td>
+                <td th:text="${#temporals.format(visit.createAt, 'dd-MM-yyyy HH:mm')}"></td>
                 <td>
                     <button class="delete-btn" onclick="deleteVisit(this)">Удалить</button>
                 </td>

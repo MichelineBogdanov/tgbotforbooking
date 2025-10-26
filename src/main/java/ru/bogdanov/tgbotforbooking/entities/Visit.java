@@ -1,6 +1,7 @@
 package ru.bogdanov.tgbotforbooking.entities;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -33,6 +34,10 @@ public class Visit {
 
     @OneToOne(mappedBy = "visit", cascade = CascadeType.ALL)
     private Notification notification;
+
+    @CreationTimestamp
+    @Column(name = "create_at", nullable = false, updatable = false)
+    private LocalDateTime createAt;
 
     public Visit() {
     }
@@ -93,6 +98,14 @@ public class Visit {
         this.notification = notification;
     }
 
+    public LocalDateTime getCreateAt() {
+        return createAt;
+    }
+
+    public void setCreateAt(LocalDateTime createAt) {
+        this.createAt = createAt;
+    }
+
     @Override
     public String toString() {
         return "Visit{" +
@@ -103,6 +116,7 @@ public class Visit {
                 ", googleEventId='" + googleEventId + '\'' +
                 ", cosmetologyService=" + cosmetologyService +
                 ", notification=" + notification +
+                ", createAt=" + createAt +
                 '}';
     }
 }
