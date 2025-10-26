@@ -13,7 +13,7 @@ import ru.bogdanov.tgbotforbooking.exceptions.CreateVisitException;
 import ru.bogdanov.tgbotforbooking.services.bot_services.UserVisitBotService;
 import ru.bogdanov.tgbotforbooking.services.telegram.utils.DateTimeUtils;
 import ru.bogdanov.tgbotforbooking.services.telegram.utils.MessagesText;
-import ru.bogdanov.tgbotforbooking.services.telegram.utils.ScheduleUtils;
+import ru.bogdanov.tgbotforbooking.services.telegram.utils.ScheduleService;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -31,14 +31,17 @@ public class GoogleCalendarService implements CalendarAPI {
     private static final Logger log = LoggerFactory.getLogger(GoogleCalendarService.class);
 
     private final UserVisitBotService userVisitBotService;
+    private final ScheduleService scheduleService;
     private final Calendar calendarService;
     public static final String PINK_COLOR_ID = "4";
     public static final String TIME_ZONE = "+03:00";
     private final String CALENDAR_ID = "primary";
 
     public GoogleCalendarService(UserVisitBotService userVisitBotService
+            , ScheduleService scheduleService
             , Calendar calendarService) {
         this.userVisitBotService = userVisitBotService;
+        this.scheduleService = scheduleService;
         this.calendarService = calendarService;
     }
 
@@ -91,7 +94,7 @@ public class GoogleCalendarService implements CalendarAPI {
 
         Event event = new Event()
                 .setSummary(user.getTgAccount())
-                .setColorId(PINK_COLOR_ID)//pink color
+                .setColorId(PINK_COLOR_ID)
                 .setDescription(description);
         EventDateTime startEvent = new EventDateTime()
                 .setDateTime(new DateTime(start))
@@ -152,14 +155,14 @@ public class GoogleCalendarService implements CalendarAPI {
     @Override
     public List<LocalDate> getFreeDays(DateTime start, DateTime end, Integer duration) {
         List<TimePeriod> freePeriods = getFreePeriods(start, end);
-        Map<LocalDate, List<LocalTime>> freeSlots = ScheduleUtils.getFreeSlots(freePeriods, duration);
+        Map<LocalDate, List<LocalTime>> freeSlots = scheduleService.getFreeSlots(freePeriods, duration);
         return freeSlots.keySet().stream().sorted(LocalDate::compareTo).toList();
     }
 
     @Override
     public List<LocalTime> getFreeSlots(DateTime start, DateTime end, Integer duration) {
         List<TimePeriod> freePeriods = getFreePeriods(start, end);
-        Map<LocalDate, List<LocalTime>> freeSlots = ScheduleUtils.getFreeSlots(freePeriods, duration);
+        Map<LocalDate, List<LocalTime>> freeSlots = scheduleService.getFreeSlots(freePeriods, duration);
         for (LocalDate localDate : freeSlots.keySet()) {
             return freeSlots.get(localDate);
         }

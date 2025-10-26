@@ -1,7 +1,11 @@
 package ru.bogdanov.tgbotforbooking.services.telegram.utils;
 
 import com.google.api.services.calendar.model.TimePeriod;
+import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -10,24 +14,28 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ScheduleUtils {
+@Service
+public class ScheduleService {
 
-    private static final LocalTime startOfDay = LocalTime.of(14, 30, 0, 1);
-    private static final LocalTime endOfDay = LocalTime.of(19, 29);
+    @Value("${schedule.start-day}")
+    private LocalTime startOfDay;
+    @Value("${schedule.end-day}")
+    private LocalTime endOfDay;
+    @Value("${schedule.slot-duration}")
+    private Duration slotDuration;
 
-    private static final List<LocalTime> slots = List.of(
-            LocalTime.of(14, 30, 1)
-            , LocalTime.of(15, 0, 1)
-            , LocalTime.of(15, 30, 1)
-            , LocalTime.of(16, 0, 1)
-            , LocalTime.of(16, 30, 1)
-            , LocalTime.of(17, 0, 1)
-            , LocalTime.of(17, 30, 1)
-            , LocalTime.of(18, 0, 1)
-            , LocalTime.of(18, 30, 1)
-            , LocalTime.of(19, 0, 1));
+    private static final List<LocalTime> slots = new ArrayList<>();
 
-    public static Map<LocalDate, List<LocalTime>> getFreeSlots(List<TimePeriod> freeIntervals, Integer duration) {
+    @PostConstruct
+    public void init() {
+        LocalTime current = startOfDay;
+        while (current.isBefore(endOfDay)) {
+            slots.add(current);
+            current = current.plus(slotDuration);
+        }
+    }
+
+    public Map<LocalDate, List<LocalTime>> getFreeSlots(List<TimePeriod> freeIntervals, Integer duration) {
         List<LocalDateTimePeriod> localDateTimePeriods = map(freeIntervals);
         List<LocalDateTimePeriod> dividedPeriods = new ArrayList<>();
         for (LocalDateTimePeriod localDateTimePeriod : localDateTimePeriods) {
@@ -39,9 +47,9 @@ public class ScheduleUtils {
             LocalDate key = dividedPeriod.start().toLocalDate();
             collect.putIfAbsent(key, new ArrayList<>());
             for (LocalTime slot : slots) {
-                if (slot.isAfter(dividedPeriod.start().toLocalTime())
-                        && slot.plusMinutes(duration - 1).isBefore(dividedPeriod.end().toLocalTime())) {
-                    collect.get(key).add(slot.minusSeconds(1));
+                if (!slot.isBefore(dividedPeriod.start().toLocalTime())
+                        && !slot.plusMinutes(duration).isAfter(dividedPeriod.end().toLocalTime())) {
+                    collect.get(key).add(slot);
                 }
             }
             if (collect.get(key).isEmpty()) {
@@ -51,17 +59,15 @@ public class ScheduleUtils {
         return collect;
     }
 
-    public static boolean isSlotPresentIn(LocalTime slot, List<LocalTime> times) {
+    public boolean isSlotPresentIn(LocalTime slot, List<LocalTime> times) {
         return times.stream().anyMatch(currentSlot -> currentSlot.equals(slot));
     }
 
-    public static List<LocalTime> getSlots() {
-        return slots.stream()
-                .map(time -> time.minusSeconds(1))
-                .toList();
+    public List<LocalTime> getSlots() {
+        return slots;
     }
 
-    private static List<LocalDateTimePeriod> map(List<TimePeriod> freeIntervals) {
+    private List<LocalDateTimePeriod> map(List<TimePeriod> freeIntervals) {
         return freeIntervals.stream()
                 .map(timePeriod -> new LocalDateTimePeriod(
                         DateTimeUtils.parseDateTimeFromRFC3339(timePeriod.getStart().toStringRfc3339()),
@@ -69,16 +75,18 @@ public class ScheduleUtils {
                 .toList();
     }
 
-    private static List<LocalDateTimePeriod> divideByDays(LocalDateTimePeriod period) {
+    private List<LocalDateTimePeriod> divideByDays(LocalDateTimePeriod period) {
         List<LocalDateTimePeriod> intervals = new ArrayList<>();
-        LocalDateTime currentStart = period.start();
+        LocalDateTime currentStart = period.start().isAfter(period.start().toLocalDate().atTime(startOfDay))
+                ? period.start()
+                : period.start().toLocalDate().atTime(startOfDay);
         while (!currentStart.toLocalDate().isAfter(period.end().toLocalDate())) {
-            LocalDateTime currentEnd = currentStart.toLocalDate().atTime(endOfDay.plusMinutes(2));
+            LocalDateTime currentEnd = currentStart.toLocalDate().atTime(endOfDay);
             if (currentEnd.isAfter(period.end())) {
                 currentEnd = period.end();
             }
             intervals.add(new LocalDateTimePeriod(currentStart, currentEnd));
-            currentStart = currentStart.toLocalDate().plusDays(1).atStartOfDay();
+            currentStart = currentStart.toLocalDate().plusDays(1).atTime(startOfDay);
         }
         intervals.removeIf(next -> next.start().equals(next.end())
                 || next.start().isAfter(LocalDateTime.of(next.start().toLocalDate(), endOfDay))

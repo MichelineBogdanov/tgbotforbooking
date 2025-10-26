@@ -18,9 +18,9 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Value("${webPanel.userName}")
+    @Value("${panel.user-name}")
     private String userName;
-    @Value("${webPanel.pass}")
+    @Value("${panel.pass}")
     private String pass;
 
     @Bean

@@ -22,9 +22,13 @@ spring:
     contexts: update
 bot:
   name: tgbotforbooking
-webPanel:
-  userName: '${WP_USERNAME}'
+panel:
+  user-name: '${WP_USERNAME}'
   pass: '${WP_PASS}'
+schedule:
+  start-day: '${SCHEDULE_START_DAY:"14:30"}'
+  end-day: '${SCHEDULE_START_DAY:"19:30"}'
+  slot-duration: '${SLOT_DURATION:"PT30M"}'
 logging:
   level:
     org:
@@ -57,6 +61,6 @@ server:
     key-store-password: '${KS_PASS}'
 google:
   calendar:
-    user_id: '${GOOGLE_USER_ID}'
-    credentials_file_path: credentials.json
-    tokens_path: tokens
+    user-id: '${GOOGLE_USER_ID}'
+    credentials-file-path: credentials.json
+    tokens-path: tokens

@@ -15,7 +15,7 @@ import ru.bogdanov.tgbotforbooking.services.telegram.commands.CommandTypes;
 import ru.bogdanov.tgbotforbooking.services.telegram.utils.DateTimeUtils;
 import ru.bogdanov.tgbotforbooking.services.telegram.utils.KeyboardBuilder;
 import ru.bogdanov.tgbotforbooking.services.telegram.utils.MessagesText;
-import ru.bogdanov.tgbotforbooking.services.telegram.utils.ScheduleUtils;
+import ru.bogdanov.tgbotforbooking.services.telegram.utils.ScheduleService;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -30,9 +30,12 @@ import java.util.stream.Collectors;
 public class ScheduleInfoCallback implements CallbackHandler {
 
     private final CalendarAPI service;
+    private final ScheduleService scheduleService;
 
-    public ScheduleInfoCallback(@Qualifier("googleCalendarService") CalendarAPI service) {
+    public ScheduleInfoCallback(@Qualifier("googleCalendarService") CalendarAPI service
+            , ScheduleService scheduleService) {
         this.service = service;
+        this.scheduleService = scheduleService;
     }
 
     @Override
@@ -44,7 +47,7 @@ public class ScheduleInfoCallback implements CallbackHandler {
         List<TimePeriod> freePeriods = service.getFreePeriods(
                 new DateTime(DateTimeUtils.fromLocalDateTimeToDate(start)),
                 new DateTime(DateTimeUtils.fromLocalDateTimeToDate(end)));
-        Map<LocalDate, List<LocalTime>> freeSlots = ScheduleUtils.getFreeSlots(freePeriods, 30);
+        Map<LocalDate, List<LocalTime>> freeSlots = scheduleService.getFreeSlots(freePeriods, 30);
         long chatId = update.getCallbackQuery().getMessage().getChatId();
         String text = getStringForMessage(freeSlots);
         SendMessage message = new SendMessage();
@@ -63,9 +66,9 @@ public class ScheduleInfoCallback implements CallbackHandler {
         StringBuilder result = new StringBuilder();
         TreeMap<LocalDate, List<LocalTime>> freeSlotsTreeMap = new TreeMap<>(freeSlots);
         freeSlotsTreeMap.forEach((localDate, times) -> {
-            String elements = ScheduleUtils.getSlots().stream()
+            String elements = scheduleService.getSlots().stream()
                     .sorted()
-                    .map(time -> ScheduleUtils.isSlotPresentIn(time, times)
+                    .map(time -> scheduleService.isSlotPresentIn(time, times)
                             ? time.toString()
                             : "<s>" + time.toString() + "</s>")
                     .collect(Collectors.joining("  "));
