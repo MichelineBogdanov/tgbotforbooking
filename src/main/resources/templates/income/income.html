@@ -11,13 +11,9 @@
     <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
 </head>
 <body>
-<!-- Вставляем шапку -->
 <div th:replace="~{fragments/header :: header}"></div>
-
 <main>
     <h1>Доход</h1>
-
-    <!-- Кнопки для переключения месяцев -->
     <div class="month-navigation">
         <button class="nav-button" id="prev-month"
                 th:attr="data-prev-month=@{/income(month=${currentMonth.minusMonths(1).toString()})}">
@@ -29,19 +25,14 @@
             Следующий месяц
         </button>
     </div>
-
-    <!-- Общая сумма дохода за месяц -->
     <div class="total-income">
         <strong>Общий доход за месяц:</strong>
         <span id="total-income-amount" th:text="${totalIncome}"></span>
     </div>
-
-    <!-- График доходов -->
     <div id="income-chart-div">
         <canvas id="income-chart" th:attr="data-daily-income=${dailyIncome}"></canvas>
     </div>
 </main>
-
 <script th:src="@{/js/income-scripts.js}"></script>
 </body>
 </html>

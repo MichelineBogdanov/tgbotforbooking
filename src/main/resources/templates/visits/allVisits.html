@@ -9,20 +9,11 @@
     <link rel="stylesheet" th:href="@{/css/styles.css}">
 </head>
 <body>
-<!-- Вставляем шапку -->
 <div th:replace="~{fragments/header :: header}"></div>
-
-<!-- Основная часть страницы -->
 <main>
-    <!-- Таблица визитов -->
     <h1>Все визиты</h1>
-
-    <!-- Вставляем пагинацию -->
     <div th:replace="~{fragments/pagingBlock :: pagination('/visits?', ${totalPages}, ${currentPage}, ${pageSize})}"></div>
-
-    <!-- Вставляем выбор количества записей на странице -->
     <div th:replace="~{fragments/pageSizeChooser :: pageSize('/visits?', ${pageSize})}"></div>
-
     <div class="table-container">
         <table id="visits-table" class="table">
             <thead>
@@ -53,7 +44,6 @@
         </table>
     </div>
 </main>
-<!-- Подключение JavaScript -->
 <script th:src="@{/js/visits-scripts.js}"></script>
 </body>
 </html>
