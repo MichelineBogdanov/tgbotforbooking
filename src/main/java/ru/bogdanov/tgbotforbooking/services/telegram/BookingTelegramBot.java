@@ -61,9 +61,9 @@ public class BookingTelegramBot extends TelegramLongPollingBot {
             }
         } else if (update.hasCallbackQuery()) {
             Message message = update.getCallbackQuery().getMessage();
+            sendAnswerCallback(new AnswerCallbackQuery(update.getCallbackQuery().getId()));
             sendMessage(callbacksHandler.handleCallbacks(update));
             deleteMessage(new DeleteMessage(message.getChatId().toString(), message.getMessageId()));
-            sendAnswerCallback(new AnswerCallbackQuery(update.getCallbackQuery().getId()));
         }
     }
 
